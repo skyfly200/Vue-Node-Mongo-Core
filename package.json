@@ -4,7 +4,8 @@
   "description": "A starter core for projects using Vue front end, with an Express driven backend storing data modeled with Mongoose in Mongo DB.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon \"src/app.js\""
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,12 @@
   },
   "homepage": "https://github.com/skyfly200/Vue-Node-Mongo-Core#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
     "mongoose": "^5.4.19",
     "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
   }
 }
