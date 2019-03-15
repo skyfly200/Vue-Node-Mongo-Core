@@ -1,0 +1,1 @@
+A starter core for projects using Vue front end, with an Express driven backend storing data modeled with Mongoose in Mongo DB.
