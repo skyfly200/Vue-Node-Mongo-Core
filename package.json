@@ -1,0 +1,24 @@
+{
+  "name": "Vue-Node-Mongo-Core",
+  "version": "1.0.0",
+  "description": "A starter core for projects using Vue front end, with an Express driven backend storing data modeled with Mongoose in Mongo DB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skyfly200/Vue-Node-Mongo-Core.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skyfly200/Vue-Node-Mongo-Core/issues"
+  },
+  "homepage": "https://github.com/skyfly200/Vue-Node-Mongo-Core#readme",
+  "dependencies": {
+    "mongoose": "^5.4.19",
+    "validator": "^10.11.0"
+  }
+}
