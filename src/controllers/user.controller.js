@@ -1,5 +1,8 @@
 const User = require('../models/user.model');
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
     res.send('Greetings from the Test controller!');
@@ -20,6 +23,15 @@ exports.create = function (req, res) {
         if (err) return next(err);
         res.send(user);
     })
+};
+
+exports.login = function (req, res) {
+  passport.authenticate('local', { successRedirect: '/user', failureRedirect: '/user/login', failureFlash: true })
+};
+
+exports.logout = function(req, res){
+  req.logout();
+  res.redirect('/');
 };
 
 exports.read = function (req, res) {
