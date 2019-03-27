@@ -7,10 +7,10 @@ const passport = require('passport');
 const flash = require('connect-flash');
 
 app.set('views', __dirname + '/views');
-//app.set('view engine', 'jade');
-//app.set('view options', { layout: false });
-//app.use(express.logger());
+app.set('view engine', 'pug');
+app.set('view options', { layout: false });
 app.use(bodyParser.urlencoded({extended: false}));
+//app.use(express.logger());
 //app.use(express.methodOverride());
 app.use(session({ secret: "cats" }));
 app.use(passport.initialize());
