@@ -1,19 +1,22 @@
-// initialize our express app
+var path = require('path');
 const express = require('express');
 const app = express();
-
-// Config Express Middleware
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+
+app.set('views', __dirname + '/views');
+//app.set('view engine', 'jade');
+//app.set('view options', { layout: false });
+//app.use(express.logger());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static("public"));
+//app.use(express.methodOverride());
 app.use(session({ secret: "cats" }));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(express.static(path.join(__dirname, 'public')));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -25,7 +28,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-// Imports routes
+// Import routes
 const user = require('./routes/user.route');
 const station = require('./routes/station.route');
 
