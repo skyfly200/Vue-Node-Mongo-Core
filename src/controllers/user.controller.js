@@ -1,7 +1,5 @@
 const User = require('../models/user.model');
-
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
