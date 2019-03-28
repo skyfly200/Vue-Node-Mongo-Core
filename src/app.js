@@ -6,6 +6,8 @@ const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 
+const User = require('./models/user.model');
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });

@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-// Require the controllers
-const user_controller = require('../controllers/user.controller');
-
 module.exports = function (app) {
-  app.get('/', function (req, res) {
+  app.get('/', function (req, res, next) {
     res.render('index', { user : req.user });
+    next();
   });
 
   app.get('/register', function(req, res) {

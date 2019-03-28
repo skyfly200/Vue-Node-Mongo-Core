@@ -11,11 +11,21 @@ html
     h1 Register Page
     p.lead Say something worthwhile here.
     br
-    form(role='form', action="/register",method="post", style='max-width: 300px;')
+    form(role='form', action="/users/new",method="POST", style='max-width: 300px;')
       .form-group
-          input.form-control(type='text', name="username", placeholder='Enter Username')
+          input.form-control(type='text', name="name", placeholder='Name')
+      .form-group
+          input.form-control(type='text', name="username", placeholder='Username')
+      .form-group
+          input.form-control(type='text', name="email", placeholder='Email')
+      .form-group
+          input.form-control(type='text', name="cell_phone", placeholder='Cell Phone')
+      .form-group
+          input.form-control(type='text', name="home_phone", placeholder='Home Phone')
       .form-group
         input.form-control(type='password', name="password", placeholder='Password')
+      .form-group
+        input.form-control(type='password', name="password_conf", placeholder='Password Confirmation')
       button.btn.btn-default(type='submit') Submit
     a(href='/login')
       button.btn.btn-primary(type="button") Login

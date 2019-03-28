@@ -3,29 +3,38 @@ const passport = require('passport');
 
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
-    res.send('Greetings from the Test controller!');
+    res.send('Greetings from the User controller!');
 };
 
 
 exports.create = function (req, res) {
-    let user = new User({
+    User.register(
+      new User({
         type: 'admin',
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
         home_phone: req.body.home_phone,
         cell_phone: req.body.cell_phone
+      }), req.body.password, function(err, user) {
+        if (err) {
+            console.log(err);
+            return res.render('register', { err : err, user : user });
+        }
+
+        passport.authenticate('local')(req, res, function () {
+          res.redirect('/');
+        });
     });
-
-    user.save( function (err, user) {
-        if (err) return next(err);
-        res.send(user);
-    })
 };
 
-exports.login = function (req, res) {
-  passport.authenticate('local', { successRedirect: '/user', failureRedirect: '/user/login', failureFlash: true })
-};
+exports.login = [
+  function (req, res, next) {
+    console.log(req.body.username);
+    next();
+  },
+  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/user/login', failureFlash: true })
+];
 
 exports.logout = function(req, res){
   req.logout();

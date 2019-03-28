@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/user.model');
 
 // Require the controllers
 const user_controller = require('../controllers/user.controller');
@@ -7,25 +8,12 @@ const user_controller = require('../controllers/user.controller');
 // Setup passport local strategy for authentication
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
+passport.use(new LocalStrategy(User.authenticate()));
 
 // a simple test url to check that all of our files are communicating correctly.
 router.get('/test', user_controller.test);
 
-router.post('/create', user_controller.create);
+router.post('/new', user_controller.create);
 
 router.get('/:id', user_controller.read);
 
