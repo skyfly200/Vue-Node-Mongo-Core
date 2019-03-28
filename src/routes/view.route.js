@@ -9,6 +9,14 @@ module.exports = function (app) {
     res.render('index', { user : req.user });
   });
 
+  app.get('/register', function(req, res) {
+      res.render('register', { });
+  });
+
+  app.get('/login', function(req, res) {
+      res.render('login', { user : req.user });
+  });
+
   app.get('/ping', function(req, res){
       res.send("pong!", 200);
   });
