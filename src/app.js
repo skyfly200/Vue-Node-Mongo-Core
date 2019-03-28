@@ -10,8 +10,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });
 app.use(bodyParser.urlencoded({extended: false}));
-//app.use(express.logger());
-//app.use(express.methodOverride());
 app.use(session({ secret: "cats" }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -28,11 +26,12 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-// Import routes
+// Load view routes
+const views = require('./routes/view.route')(app);
+
+// Import and register API routes
 const user = require('./routes/user.route');
 const station = require('./routes/station.route');
-
-// register router paths
 app.use('/users', user);
 app.use('/stations', station);
 
