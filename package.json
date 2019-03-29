@@ -4,7 +4,7 @@
   "description": "A starter core for projects using Vue front end, with an Express driven backend storing data modeled with Mongoose in Mongo DB.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "make test",
     "dev": "nodemon \"src/app.js\""
   },
   "repository": {
