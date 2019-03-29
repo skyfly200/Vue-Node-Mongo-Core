@@ -10,7 +10,7 @@ exports.test = function (req, res) {
 exports.create = function (req, res) {
     User.register(
       new User({
-        type: 'admin',
+        roles: ['admin'],
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
@@ -30,22 +30,25 @@ exports.create = function (req, res) {
 
 exports.login = [
   function (req, res, next) {
-    console.log(req.body.username);
+    //console.log(req.body.username);
     next();
   },
   passport.authenticate('local', { successRedirect: '/', failureRedirect: '/user/login', failureFlash: true })
 ];
 
-exports.logout = function(req, res){
+exports.logout = function(req, res, next){
   req.logout();
   res.redirect('/');
 };
 
-exports.read = function (req, res) {
-    User.findById(req.params.id, function (err, user) {
-        if (err) return next(err);
-        res.send(user);
-    })
+exports.read = function (req, res, next) {
+    let id = req.params.id;
+    if (id.len === 24) {
+      User.findById(id, function (err, user) {
+          if (err) return next(err);
+          res.send(user);
+      })
+    }
 };
 
 exports.update = function (req, res) {
