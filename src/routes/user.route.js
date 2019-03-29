@@ -15,14 +15,14 @@ router.get('/test', user_controller.test);
 
 router.post('/new', user_controller.create);
 
+router.post('/login', user_controller.login);
+
+router.get('/logout', user_controller.logout);
+
 router.get('/:id', user_controller.read);
 
 router.put('/:id/update', user_controller.update);
 
 router.delete('/:id/delete', user_controller.delete);
-
-router.post('/login', user_controller.login);
-
-router.get('/logout', user_controller.logout);
 
 module.exports = router;
