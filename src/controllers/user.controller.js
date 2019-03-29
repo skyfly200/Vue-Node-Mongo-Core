@@ -43,10 +43,10 @@ exports.logout = function(req, res, next){
 
 exports.read = function (req, res, next) {
     let id = req.params.id;
-    if (id.len === 24) {
+    if (id.length === 24) {
       User.findById(id, function (err, user) {
-          if (err) return next(err);
-          res.send(user);
+        if (err) return next(err);
+        res.send(user);
       })
     } else {
       res.send('invalid user ID');
