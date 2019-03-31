@@ -21,9 +21,16 @@ exports.create = function (req, res) {
 };
 
 exports.read = function (req, res, next) {
-  Role.find({title: req.params.title}, (err, people) =>{
+  Role.find({title: req.params.title}, (err, roles) =>{
     if (err) return res.status(500).send(err)
-    return res.status(200).send(people);
+    return res.status(200).send(roles);
+  });
+};
+
+exports.readAll = function (req, res, next) {
+  Role.find((err, roles) =>{
+    if (err) return res.status(500).send(err)
+    return res.status(200).send(roles);
   });
 };
 

@@ -36,7 +36,7 @@ const user = require('./routes/user.route');
 const role = require('./routes/role.route');
 const station = require('./routes/station.route');
 app.use('/users', user);
-app.use('/role', role);
+app.use('/roles', role);
 app.use('/stations', station);
 
 // Set up mongoose connection

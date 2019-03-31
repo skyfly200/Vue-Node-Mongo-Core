@@ -12,6 +12,8 @@ router.post('/new', role_controller.create);
 
 router.get('/:id', role_controller.read);
 
+router.get('/', role_controller.readAll);
+
 router.put('/:id/update', role_controller.update);
 
 router.delete('/:id/delete', role_controller.delete);
