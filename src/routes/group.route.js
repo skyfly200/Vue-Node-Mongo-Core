@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Require the controllers WHICH WE DID NOT CREATE YET!!
-const station_controller = require('../controllers/group.controller');
+const group_controller = require('../controllers/group.controller');
 
 
 // a simple test url to check that all of our files are communicating correctly.
