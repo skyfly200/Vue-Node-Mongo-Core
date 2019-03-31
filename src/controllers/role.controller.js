@@ -10,34 +10,33 @@ exports.test = function (req, res) {
 
 
 exports.create = function (req, res) {
-  new Role({
+  const newRole = new Role({
     title: req.params.title,
     actions: default_actions,
+  });
+  newRole.save(err => {
+    if (err) return res.status(500).send(err);
+    return res.status(200).send(newRole);
   });
 };
 
 exports.read = function (req, res, next) {
-    let id = req.params.id;
-    if (id.length === 24) {
-      Role.findById(id, function (err, user) {
-        if (err) return next(err);
-        res.send(role);
-      })
-    } else {
-      res.send('invalid user ID');
-    }
+  Role.find({title: req.params.title}, (err, people) =>{
+    if (err) return res.status(500).send(err)
+    return res.status(200).send(people);
+  });
 };
 
 exports.update = function (req, res) {
-    Role.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, role) {
-        if (err) return next(err);
-        res.send(role);
-    });
+  Role.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function (err, role) {
+      if (err) return res.status(500).send(err);
+      res.send(role);
+  });
 };
 
 exports.delete = function (req, res) {
   Role.findByIdAndRemove(req.params.id, function (err, role) {
-        if (err) return next(err);
-        res.send(role);
-    })
+    if (err) return res.status(500).send(err);
+    res.send(role);
+  })
 };

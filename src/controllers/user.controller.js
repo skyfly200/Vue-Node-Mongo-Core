@@ -54,7 +54,7 @@ exports.read = function (req, res, next) {
 };
 
 exports.update = function (req, res) {
-    User.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, user) {
+    User.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function (err, user) {
         if (err) return next(err);
         res.send(user);
     });
