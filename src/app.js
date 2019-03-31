@@ -34,10 +34,10 @@ const views = require('./routes/view.route')(app);
 // Import and register API routes
 const user = require('./routes/user.route');
 const role = require('./routes/role.route');
-const station = require('./routes/station.route');
+const group = require('./routes/group.route');
 app.use('/users', user);
 app.use('/roles', role);
-app.use('/stations', station);
+app.use('/groups', group);
 
 // Set up mongoose connection
 // const mongoose = require('./database.js');
