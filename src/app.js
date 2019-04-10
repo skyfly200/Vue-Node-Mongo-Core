@@ -39,16 +39,18 @@ app.use('/users', user);
 app.use('/roles', role);
 app.use('/groups', group);
 
+// Setup dev database info
+const dbInfo = {
+  host: 'localhost',
+  port: '27017',
+  db: 'CRNH'
+};
+const dev_db_url = `mongodb://${dbInfo.host}:${dbInfo.port}/${dbInfo.db}`;
+// If provided use DB from env variable, else use dev DB
+const mongoDB = process.env.MONGODB_URI || dev_db_url;
 // Set up mongoose connection
-// const mongoose = require('./database.js');
-// let db = mongoose.connection;
-const mongoose = require('mongoose');
-let dev_db_url = 'mongodb://localhost:27017/CRNH';
-let mongoDB = process.env.MONGODB_URI || dev_db_url;
-mongoose.connect(mongoDB);
-mongoose.Promise = global.Promise;
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+const database = require('./database.js');
+const db = database.connect(mongoDB);
 
 // Start server
 let port = 1234;

@@ -2,20 +2,15 @@
 // import dependencies
 const mongoose = require('mongoose');
 
-// Setup dev database info
-const devServer = 'localhost';
-const port = '27017';
-const dbName = 'CRNH';
-let dev_db_url = `mongodb://${devServer}:${port}/${dbName}`;
-let mongoDB = process.env.MONGODB_URI || dev_db_url;
+exports.connect = function (mongoDB) {
+  // Connect to the database
+  mongoose.connect(mongoDB, {useNewUrlParser: true});
+  mongoose.Promise = global.Promise;
+  let db = mongoose.connection;
 
-// Connect to the database
-mongoose.connect(mongoDB);
-mongoose.Promise = global.Promise;
+  // Report success or error
+  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+  db.on('connected', console.log.bind(console, 'Mongoose connected to ', mongoDB));
 
-// Report Success or error
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-// Export database connection from module
-exports = mongoose;
-//exports.db = mongoose.connection;
+  return db;
+}
