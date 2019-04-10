@@ -48,7 +48,7 @@ const dbInfo = {
   port: '27017',
   db: 'CRNH'
 };
-const dev_db_url = `mongodb://${dbInfo.host}:${dbInfo.port}/${dbInfo.db}`;
+const dev_db_url = database.buildURI(dbInfo);
 // If provided use DB from env variable, else use dev DB
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 // Set up mongoose connection

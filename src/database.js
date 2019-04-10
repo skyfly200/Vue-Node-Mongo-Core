@@ -2,6 +2,10 @@
 // import dependencies
 const mongoose = require('mongoose');
 
+exports.buildURI = function (dbInfo) {
+  return `mongodb://${dbInfo.host}:${dbInfo.port}/${dbInfo.db}`;
+}
+
 exports.connect = function (mongoDB) {
   // Connect to the database
   mongoose.connect(mongoDB, {useNewUrlParser: true});
