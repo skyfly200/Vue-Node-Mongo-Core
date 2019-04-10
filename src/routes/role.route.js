@@ -8,11 +8,11 @@ const role_controller = require('../controllers/role.controller');
 // a simple test url to check that all of our files are communicating correctly.
 router.get('/test', role_controller.test);
 
+router.get('/', role_controller.readAll);
+
 router.post('/new', role_controller.create);
 
 router.get('/:id', role_controller.read);
-
-router.get('/', role_controller.readAll);
 
 router.put('/:id/update', role_controller.update);
 
