@@ -1,10 +1,11 @@
 var path = require('path');
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
+const database = require('./database.js');
 
 const User = require('./models/user.model');
 
@@ -12,7 +13,9 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(session({ secret: "cats" }));
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'awesomecookiesecret'
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -39,7 +42,7 @@ app.use('/users', user);
 app.use('/roles', role);
 app.use('/groups', group);
 
-// Setup dev database info
+// Define dev database info
 const dbInfo = {
   host: 'localhost',
   port: '27017',
@@ -49,11 +52,10 @@ const dev_db_url = `mongodb://${dbInfo.host}:${dbInfo.port}/${dbInfo.db}`;
 // If provided use DB from env variable, else use dev DB
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 // Set up mongoose connection
-const database = require('./database.js');
 const db = database.connect(mongoDB);
 
-// Start server
-let port = 1234;
+// Start express server
+const port = process.env.PORT || 1234;
 app.listen(port, () => {
     console.log('Server is up and running on port number ' + port);
 });
