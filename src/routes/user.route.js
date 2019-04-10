@@ -21,8 +21,8 @@ router.get('/logout', user_controller.logout);
 
 router.get('/:id', user_controller.read);
 
-router.put('/:id/update', user_controller.update);
+router.put('/:id', user_controller.update);
 
-router.delete('/:id/delete', user_controller.delete);
+router.delete('/:id', user_controller.delete);
 
 module.exports = router;

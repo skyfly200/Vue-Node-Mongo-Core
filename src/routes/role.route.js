@@ -12,10 +12,10 @@ router.get('/', role_controller.readAll);
 
 router.post('/new', role_controller.create);
 
-router.get('/:id', role_controller.read);
+router.get('/:title', role_controller.read);
 
-router.put('/:id/update', role_controller.update);
+router.put('/:title', role_controller.update);
 
-router.delete('/:id/delete', role_controller.delete);
+router.delete('/:title', role_controller.delete);
 
 module.exports = router;

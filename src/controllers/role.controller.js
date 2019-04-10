@@ -8,10 +8,9 @@ exports.test = function (req, res) {
   res.send('Greetings from the Role controller!');
 };
 
-
 exports.create = function (req, res) {
   const newRole = new Role({
-    title: req.params.title,
+    title: req.body.title,
     actions: default_actions,
   });
   newRole.save(err => {
@@ -35,7 +34,7 @@ exports.readAll = function (req, res, next) {
 };
 
 exports.update = function (req, res) {
-  Role.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function (err, role) {
+  Role.findOneAndUpdate({title: req.params.title}, {$set: req.body}, {new: true}, function (err, role) {
       if (err) return res.status(500).send(err);
       res.send(role);
   });
