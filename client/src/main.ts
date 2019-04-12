@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
+import { HTTP } from "./http-common";
 
 Vue.config.productionTip = false;
 
