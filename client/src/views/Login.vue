@@ -3,13 +3,18 @@
     h1 Login
     v-form.login-form(@onSubmit="submit" v-model="valid")
       v-text-field( v-model="username"
-        :rules="usernameRules"
+        :rules="[rules.required]"
         label="Username"
         required)
-      v-text-field( v-model="password"
-        :rules="passwordRules"
+      v-text-field(
+        :append-icon="show ? 'visibility' : 'visibility_off'"
+        :rules="[rules.required]"
+        :type="show ? 'text' : 'password'"
+        v-model="password"
+        name="password"
         label="Password"
-        required)
+        class="input-group--focused"
+        @click:append="show = !show")
       v-btn(@click="submit") Submit
 </template>
 
@@ -18,11 +23,13 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   data: () => ({
+    show: false,
     valid: false,
     username: "",
-    usernameRules: [v => !!v || "Username is required"],
     password: "",
-    passwordRules: [v => !!v || "Password is required"]
+    rules: {
+      required: value => !!value || "Required."
+    }
   }),
   methods: {
     submit: () => {
