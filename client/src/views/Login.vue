@@ -16,6 +16,7 @@
         class="input-group--focused"
         @click:append="show = !show")
       v-btn(type="submit") Login
+      div.error {{ error }}
 </template>
 
 <script>
@@ -25,6 +26,7 @@ import { Component, Vue } from "vue-property-decorator";
   data: () => ({
     show: false,
     valid: false,
+    error: "",
     username: "",
     password: "",
     rules: {
@@ -33,31 +35,39 @@ import { Component, Vue } from "vue-property-decorator";
   }),
   methods: {
     login: function(e) {
-      if (this.username && this.password)
+      if (this.username && this.password) {
+        this.error = this.username;
         this.$http
           .post("http://localhost:1234/users/login", {
             username: this.username,
             password: this.password
           })
           .then(response => {
-            if (response.data && response.data.auth) {
-              // MUST be changed to store JWT in cookie for security!!!
-              localStorage.setItem("jwt", response.data.token);
-              if (localStorage.getItem("jwt") != null) {
-                this.$emit("loggedIn");
-                if (this.$route.params.nextUrl != null) {
-                  this.$router.push(this.$route.params.nextUrl);
-                } else {
-                  this.$router.push("dashboard");
+            if (response.data) {
+              if (response.data.auth && response.data.token) {
+                // MUST be changed to store JWT in cookie for security!!!
+                localStorage.setItem("jwt", response.data.token);
+                if (localStorage.getItem("jwt") != null) {
+                  this.$emit("loggedIn");
+                  if (this.$route.params.nextUrl != null) {
+                    this.$router.push(this.$route.params.nextUrl);
+                  } else {
+                    this.$router.push("dashboard");
+                  }
                 }
+              } else {
+                this.error = response.data.err;
               }
             } else {
-              console.log("Auth failed");
+              this.error = "Auth failed";
             }
           })
           .catch(function(error) {
             console.error(error);
           });
+      } else {
+        this.error = "All fields are required";
+      }
     }
   }
 })
