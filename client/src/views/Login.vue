@@ -33,7 +33,8 @@ import { Component, Vue } from "vue-property-decorator";
   }),
   methods: {
     login: function(e) {
-      console.log(this.username, this.password);
+      if (this.username && this.password)
+        console.log(this.username, this.password);
     }
   }
 })
