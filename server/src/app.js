@@ -15,7 +15,7 @@ const User = require('./models/user.model');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });
-app.use(cors);
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({
   secret: process.env.SESSION_SECRET || config.sessionSecret
