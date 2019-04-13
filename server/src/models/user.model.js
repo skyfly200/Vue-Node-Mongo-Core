@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
@@ -14,6 +15,12 @@ const UserSchema = new Schema({
     memberships: [{name: String}]
 });
 
+UserSchema.pre('save', async function(next){
+  const user = this;
+  const hash = await bcrypt.hash(this.password, 10);
+  this.password = hash;
+  next();
+})
 
 UserSchema.plugin(passportLocalMongoose);
 

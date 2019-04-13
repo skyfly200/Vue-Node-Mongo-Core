@@ -23,6 +23,7 @@ exports.create = function (req, res) {
         }
 
         passport.authenticate('local')(req, res, function () {
+          let token = jwt.sign({ id: user.id }, config.tokenSecret, { expiresIn: 86400});
           res.redirect('/');
         });
     });
