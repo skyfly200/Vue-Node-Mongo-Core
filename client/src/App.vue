@@ -2,8 +2,8 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span>App Name</span>
+        <span class="font-weight-light">Vue Powered</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div id="nav">
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
-
 export default {
   name: "App",
   data() {
@@ -34,9 +32,10 @@ export default {
     this.$http.interceptors.response.use(undefined, function(err) {
       return new Promise(function(resolve, reject) {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch(logout);
+          this.$store.dispatch("logout");
+          resolve();
         }
-        throw err;
+        reject(err);
       });
     });
   },
