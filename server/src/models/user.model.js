@@ -22,6 +22,11 @@ UserSchema.pre('save', async function(next){
   next();
 })
 
+UserSchema.methods.isValidPassword = async function(password){
+  const user = this;
+  return await bcrypt.compare(password, user.password);
+}
+
 UserSchema.plugin(passportLocalMongoose);
 
 // Export the model
