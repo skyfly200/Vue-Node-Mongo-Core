@@ -13,9 +13,7 @@
       <div id="user">
         <span v-if="isLoggedIn">
           Welcome
-          <router-link to="/dashboard">
-            {{ username }}
-          </router-link>
+          <router-link to="/dashboard">{{ username }}</router-link>
         </span>
         <v-btn flat v-if="isLoggedIn"><a @click="logout">Logout</a></v-btn>
         <v-btn flat v-else to="/login">Login</v-btn>
@@ -64,3 +62,8 @@ export default {
   }
 };
 </script>
+
+<style lang="sass" scoped>
+#user
+  margin-left: 3vw
+</style>
