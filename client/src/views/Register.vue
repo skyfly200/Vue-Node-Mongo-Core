@@ -1,7 +1,7 @@
 <template lang="pug">
   .register
     h1 Sign Up
-    v-form.registration-form(@submit.prevent="login" v-model="valid")
+    v-form.registration-form(@submit.prevent="register" v-model="valid")
       v-text-field( v-model="user.name"
         :rules="[rules.required]"
         label="Name"
@@ -41,9 +41,11 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
+  props: ["nextUrl"],
   data: () => ({
     show: false,
     valid: false,
+    error: "",
     user: {
       name: "",
       username: "",
@@ -58,14 +60,48 @@ import { Component, Vue } from "vue-property-decorator";
     }
   }),
   methods: {
-    login: function(e) {
+    register: function(e) {
       if (
         this.user.name &&
         this.user.email &&
         this.user.username &&
-        this.user.password
-      )
-        console.log(this.user);
+        this.user.password &&
+        this.user.passwordConf
+      ) {
+        if (this.user.password === this.user.passwordConf) {
+          // POST http request
+          this.$http
+            .post(url, {
+              name: this.name,
+              username: this.username,
+              email: this.email,
+              password: this.password,
+              homePhone: this.homePhone,
+              cellPhone: this.cellPhone
+            })
+            .then(response => {
+              // MUST be changed to store JWT in cookie for security!!!
+              localStorage.setItem("jwt", response.data.token);
+
+              if (localStorage.getItem("jwt") != null) {
+                this.$emit("loggedIn");
+                if (this.$route.params.nextUrl != null) {
+                  this.$router.push(this.$route.params.nextUrl);
+                } else {
+                  this.$router.push("/");
+                }
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+          console.log(this.user);
+        } else {
+          this.error = "Passwords do not match";
+        }
+      } else {
+        this.error = "Missing a required field";
+      }
     }
   }
 })
