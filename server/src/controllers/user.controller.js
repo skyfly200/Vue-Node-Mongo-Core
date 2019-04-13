@@ -8,15 +8,6 @@ exports.test = function (req, res) {
     res.send('Greetings from the User controller!');
 };
 
-exports.signup = async (req, res, next) => {
-  passport.authenticate('signup', { session : false }) , async (req, res, next) => {
-    res.json({
-      message : 'Signup successful',
-      user : req.user,
-    });
-  };
-};
-
 exports.login = async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {     try {
       if(err || !user){
