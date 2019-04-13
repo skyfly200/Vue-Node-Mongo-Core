@@ -34,7 +34,8 @@
         name="password-conf"
         label="Password Confirmation"
         class="input-group--focused")
-      v-btn(type="submit") Login
+      v-btn(type="submit") Register
+      v-btn(to="/login") Login
 </template>
 
 <script>

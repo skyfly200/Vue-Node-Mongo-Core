@@ -16,6 +16,7 @@
         class="input-group--focused"
         @click:append="show = !show")
       v-btn(type="submit") Login
+      v-btn(to="/register") Register
       div.error {{ error }}
 </template>
 

@@ -18,8 +18,8 @@
         <v-btn flat><a @click="logout">Logout</a></v-btn>
       </div>
       <div v-else>
-        <v-btn flat to="/login">Login</v-btn>
-        <v-btn flat to="/register">Register</v-btn>
+        <v-btn flat small to="/login">Login</v-btn>
+        <v-btn flat small to="/register">Register</v-btn>
       </div>
     </v-toolbar>
 
