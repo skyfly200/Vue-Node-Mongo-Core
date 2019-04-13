@@ -14,10 +14,10 @@ export default new Vuex.Store({
     auth_request(state){
       state.status = 'loading'
     },
-    auth_success(state: any, token: String, user: Object){
+    auth_success(state, data){
       state.status = 'success'
-      state.token = token
-      state.user = user
+      state.token = data.token
+      state.user = data.user
     },
     auth_error(state){
       state.status = 'error'
@@ -28,7 +28,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    login({commit}, user) {
+    login: ({commit}, user) => {
       return new Promise((resolve, reject) => {
         commit('auth_request');
         axios({url: 'http://localhost:1234/users/login', data: user, method: 'POST' })
@@ -38,7 +38,7 @@ export default new Vuex.Store({
           // MUST be changed to store JWT in cookie for security!!!
           localStorage.setItem('token', token)
           axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token, user)
+          commit('auth_success', {token, user})
           resolve(resp)
         })
         .catch(err => {
@@ -48,7 +48,7 @@ export default new Vuex.Store({
         });
       });
     },
-    register({commit}, user) {
+    register: ({commit}, user) => {
       return new Promise((resolve, reject) => {
         commit('auth_request');
         axios({url: "http://localhost:1234/users/new", data: user, method: 'POST' })
@@ -68,7 +68,7 @@ export default new Vuex.Store({
         })
       })
     },
-    logout({commit}) {
+    logout: ({commit}) => {
       return new Promise((resolve, reject) => {
         commit('logout');
         localStorage.removeItem('token')
@@ -79,6 +79,6 @@ export default new Vuex.Store({
   },
   getters : {
     isLoggedIn: state => !!state.token,
-    authStatus: state => state.status,
+    authStatus: state => state.status
   }
 });
