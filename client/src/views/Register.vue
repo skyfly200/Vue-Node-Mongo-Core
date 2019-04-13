@@ -36,6 +36,7 @@
         class="input-group--focused")
       v-btn(type="submit") Register
       v-btn(to="/login") Login
+      div.error {{ error }}
 </template>
 
 <script>
@@ -70,33 +71,29 @@ import { Component, Vue } from "vue-property-decorator";
         this.user.passwordConf
       ) {
         if (this.user.password === this.user.passwordConf) {
-          // POST http request
-          this.$http
-            .post("http://localhost:1234/users/new", {
-              name: this.name,
-              username: this.username,
-              email: this.email,
-              password: this.password,
-              homePhone: this.homePhone,
-              cellPhone: this.cellPhone
-            })
+          let data = {
+            name: this.user.name,
+            username: this.user.username,
+            email: this.user.email,
+            password: this.user.password,
+            homePhone: this.user.homePhone,
+            cellPhone: this.user.cellPhone
+          };
+          this.$store
+            .dispatch("register", data)
             .then(response => {
-              // MUST be changed to store JWT in cookie for security!!!
-              localStorage.setItem("jwt", response.data.token);
-
-              if (localStorage.getItem("jwt") != null) {
-                this.$emit("loggedIn");
-                if (this.$route.params.nextUrl != null) {
-                  this.$router.push(this.$route.params.nextUrl);
+              if (response.data) {
+                if (response.data.message) {
+                  console.log(response.data.message);
+                  this.$router.push("/login");
                 } else {
-                  this.$router.push("/");
+                  this.error = response.data.err;
                 }
+              } else {
+                this.error = "Registration failed";
               }
             })
-            .catch(error => {
-              console.error(error);
-            });
-          console.log(this.user);
+            .catch(err => console.error(err));
         } else {
           this.error = "Passwords do not match";
         }
