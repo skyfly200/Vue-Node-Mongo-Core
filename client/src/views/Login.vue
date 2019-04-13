@@ -1,7 +1,7 @@
 <template lang="pug">
   .login
     h1 Sign In
-    v-form.login-form(@submit.prevent="submit" v-model="valid")
+    v-form.login-form(@submit.prevent="login" v-model="valid")
       v-text-field( v-model="username"
         :rules="[rules.required]"
         label="Username"
@@ -32,8 +32,8 @@ import { Component, Vue } from "vue-property-decorator";
     }
   }),
   methods: {
-    submit: () => {
-      console.log("Submit");
+    login: function(e) {
+      console.log(this.username, this.password);
     }
   }
 })
