@@ -36,7 +36,7 @@ import { Component, Vue } from "vue-property-decorator";
   methods: {
     login: function(e) {
       if (this.username && this.password) {
-        this.error = this.username;
+        this.error = "";
         this.$http
           .post("http://localhost:1234/users/login", {
             username: this.username,
