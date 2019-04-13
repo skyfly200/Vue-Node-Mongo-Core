@@ -38,5 +38,5 @@ import { Component, Vue } from "vue-property-decorator";
     }
   }
 })
-export default class Home extends Vue {}
+export default class Login extends Vue {}
 </script>

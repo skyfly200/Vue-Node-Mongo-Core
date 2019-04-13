@@ -26,7 +26,38 @@ export default new Router({
       path: "/login",
       name: "login",
       component: () =>
-        import(/* webpackChunkName: "login" */ "./views/Login.vue")
+        import(/* webpackChunkName: "login" */ "./views/Login.vue"),
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: () =>
+        import(/* webpackChunkName: "Register" */ "./views/Register.vue"),
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () =>
+        import(/* webpackChunkName: "admin" */ "./views/Admin.vue"),
+      meta: {
+        requiresAuth: true,
+        is_admin: true
+      }
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () =>
+        import(/* webpackChunkName: "dashboard" */ "./views/Dashboard.vue"),
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 });
