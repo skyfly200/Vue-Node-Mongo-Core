@@ -10,13 +10,16 @@
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link>
       </div>
-      <div id="user">
-        <span v-if="isLoggedIn">
+      <div id="user" v-if="isLoggedIn">
+        <span>
           Welcome
           <router-link to="/dashboard">{{ username }}</router-link>
         </span>
-        <v-btn flat v-if="isLoggedIn"><a @click="logout">Logout</a></v-btn>
-        <v-btn flat v-else to="/login">Login</v-btn>
+        <v-btn flat><a @click="logout">Logout</a></v-btn>
+      </div>
+      <div v-else>
+        <v-btn flat to="/login">Login</v-btn>
+        <v-btn flat to="/register">Register</v-btn>
       </div>
     </v-toolbar>
 
