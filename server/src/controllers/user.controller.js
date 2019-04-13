@@ -38,35 +38,26 @@ exports.login = async (req, res, next) => {
   })(req, res, next);
 };
 
-// exports.create = function (req, res) {
-//     User.register(
-//       new User({
-//         roles: ['admin'],
-//         name: req.body.name,
-//         username: req.body.username,
-//         email: req.body.email,
-//         home_phone: req.body.home_phone,
-//         cell_phone: req.body.cell_phone
-//       }), req.body.password, function(err, user) {
-//         if (err) {
-//             console.log(err);
-//             return res.render('register', { err : err, user : user });
-//         }
-//
-//         passport.authenticate('local')(req, res, function () {
-//           let token = jwt.sign({ id: user.id }, config.tokenSecret, { expiresIn: 86400});
-//           res.redirect('/');
-//         });
-//     });
-// };
-//
-// exports.login_old = [
-//   function (req, res, next) {
-//     //console.log(req.body.username);
-//     next();
-//   },
-//   passport.authenticate('local', { successRedirect: '/', failureRedirect: '/users/login', failureFlash: true })
-// ];
+exports.create = function (req, res) {
+    try {
+      User.create({
+        roles: ['admin'],
+        name: req.body.name,
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
+        home_phone: req.body.home_phone,
+        cell_phone: req.body.cell_phone
+      });
+      res.json({
+        message : 'Signup successful',
+        user : req.user,
+      });
+    }
+    catch (error) {
+      res.json({error});
+    }
+};
 
 exports.logout = function(req, res, next){
   req.logout();
