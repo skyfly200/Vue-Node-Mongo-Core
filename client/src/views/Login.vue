@@ -37,23 +37,18 @@ import { Component, Vue } from "vue-property-decorator";
     login: function(e) {
       if (this.username && this.password) {
         this.error = "";
-        this.$http
-          .post("http://localhost:1234/users/login", {
+        this.$store
+          .dispatch("login", {
             username: this.username,
             password: this.password
           })
           .then(response => {
             if (response.data) {
               if (response.data.auth && response.data.token) {
-                // MUST be changed to store JWT in cookie for security!!!
-                localStorage.setItem("jwt", response.data.token);
-                if (localStorage.getItem("jwt") != null) {
-                  this.$emit("loggedIn");
-                  if (this.$route.params.nextUrl != null) {
-                    this.$router.push(this.$route.params.nextUrl);
-                  } else {
-                    this.$router.push("dashboard");
-                  }
+                if (this.$route.params.nextUrl != null) {
+                  this.$router.push(this.$route.params.nextUrl);
+                } else {
+                  this.$router.push("dashboard");
                 }
               } else {
                 this.error = response.data.err;
@@ -62,9 +57,7 @@ import { Component, Vue } from "vue-property-decorator";
               this.error = "Auth failed";
             }
           })
-          .catch(function(error) {
-            console.error(error);
-          });
+          .catch(err => console.log(err));
       } else {
         this.error = "All fields are required";
       }

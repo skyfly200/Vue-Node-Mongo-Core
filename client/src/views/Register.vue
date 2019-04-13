@@ -71,7 +71,7 @@ import { Component, Vue } from "vue-property-decorator";
         if (this.user.password === this.user.passwordConf) {
           // POST http request
           this.$http
-            .post(url, {
+            .post("http://localhost:1234/users/new", {
               name: this.name,
               username: this.username,
               email: this.email,
