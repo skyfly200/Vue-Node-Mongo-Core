@@ -1,7 +1,7 @@
 <template lang="pug">
   .login
-    h1 Login
-    v-form.login-form(@onSubmit="submit" v-model="valid")
+    h1 Sign In
+    v-form.login-form(@submit.prevent="submit" v-model="valid")
       v-text-field( v-model="username"
         :rules="[rules.required]"
         label="Username"
@@ -15,7 +15,7 @@
         label="Password"
         class="input-group--focused"
         @click:append="show = !show")
-      v-btn(@click="submit") Submit
+      v-btn(type="submit") Login
 </template>
 
 <script>
