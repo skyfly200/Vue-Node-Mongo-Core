@@ -1,7 +1,9 @@
 var path = require('path');
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
@@ -12,6 +14,7 @@ const User = require('./models/user.model');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });
+app.use(cors);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'awesomecookiesecret'
