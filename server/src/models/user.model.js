@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const UserSchema = new Schema({
     name: {type: String, required: true},
@@ -26,8 +25,6 @@ UserSchema.methods.isValidPassword = async function(password){
   const user = this;
   return await bcrypt.compare(password, user.password);
 }
-
-UserSchema.plugin(passportLocalMongoose);
 
 // Export the model
 module.exports = mongoose.model('User', UserSchema)

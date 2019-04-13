@@ -5,15 +5,10 @@ const User = require('../models/user.model');
 // Require the controllers
 const user_controller = require('../controllers/user.controller');
 
-// Setup passport local strategy for authentication
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-passport.use(new LocalStrategy(User.authenticate()));
-
 // a simple test url to check that all of our files are communicating correctly.
 router.get('/test', user_controller.test);
 
-router.post('/new', user_controller.create);
+router.post('/register', user_controller.signup);
 
 router.post('/login', user_controller.login);
 

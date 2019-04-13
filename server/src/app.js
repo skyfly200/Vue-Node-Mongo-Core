@@ -12,6 +12,8 @@ const database = require('./database.js');
 
 const User = require('./models/user.model');
 
+require('./auth');
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.set('view options', { layout: false });
@@ -24,8 +26,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
-
-passport.use(User.createStrategy());
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -44,24 +44,20 @@ const views = require('./routes/view.route')(app);
 const user = require('./routes/user.route');
 const role = require('./routes/role.route');
 const group = require('./routes/group.route');
+const secureRoute = require('./routes/secure-route');
 app.use('/users', user);
 app.use('/roles', role);
 app.use('/groups', group);
+app.use('/secure', passport.authenticate('jwt', { session : false }), secureRoute );
 
-// Define dev database info
-const dbInfo = {
-  host: 'localhost',
-  port: '27017',
-  db: 'CRNH'
-};
-const dev_db_url = database.buildURI(dbInfo);
+const dev_db_url = database.buildURI(config.dbInfo);
 // If provided use DB from env variable, else use dev DB
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 // Set up mongoose connection
 const db = database.connect(mongoDB);
 
 // Start express server
-const port = process.env.PORT || 1234;
+const port = process.env.PORT || config.expressPort;
 app.listen(port, () => {
     console.log('Server is up and running on port number ' + port);
 });
