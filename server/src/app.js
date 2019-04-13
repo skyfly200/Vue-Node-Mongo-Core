@@ -21,6 +21,8 @@ app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
+passport.use(User.createStrategy());
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });

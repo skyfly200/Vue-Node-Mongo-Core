@@ -33,7 +33,7 @@ exports.login = [
     //console.log(req.body.username);
     next();
   },
-  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/user/login', failureFlash: true })
+  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/users/login', failureFlash: true })
 ];
 
 exports.logout = function(req, res, next){
