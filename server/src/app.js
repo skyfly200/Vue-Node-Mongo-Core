@@ -1,4 +1,5 @@
-var path = require('path');
+const path = require('path');
+const config = require('./config');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -17,7 +18,7 @@ app.set('view options', { layout: false });
 app.use(cors);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'awesomecookiesecret'
+  secret: process.env.SESSION_SECRET || config.sessionSecret
 }));
 app.use(passport.initialize());
 app.use(passport.session());
