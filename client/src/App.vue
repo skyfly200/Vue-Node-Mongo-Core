@@ -9,6 +9,14 @@
       <div id="nav">
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link>
+      </div>
+      <div id="user">
+        <span v-if="isLoggedIn">
+          Welcome
+          <router-link to="/dashboard">
+            {{ username }}
+          </router-link>
+        </span>
         <v-btn flat v-if="isLoggedIn"><a @click="logout">Logout</a></v-btn>
         <v-btn flat v-else to="/login">Login</v-btn>
       </div>
@@ -42,6 +50,9 @@ export default {
   computed: {
     isLoggedIn: function() {
       return this.$store.getters.isLoggedIn;
+    },
+    username: function() {
+      return this.$store.getters.user.username;
     }
   },
   methods: {

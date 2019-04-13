@@ -48,7 +48,7 @@ import { Component, Vue } from "vue-property-decorator";
                 if (this.$route.params.nextUrl != null) {
                   this.$router.push(this.$route.params.nextUrl);
                 } else {
-                  this.$router.push("dashboard");
+                  this.$router.push("/dashboard");
                 }
               } else {
                 this.error = response.data.err;
