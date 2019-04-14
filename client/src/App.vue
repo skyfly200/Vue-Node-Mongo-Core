@@ -9,11 +9,15 @@
       <div id="nav">
         <router-link to="/">Home</router-link> |
         <router-link to="/about">About</router-link>
+        <template v-if="isLoggedIn">
+          <span> | </span>
+          <router-link to="/dashboard">Dashboard</router-link>
+        </template>
       </div>
       <div id="user" v-if="isLoggedIn">
         <span>
           Welcome
-          <router-link to="/dashboard">{{ username }}</router-link>
+          <router-link to="/profile">{{ username }}</router-link>
         </span>
         <v-btn flat><a @click="logout">Logout</a></v-btn>
       </div>
