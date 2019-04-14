@@ -1,38 +1,29 @@
-<template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>App Name</span>
-        <span class="font-weight-light">Vue Powered</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-        <template v-if="isLoggedIn">
-          <span> | </span>
-          <router-link to="/dashboard">Dashboard</router-link>
-        </template>
-      </div>
-      <div id="user" v-if="isLoggedIn">
-        <span>
-          Welcome
-          <router-link to="/profile">{{ username }}</router-link>
-        </span>
-        <v-btn flat><a @click="logout">Logout</a></v-btn>
-      </div>
-      <div v-else>
-        <v-btn flat small to="/login">Login</v-btn>
-        <v-btn flat small to="/register">Register</v-btn>
-      </div>
-    </v-toolbar>
-
-    <v-content>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
-    </v-content>
-  </v-app>
+<template lang="pug">
+v-app
+  v-toolbar(app='')
+    v-toolbar-title.headline.text-uppercase
+      span App Name
+      span.font-weight-light Vue Powered
+    v-spacer
+    #nav
+      router-link(to='/') Home
+      |  |
+      router-link(to='/about') About
+      template(v-if='isLoggedIn')
+        span  |
+        router-link(to='/dashboard') Dashboard
+    #user(v-if='isLoggedIn')
+      span
+        | Welcome
+        router-link(to='/profile') {{ username }}
+      v-btn(flat='')
+        a(@click='logout') Logout
+    div(v-else='')
+      v-btn(flat='' small='' to='/login') Login
+      v-btn(flat='' small='' to='/register') Register
+  v-content
+    v-container(fluid='')
+      router-view
 </template>
 
 <script>
