@@ -1,6 +1,12 @@
 <template lang="pug">
   .dashboard
     h1 Welcome to the dashboard {{ username }}
+    v-btn(primary to="/profile")
+      v-icon person
+      span Your Profile
+    v-btn(primary to="/groups")
+      v-icon people
+      span Your Groups
 </template>
 
 <script>
