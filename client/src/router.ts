@@ -58,6 +58,29 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () =>
+        import(/* webpackChunkName: "profile" */ "./views/Profile.vue"),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/groups",
+      name: "groups",
+      component: () =>
+        import(/* webpackChunkName: "groups" */ "./views/Groups.vue"),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "*",
+      name: "404",
+      component: () => import(/* webpackChunkName: "404" */ "./views/404.vue")
     }
   ]
 });
