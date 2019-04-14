@@ -82,13 +82,10 @@ import { Component, Vue } from "vue-property-decorator";
           this.$store
             .dispatch("register", data)
             .then(response => {
-              if (response.data) {
-                if (response.data.message) {
-                  console.log(response.data.message);
-                  this.$router.push("/login");
-                } else {
-                  this.error = response.data.err;
-                }
+              if (response.data.message) {
+                this.$router.push("/login");
+              } else if (response.data.err) {
+                this.error = response.data.err;
               } else {
                 this.error = "Registration failed";
               }
