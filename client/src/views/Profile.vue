@@ -1,7 +1,6 @@
-<template>
-  <div class="profile">
-    <h1>{{ username }}'s Profile</h1>
-  </div>
+<template lang="pug">
+  .profile
+    h1 {{ username }}'s Profile
 </template>
 
 <script>

@@ -1,7 +1,6 @@
-<template>
-  <div class="groups">
-    <h1>Find Grouos to Join</h1>
-  </div>
+<template lang="pug">
+  .groups
+    h1 Find Groups to Join
 </template>
 
 <script>
