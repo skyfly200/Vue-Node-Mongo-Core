@@ -41,7 +41,7 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-  Role.findOneAndRemove(req.params.title, function (err, role) {
+  Role.findOneAndRemove({title: req.params.title}, function (err, role) {
     if (err) return res.status(500).send(err);
     res.send(role);
   })
