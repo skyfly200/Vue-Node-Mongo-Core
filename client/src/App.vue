@@ -14,7 +14,7 @@ v-app
         router-link(to='/dashboard') Dashboard
     #user(v-if='isLoggedIn')
       span
-        | Welcome
+        | Welcome&nbsp;
         router-link(to='/profile') {{ username }}
       v-btn(flat='')
         a(@click='logout') Logout
