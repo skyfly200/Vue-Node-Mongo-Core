@@ -45,11 +45,9 @@ const views = require('./routes/view.route')(app);
 const user = require('./routes/user.route');
 const role = require('./routes/role.route');
 const group = require('./routes/group.route');
-const secureRoute = require('./routes/secure-route');
 app.use('/users', user);
-app.use('/roles', role);
-app.use('/groups', group);
-app.use('/secure', passport.authenticate('jwt', { session : false }), secureRoute );
+app.use('/roles', passport.authenticate('jwt', { session : false }), role);
+app.use('/groups', passport.authenticate('jwt', { session : false }), group);
 
 const dev_db_url = database.buildURI(config.dbInfo);
 // If provided use DB from env variable, else use dev DB
