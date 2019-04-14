@@ -67,3 +67,5 @@ import { Component, Vue } from "vue-property-decorator";
 })
 export default class Login extends Vue {}
 </script>
+
+<style lang="sass" scoped></style>

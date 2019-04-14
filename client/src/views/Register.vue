@@ -102,3 +102,5 @@ import { Component, Vue } from "vue-property-decorator";
 })
 export default class Register extends Vue {}
 </script>
+
+<style lang="sass" scoped></style>

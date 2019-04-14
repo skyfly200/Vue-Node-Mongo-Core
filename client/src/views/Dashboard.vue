@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "Dashboard",
   computed: {
     username: function() {
       return this.$store.getters.user.username;
@@ -13,3 +13,5 @@ export default {
   }
 };
 </script>
+
+<style lang="sass" scoped></style>
