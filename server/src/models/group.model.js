@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 let GroupSchema = new Schema({
     name: {type: String, required: true},
-    created: { type: Date, default: Date.now },
-    email: {type: String, required: true},
+    created: {type: Date, default: Date.now},
+    creator: {type: String, required: true},
+    email: {type: String},
     web_url: {type: String},
     phone: {type: String},
 });

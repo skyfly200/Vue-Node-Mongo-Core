@@ -11,6 +11,10 @@ const UserSchema = new Schema({
     email: {type: String, required: true, unique:true, trim: true, lowercase:true},
     home_phone: {type: String},
     cell_phone: {type: String},
+    profile: {
+      djName: { type: String },
+      favColor: { type: String }
+    },
     memberships: [{name: String}]
 });
 
