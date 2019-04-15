@@ -79,7 +79,7 @@ exports.profile = function (req, res, next) {
         });
       })
     } else {
-      res.send({err: 'Can not find user'});
+      res.send({err: 'Must provide a username'});
     }
 };
 

@@ -60,7 +60,7 @@ let router = new Router({
       }
     },
     {
-      path: "/profile",
+      path: "/profile/:username?",
       name: "profile",
       component: () =>
         import(/* webpackChunkName: "profile" */ "./views/Profile.vue"),

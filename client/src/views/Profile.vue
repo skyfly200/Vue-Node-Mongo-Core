@@ -18,16 +18,22 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   data: () => ({
-    user: {}
+    user: {},
+    username: ""
   }),
-  computed: {
-    username: function() {
-      return this.$store.getters.user.username;
+  watch: {
+    $route(to, from) {
+      this.username = this.$route.params.username
+        ? this.$route.params.username
+        : this.$store.getters.user.username;
+      this.getProfile(this.username);
     }
   },
   created() {
-    let id = this.$route.params.id ? this.$route.params.id : this.username;
-    this.getProfile(id);
+    this.username = this.$route.params.username
+      ? this.$route.params.username
+      : this.$store.getters.user.username;
+    this.getProfile(this.username);
   },
   methods: {
     titleCase: function(string) {
@@ -35,16 +41,21 @@ import { Component, Vue } from "vue-property-decorator";
       else return "";
     },
     getProfile: function(username) {
-      this.user = {
-        joined: new Date(),
-        name: "Users Name",
-        groups: ["Group 111"],
-        profile: [
-          { title: "Favorite Color", value: "Purple" },
-          { title: "Nickname", value: "Mad Max" },
-          { title: "Favorite Genera", value: "Rock" }
-        ]
-      };
+      this.$http({
+        url: "http://localhost:1234/users/profile/" + username,
+        data: { username: username },
+        method: "GET"
+      })
+        .then(resp => {
+          if (resp.data.err) {
+            console.error(resp.data.err);
+          } else {
+            this.user = resp.data;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   }
 })
