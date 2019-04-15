@@ -33,6 +33,10 @@ export default {
     return {};
   },
   created: function() {
+    this.$store.dispatch("load_session", {
+      token: localStorage.getItem("token"),
+      user: JSON.parse(localStorage.getItem("user"))
+    });
     this.$http.interceptors.response.use(undefined, function(err) {
       return new Promise(function(resolve, reject) {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {

@@ -28,6 +28,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    load_session: ({commit}, data) => {
+      let {token, user} = data;
+      console.log(data);
+      commit('auth_success', {token, user});
+    },
     login: ({commit}, user) => {
       return new Promise((resolve, reject) => {
         commit('auth_request');
@@ -37,6 +42,7 @@ export default new Vuex.Store({
           const user = resp.data.user
           // MUST be changed to store JWT in cookie for security!!!
           localStorage.setItem('token', token)
+          localStorage.setItem('user', JSON.stringify(user))
           axios.defaults.headers.common['Authorization'] = token
           commit('auth_success', {token, user})
           resolve(resp)
@@ -64,6 +70,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('logout');
         localStorage.removeItem('token')
+        localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })
