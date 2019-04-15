@@ -4,6 +4,7 @@ v-container(fluid grid-list-md).error-404
     v-flex.heading
       h1 404
       h2 Page not found
+    v-flex.links
       router-link(to="/") Back to Home
       h4 Email webmaster about broken links
 </template>
@@ -18,7 +19,9 @@ export default {
 .layout
   display: flex
   flex-direction: column
+  text-align: center
 .flex
   display: flex
   justify-content: center
+  flex-direction: column
 </style>
