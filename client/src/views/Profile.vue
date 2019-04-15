@@ -1,6 +1,8 @@
 <template lang="pug">
-  .profile
-    h1 {{ titleCase(username) }}'s Profile
+v-container(fluid grid-list-md).profile
+  v-layout.layout
+    v-flex.heading
+      h1 {{ titleCase(username) }}'s Profile
 </template>
 
 <script>
@@ -19,4 +21,11 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.profile
+  display: flex
+  flex-direction: column
+.flex
+  display: flex
+  justify-content: center
+</style>

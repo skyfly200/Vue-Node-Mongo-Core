@@ -1,9 +1,11 @@
 <template lang="pug">
-  .error-404
-    h1 404
-    h2 Page not found
-    router-link(to="/") Back to Home
-    h4 Email webmaster about broken links
+v-container(fluid grid-list-md).error-404
+  v-layout.layout
+    v-flex.heading
+      h1 404
+      h2 Page not found
+      router-link(to="/") Back to Home
+      h4 Email webmaster about broken links
 </template>
 
 <script>
@@ -12,4 +14,11 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.layout
+  display: flex
+  flex-direction: column
+.flex
+  display: flex
+  justify-content: center
+</style>

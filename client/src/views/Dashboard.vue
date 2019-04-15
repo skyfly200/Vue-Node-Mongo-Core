@@ -1,15 +1,15 @@
 <template lang="pug">
-  v-container(fluid grid-list-md).dashboard
-    v-layout.dashboard-layout
-      v-flex.heading
-        h1 Welcome to the dashboard {{ username }}
-      v-flex.body
-        v-btn(primary to="/profile")
-          v-icon person
-          span Your Profile
-        v-btn(primary to="/groups")
-          v-icon people
-          span Your Groups
+v-container(fluid grid-list-md).dashboard
+  v-layout.layout
+    v-flex.heading
+      h1 Welcome to the dashboard {{ username }}
+    v-flex.body
+      v-btn(primary to="/profile")
+        v-icon person
+        span Your Profile
+      v-btn(primary to="/groups")
+        v-icon people
+        span Your Groups
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.dashboard-layout
+.layout
   display: flex
   flex-direction: column
 .flex

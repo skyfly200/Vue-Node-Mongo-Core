@@ -1,6 +1,8 @@
 <template lang="pug">
-  .admin-dashboard
-    h1 Welcome to the admin portal {{ username }}
+v-container(fluid grid-list-md).admin-dashboard
+  v-layout.layout
+    v-flex.heading
+      h1 Welcome to the admin portal {{ username }}
 </template>
 
 <script>
@@ -14,4 +16,11 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.layout
+  display: flex
+  flex-direction: column
+.flex
+  display: flex
+  justify-content: center
+</style>

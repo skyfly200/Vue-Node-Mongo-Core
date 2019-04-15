@@ -7,10 +7,10 @@ v-app
     v-spacer
     #nav
       router-link(to='/') Home
-      |  |
+      |  |&nbsp;
       router-link(to='/about') About
       template(v-if='isLoggedIn')
-        span  |
+        span  |&nbsp;
         router-link(to='/dashboard') Dashboard
     #user(v-if='isLoggedIn')
       span
