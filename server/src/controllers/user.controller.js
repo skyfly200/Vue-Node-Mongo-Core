@@ -4,10 +4,6 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
 //Simple version, without validation or sanitation
-exports.test = function (req, res) {
-    res.send('Greetings from the User controller!');
-};
-
 exports.login = async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
@@ -68,6 +64,22 @@ exports.read = function (req, res, next) {
       })
     } else {
       res.send('invalid user ID');
+    }
+};
+
+exports.profile = function (req, res, next) {
+    if (req.params.username) {
+      User.findOne({username: req.params.username}, function (err, user) {
+        if (err) return next(err);
+        res.send({
+          joined: user.joined,
+          name: user.name,
+          groups: user.groups,
+          profile: user.profile
+        });
+      })
+    } else {
+      res.send({err: 'Can not find user'});
     }
 };
 

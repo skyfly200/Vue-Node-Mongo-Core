@@ -6,13 +6,13 @@ const User = require('../models/user.model');
 const user_controller = require('../controllers/user.controller');
 
 // a simple test url to check that all of our files are communicating correctly.
-router.get('/test', user_controller.test);
-
 router.post('/register', user_controller.create);
 
 router.post('/login', user_controller.login);
 
 router.get('/logout', user_controller.logout);
+
+router.get('/profile/:username', user_controller.profile);
 
 router.get('/:id', user_controller.read);
 
