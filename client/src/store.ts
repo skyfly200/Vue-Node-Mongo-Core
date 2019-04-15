@@ -30,7 +30,6 @@ export default new Vuex.Store({
   actions: {
     load_session: ({commit}, data) => {
       let {token, user} = data;
-      console.log(data);
       commit('auth_success', {token, user});
     },
     login: ({commit}, user) => {
