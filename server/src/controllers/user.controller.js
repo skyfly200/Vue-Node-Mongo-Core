@@ -34,27 +34,34 @@ exports.login = async (req, res, next) => {
 exports.create = async function (req, res) {
   // generate a validation key to store and send to user
   const emailToken = await utils.generateToken();
-  mailgun.sendEmail('CCRN Accounts <accounts@coloradocommunityradio.com>', req.body.email, {
-    subject: "Verify Your Email",
-    text: "verify",
-    html: `<h1>Thanks for signing up!</h1>
-          Please <a href='${config.verifyURL}?token=${emailToken}&username=${req.body.username}'>Verify Your Email</a>.`
-  });
   try {
-    User.create({
-      roles: ['admin'],
-      active: false,
-      emailKey: emailToken,
-      name: req.body.name,
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
-      home_phone: req.body.home_phone,
-      cell_phone: req.body.cell_phone
-    });
-    res.json({
-      message : 'Signup successful',
-      user : req.user,
+    // verify email deliverability before creating an account
+    mailgun.sendEmail('CCRN Accounts <accounts@coloradocommunityradio.com>', req.body.email, {
+      subject: "Verify Your Email",
+      text: "verify",
+      html: `<h1>Thanks for signing up!</h1>
+            Please <a href='${config.verifyURL}?token=${emailToken}&username=${req.body.username}'>Verify Your Email</a>.`
+    })
+    .then( body => {
+      User.create({
+        roles: ['admin'],
+        active: false,
+        emailKey: emailToken,
+        name: req.body.name,
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
+        home_phone: req.body.home_phone,
+        cell_phone: req.body.cell_phone
+      });
+      res.json({
+        message : 'Signup successful',
+        user : req.user,
+      });
+    })
+    .catch( error => {
+      console.error(error)
+      res.json(error);
     });
   }
   catch (error) {
@@ -62,16 +69,24 @@ exports.create = async function (req, res) {
   }
 };
 
-exports.read = function (req, res, next) {
-    let id = req.params.id;
-    if (id.length === 24) {
-      User.findById(id, function (err, user) {
-        if (err) return next(err);
-        res.send(user);
-      })
-    } else {
-      res.send('invalid user ID');
-    }
+exports.verifyEmail = function (req, res, next) {
+    const username = req.query.username;
+    User.findOne({username: username}, function (err, user) {
+      if (err) {
+        res.render('verifyEmail', {result: "Error: " + err});
+      } else if (!user) {
+        res.render('verifyEmail', {result: "Cant find user " + username});
+      } else if (user.emailKey === req.query.token) { // add token timeout
+        User.findOneAndUpdate({username: username}, {active: true}, {new: true}, function (err, user) {
+          if (err) {
+            res.render('verifyEmail', {result: "Error: " + err});
+          }
+          res.render('verifyEmail', {result: 'Email has been verified'});
+        });
+      } else {
+        res.render('verifyEmail', {result: 'Invalid token'});
+      }
+    })
 };
 
 exports.logout = function(req, res, next){

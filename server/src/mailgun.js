@@ -12,8 +12,8 @@ exports.sendEmail = function (sender, recipient, message) {
       html: message.html
     };
     mailgun.messages().send(data, (error, body) => {
-      if (error) { console.log(error); }
-      else console.log(body);
+      if (error) { reject(error) }
+      else resolve(body);
     });
   });
 };
