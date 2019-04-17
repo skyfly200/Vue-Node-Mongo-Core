@@ -40,7 +40,7 @@ exports.create = async function (req, res) {
       subject: "Verify Your Email",
       text: "verify",
       html: `<h1>Thanks for signing up!</h1>
-            Please <a href='${config.verifyURL}/${req.body.username}/${emailToken}'>Verify Your Email</a>.`
+            Please <a href='${config.token.verifyURL}/${req.body.username}/${emailToken}'>Verify Your Email</a>.`
     })
     .then( body => {
       User.create({
