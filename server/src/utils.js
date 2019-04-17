@@ -30,7 +30,7 @@ exports.verifyUserToken = function (type, username, token) {
           if (expired) {
             resolve({valid: false, message: "The token has expired"});
           } else {
-            resolve({valid: true, message: "Valid token"});
+            resolve({valid: true});
           }
         } else {
           resolve({valid: false, message: "Invalid Token"});
