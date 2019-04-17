@@ -1,6 +1,8 @@
-const domain = "mail.coloradocommunityradio.com";
-const mailgunAPIKey = "";
-const mailgun = require('mailgun-js')({ apiKey: mailgunAPIKey, domain: domain });
+const config = require('./config').mailgun;
+const mailgun = require('mailgun-js')({
+  apiKey: config.mailgunAPIKey,
+  domain: config.domain
+});
 
 // Create and export function to send emails through Mailgun API
 exports.sendEmail = function (recipient, message) {
@@ -8,7 +10,8 @@ exports.sendEmail = function (recipient, message) {
     from: 'CCRN Accounts <accounts@coloradocommunityradio.com>',
     to: recipient,
     subject: message.subject,
-    text: message.text
+    text: message.text,
+    html: message.html
   };
 
   mailgun.messages().send(data, (error, body) => {
