@@ -38,7 +38,7 @@ exports.create = async function (req, res) {
     subject: "Verify Your Email",
     text: "verify",
     html: `<h1>Thanks for signing up!</h1>
-          Please <a href='${config.verifyURL}?token=${emailToken}'>Verify Your Email</a>.`
+          Please <a href='${config.verifyURL}?token=${emailToken}&username=${req.body.username}'>Verify Your Email</a>.`
   });
   try {
     User.create({
@@ -60,6 +60,18 @@ exports.create = async function (req, res) {
   catch (error) {
     res.json({error});
   }
+};
+
+exports.read = function (req, res, next) {
+    let id = req.params.id;
+    if (id.length === 24) {
+      User.findById(id, function (err, user) {
+        if (err) return next(err);
+        res.send(user);
+      })
+    } else {
+      res.send('invalid user ID');
+    }
 };
 
 exports.logout = function(req, res, next){
