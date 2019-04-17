@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/node,vuejs,windows
 # Edit at https://www.gitignore.io/?templates=node,vuejs,windows
 
+## Secrets ##
+config.js
+
 ### Node ###
 # Logs
 logs
