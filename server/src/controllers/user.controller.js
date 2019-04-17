@@ -1,5 +1,7 @@
 const User = require('../models/user.model');
 const config = require('../config');
+const utils = require('../utils');
+const mailgun = require('../mailgun');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
@@ -29,25 +31,35 @@ exports.login = async (req, res, next) => {
   })(req, res, next);
 };
 
-exports.create = function (req, res) {
-    try {
-      User.create({
-        roles: ['admin'],
-        name: req.body.name,
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        home_phone: req.body.home_phone,
-        cell_phone: req.body.cell_phone
-      });
-      res.json({
-        message : 'Signup successful',
-        user : req.user,
-      });
-    }
-    catch (error) {
-      res.json({error});
-    }
+exports.create = async function (req, res) {
+  // generate a validation key to store and send to user
+  const emailToken = await utils.generateToken();
+  mailgun.sendEmail('CCRN Accounts <accounts@coloradocommunityradio.com>', req.body.email, {
+    subject: "Verify Your Email",
+    text: "verify",
+    html: `<h1>Thanks for signing up!</h1>
+          Please <a href='${config.verifyURL}?token=${emailToken}'>Verify Your Email</a>.`
+  });
+  try {
+    User.create({
+      roles: ['admin'],
+      active: false,
+      emailKey: emailToken,
+      name: req.body.name,
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email,
+      home_phone: req.body.home_phone,
+      cell_phone: req.body.cell_phone
+    });
+    res.json({
+      message : 'Signup successful',
+      user : req.user,
+    });
+  }
+  catch (error) {
+    res.json({error});
+  }
 };
 
 exports.logout = function(req, res, next){
