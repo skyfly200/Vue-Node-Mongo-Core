@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const base64url = require('base64url');
+var moment = require('moment');
 
 exports.generateToken = function ({ stringBase = 'base64', byteLength = 48 } = {}) {
   return new Promise((resolve, reject) => {
@@ -11,4 +12,8 @@ exports.generateToken = function ({ stringBase = 'base64', byteLength = 48 } = {
       }
     });
   });
+}
+
+exports.hasExpired = function (issued) {
+  return moment().isAfter(moment(issued).add(3, 'm'));
 }

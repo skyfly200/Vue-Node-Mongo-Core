@@ -6,7 +6,10 @@ const UserSchema = new Schema({
     name: {type: String, required: true},
     username: {type: String, required: true, unique:true, trim: true, lowercase:true},
     password: {type: String},
-    emailKey: {type: String},
+    verifyEmail: {
+      token: {type: String},
+      issued: {type: Date}
+    },
     active: {type: Boolean, default: false},
     joined: { type: Date, default: Date.now },
     roles: [{type: String}],
