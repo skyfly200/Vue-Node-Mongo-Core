@@ -40,15 +40,20 @@ exports.create = async function (req, res) {
       subject: "Verify Your Email",
       text: "verify",
       html: `<h1>Thanks for signing up!</h1>
-            Please <a href='${config.token.verifyURL}/${req.body.username}/${emailToken}'>Verify Your Email</a>.`
+            <p>Please click the button below to verify your email address.</p>
+            <a href='${config.token.verifyURL}/${'email'}/${req.body.username}/${emailToken}'>
+            <button>Verify Email</button></a>
+            <p>This link will expire in ${config.token.expires.value} ${config.token.expires.unit}s</p>`
     })
     .then( body => {
       User.create({
         roles: ['admin'],
         active: false,
-        verifyEmail: {
-          token: emailToken,
-          issued: new Date()
+        tokens: {
+          email: {
+            token: emailToken,
+            issued: new Date()
+          }
         },
         name: req.body.name,
         username: req.body.username,
@@ -72,28 +77,25 @@ exports.create = async function (req, res) {
   }
 };
 
-exports.verifyEmail = function (req, res, next) {
-    const username = req.params.username;
-    User.findOne({username: username}, function (err, user) {
-      if (err) {
-        res.render('verifyEmail', {result: "Error: " + err});
-      } else if (!user) {
-        res.render('verifyEmail', {result: "Cant find user " + username});
-      } else if (user.verifyEmail.token === req.params.token) { // add token timeout
-        if (utils.hasExpired(user.verifyEmail.issued)) {
-          res.render('verifyEmail', {result: "The token has expired"});
-        } else {
-          User.findOneAndUpdate({username: username}, {active: true}, {new: true}, function (err, user) {
-            if (err) {
-              res.render('verifyEmail', {result: "Activation failed: " + err});
-            }
-            res.render('verifyEmail', {result: 'Email has been verified'});
-          });
-        }
+exports.verifyToken = function (req, res, next) {
+    const {type, username, token} = req.params;
+    utils.verifyUserToken(type, username, token)
+    .then( (result) => {
+      if (result.valid) {
+        User.findOneAndUpdate({username: username}, {active: true}, {new: true}, function (err, user) {
+          if (err) {
+            res.render('verifyEmail', {result: "Activation Error: " + err});
+          } else if (!user) {
+            res.render('verifyEmail', {result: "User Lookup Failed"});
+          } else {
+            res.render('verifyEmail', {result: 'Your email has been verified'});
+          }
+        });
       } else {
-        res.render('verifyEmail', {result: 'Invalid token'});
+        res.render('verifyEmail', {result: result.message});
       }
     })
+    .catch( (error) => res.render('verifyEmail', {result: "An error occured: " + error}) );
 };
 
 exports.logout = function(req, res, next){

@@ -8,7 +8,7 @@ const user_controller = require('../controllers/user.controller');
 // a simple test url to check that all of our files are communicating correctly.
 router.post('/register', user_controller.create);
 
-router.get('/verify/:username/:token', user_controller.verifyEmail);
+router.get('/verify/:type/:username/:token', user_controller.verifyToken);
 
 router.post('/login', user_controller.login);
 
