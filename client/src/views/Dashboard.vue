@@ -7,9 +7,6 @@ v-container(fluid grid-list-md).dashboard
       v-btn(primary to="/profile")
         v-icon person
         span Your Profile
-      v-btn(primary to="/groups")
-        v-icon people
-        span Your Groups
 </template>
 
 <script>
