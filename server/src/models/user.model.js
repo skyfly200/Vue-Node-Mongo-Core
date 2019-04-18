@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    name: {type: String, required: true},
+    email: {type: String, required: true, unique:true, trim: true, lowercase:true},
     username: {type: String, required: true, unique:true, trim: true, lowercase:true},
     password: {type: String},
     tokens: {
@@ -13,10 +13,11 @@ const UserSchema = new Schema({
       }
     },
     active: {type: Boolean, default: false},
+    name: {type: String, required: true},
+    bio: {type: String},
     joined: { type: Date, default: Date.now },
     roles: [{type: String}],
     groups: [{type: String}],
-    email: {type: String, required: true, unique:true, trim: true, lowercase:true},
     home_phone: {type: String},
     cell_phone: {type: String},
     profile: [{title: {type: String}, value: {type: String}}],

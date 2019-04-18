@@ -60,7 +60,12 @@ exports.create = async function (req, res) {
         password: req.body.password,
         email: req.body.email,
         home_phone: req.body.home_phone,
-        cell_phone: req.body.cell_phone
+        cell_phone: req.body.cell_phone,
+        profile: [
+          {title: "Bio", value: ""},
+          {title: "Favorite Color", value: ""},
+          {title: "Favorite Instrument", value: ""}
+        ]
       });
       res.json({
         message : 'Signup successful',
@@ -120,6 +125,7 @@ exports.profile = function (req, res, next) {
       User.findOne({username: req.params.username}, function (err, user) {
         if (err) return next(err);
         res.send({
+          bio: user.bio,
           joined: user.joined,
           name: user.name,
           groups: user.groups,

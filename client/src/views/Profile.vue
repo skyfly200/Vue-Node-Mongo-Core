@@ -2,15 +2,33 @@
 v-container(fluid grid-list-md).profile
   v-layout.layout
     v-flex.heading
-      h1 {{ titleCase(username) }}'s Profile
+      v-card
+        .header-image
+          img(src="http://lorempixel.com/800/200/abstract")
+        .header-body
+          .profile-image
+            img(src="http://lorempixel.com/200/200/abstract")
+          .profile-info
+            h1 {{ titleCase(username) }}
+            h3 Name: {{ user.name }}
+            h3 Joined: {{ user.joined }}
     v-flex.body
-      h3 Joined: {{ user.joined }}
-      h3 Name: {{ user.name }}
-      h3 Groups:
-      ul
-        li(v-for="group in user.groups") {{ group }}
-      h3 Profile Info:
-      p(v-for="field in user.profile") {{ field.title }}: {{ field.value }}
+      v-card.bio.section
+        v-card-title
+          h3 Bio
+        v-card-text
+          p {{ user.bio }}
+      v-card.groups.section(v-if="user.groups")
+        v-card-title
+          h3 Groups:
+        v-card-text
+          ul
+            li(v-for="group in user.groups") {{ group }}
+      v-card.fields.section
+        v-card-title
+          h3 Profile Info
+        v-card-text
+          p(v-for="field in user.profile") {{ field.title }}: {{ field.value }}
 </template>
 
 <script>
@@ -67,9 +85,27 @@ export default class Profile extends Vue {}
   display: flex
   flex-direction: column
   justify-content: center
-.flex
+.header-image img
+  width: 100%
+.header-body
   display: flex
-  flex-direction: column
+  justify-content: left
+  .profile-image
+    margin: 1em
+  .profile-info
+    margin: 2em
+.body
+  display: flex
   justify-content: center
-  text-align: center
+  .section
+    padding: 1em
+    width: 100%
+    margin: 1em
+    display: flex
+    flex-direction: column
+    justify-content: center
+    .v-card__text
+      height: 100%
+  .bio
+    flex: 1 100%
 </style>
