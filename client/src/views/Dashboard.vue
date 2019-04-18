@@ -15,9 +15,13 @@ v-container(fluid grid-list-md).dashboard
     v-flex.heading
       h1 Welcome to the dashboard {{ username }}
     v-flex.body
-      v-btn(primary to="/profile")
-        v-icon person
-        span Your Profile
+      v-card.buttons
+        v-btn(primary to="/profile")
+          v-icon person
+          span Your Profile
+        v-btn(primary to="/password")
+          v-icon lock
+          span Change Password
 </template>
 
 <script>
@@ -73,4 +77,11 @@ export default {
 .flex
   display: flex
   justify-content: center
+.buttons
+  display: flex
+  flex-direction: column
+  padding: 1em
+  .v-btn
+    margin: 1em auto
+    width: 200px
 </style>

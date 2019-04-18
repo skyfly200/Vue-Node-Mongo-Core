@@ -75,6 +75,12 @@ let router = new Router({
         import(/* webpackChunkName: "verifyEmail" */ "./views/VerifyEmail.vue")
     },
     {
+      path: "/password/:username?/:token?",
+      name: "password",
+      component: () =>
+        import(/* webpackChunkName: "password" */ "./views/Password.vue")
+    },
+    {
       path: "/groups",
       name: "groups",
       component: () =>
