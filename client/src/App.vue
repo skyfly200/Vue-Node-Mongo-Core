@@ -29,6 +29,9 @@ v-app
         v-spacer
         v-btn(color='green darken-1' flat @click='resend') Resend Email
         v-btn(color='blue darken-1' flat @click='dialog = false') Close
+  v-snackbar(v-model="snackbar" right timeout=3000)
+    | {{ snackbarMessage }}
+    v-btn(flat @click="snackbar = false") Close
   v-content
     v-container(fluid='')
       router-view
@@ -39,7 +42,10 @@ export default {
   name: "App",
   data() {
     return {
-      dialog: false
+      dialog: false,
+      dialogMessage: "",
+      snackbar: false,
+      snackbarMessage: ""
     };
   },
   created: function() {
@@ -79,8 +85,23 @@ export default {
     },
     resend: function() {
       // send a new verification email
-      // api path: /users/resend/:username
-      this.dialog = false;
+      this.$http({
+        url: "http://localhost:1234/users/resend/" + this.username,
+        data: { username: this.username },
+        method: "GET"
+      })
+        .then(resp => {
+          if (resp.data.err) {
+            console.error(resp.data.err);
+          } else {
+            this.dialog = false;
+            this.snackbar = true;
+            this.snackbarMessage = "Email Sent";
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   }
 };
