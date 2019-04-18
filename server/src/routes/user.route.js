@@ -10,6 +10,8 @@ router.post('/register', user_controller.create);
 
 router.get('/verify/:type/:username/:token', user_controller.verifyToken);
 
+router.get('/resend/:username', user_controller.resendEmailVerify);
+
 router.post('/login', user_controller.login);
 
 router.get('/logout', user_controller.logout);

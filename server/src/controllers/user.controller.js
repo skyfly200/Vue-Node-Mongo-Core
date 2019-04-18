@@ -31,7 +31,7 @@ exports.login = async (req, res, next) => {
   })(req, res, next);
 };
 
-exports.create = async function (req, res) {
+exports.create = async function (req, res, next) {
   // generate a validation token to store and send to user
   const emailToken = await utils.generateToken();
   try {
@@ -73,7 +73,7 @@ exports.create = async function (req, res) {
       });
     })
     .catch( error => {
-      console.error(error)
+      console.error(error);
       res.json(error);
     });
   }
@@ -81,6 +81,42 @@ exports.create = async function (req, res) {
     res.json({error});
   }
 };
+
+exports.resendEmailVerify = async function (req, res, next) {
+  // generate a validation token to store and send to user
+  const emailToken = await utils.generateToken();
+  const username = req.params.username;
+  try {
+    User.findOne({username: username}, function (err, user) {
+      if (err || !user) return res.send(400);
+      // verify email deliverability before creating an account
+      mailgun.sendEmail('CCRN Accounts <accounts@coloradocommunityradio.com>', user.email, {
+        subject: "Verify Your Email",
+        text: "verify",
+        html: `<h1>Thanks for signing up!</h1>
+              <p>Please click the button below to verify your email address.</p>
+              <a href='${config.token.verifyURL}/${'email'}/${username}/${emailToken}'>
+              <button>Verify Email</button></a>
+              <p>This link will expire in ${config.token.expires.value} ${config.token.expires.unit}s</p>`
+      })
+      .then( body => {
+        User.findOneAndUpdate({username: username}, {
+          tokens: {email: { token: emailToken, issued: new Date() }}
+        }, {new: true}, function (err, user) {
+          if (err) return console.error(err);
+          res.send({message: 'Sent'});
+        });
+      })
+      .catch( error => {
+        console.error(error);
+        res.json(error);
+      });
+    });
+  }
+  catch (error) {
+    res.json({error});
+  }
+}
 
 exports.verifyToken = function (req, res, next) {
     const {type, username, token} = req.params;
@@ -137,16 +173,16 @@ exports.profile = function (req, res, next) {
     }
 };
 
-exports.update = function (req, res) {
-    User.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function (err, user) {
-        if (err) return next(err);
-        res.send(user);
-    });
+exports.update = function (req, res, next) {
+  User.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function (err, user) {
+      if (err) return next(err);
+      res.send(user);
+  });
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res, next) {
   User.findByIdAndRemove(req.params.id, function (err, user) {
-        if (err) return next(err);
-        res.send(user);
-    })
+      if (err) return next(err);
+      res.send(user);
+  })
 };

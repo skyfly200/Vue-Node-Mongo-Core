@@ -79,6 +79,7 @@ export default {
     },
     resend: function() {
       // send a new verification email
+      // api path: /users/resend/:username
       this.dialog = false;
     }
   }
