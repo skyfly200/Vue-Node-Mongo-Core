@@ -20,7 +20,7 @@ v-container(fluid grid-list-md).profile
           p {{ user.bio }}
       v-card.groups.section(v-if="user.groups")
         v-card-title
-          h3 Groups:
+          h3 Groups
         v-card-text
           ul
             li(v-for="group in user.groups") {{ group }}
@@ -106,6 +106,7 @@ export default class Profile extends Vue {}
     justify-content: center
     .v-card__text
       height: 100%
+      min-height: 20vh
   .bio
     flex: 1 100%
 </style>
