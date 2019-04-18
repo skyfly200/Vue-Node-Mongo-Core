@@ -18,6 +18,7 @@ export default {
     message: "Checking Token"
   }),
   created() {
+    this.$store.dispatch("logout");
     this.username = this.$route.params.username;
     this.$http({
       url:
