@@ -28,16 +28,6 @@ app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
 // Load view routes
 const views = require('./routes/view.route')(app);
 
