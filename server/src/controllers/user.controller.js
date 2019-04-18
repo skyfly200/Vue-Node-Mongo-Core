@@ -17,12 +17,12 @@ exports.login = async (req, res, next) => {
       }
       req.login(user, { session : false }, async (error) => {
         if( error ) return next(error)
-        //We don't want to store the sensitive information such as the
-        //user password in the token so we pick only the username, roles and id
-        const body = { _id : user._id, username : user.username, roles: user.roles };
-        //Sign the JWT token and populate the payload with the user email and id
+        // We don't want to store the sensitive information such as the
+        // user password in the token so we pick only the username, roles and id
+        const body = { _id : user._id, username : user.username, roles: user.roles, active: user.active };
+        // Sign the JWT token and populate the payload with the user email and id
         const token = jwt.sign({ user : body },'top_secret');
-        //Send back the token to the user
+        // Send back the token to the user
         return res.json({ auth: true, token: token, user: body });
       });
     } catch (error) {

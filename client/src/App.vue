@@ -1,6 +1,6 @@
 <template lang="pug">
 v-app
-  v-toolbar(app='')
+  v-toolbar(app)
     v-toolbar-title.headline.text-uppercase
       span App Name
       span.font-weight-light Vue Powered
@@ -16,11 +16,19 @@ v-app
       span
         | Welcome&nbsp;
         router-link(to='/profile') {{ username }}
-      v-btn(flat='')
+      v-btn(flat)
         a(@click='logout') Logout
-    div(v-else='')
-      v-btn(flat='' small='' to='/login') Login
-      v-btn(flat='' small='' to='/register') Register
+    div(v-else)
+      v-btn(flat small to='/login') Login
+      v-btn(flat small to='/register') Register
+  v-dialog(v-model='dialog' max-width='290')
+    v-card
+      v-card-title.headline Please verify your email
+      v-card-text You must verify your email to activate your account
+      v-card-actions
+        v-spacer
+        v-btn(color='green darken-1' flat @click='resend') Resend Email
+        v-btn(color='blue darken-1' flat @click='dialog = false') Close
   v-content
     v-container(fluid='')
       router-view
@@ -30,13 +38,16 @@ v-app
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      dialog: false
+    };
   },
   created: function() {
     this.$store.dispatch("load_session", {
       token: localStorage.getItem("token"),
       user: JSON.parse(localStorage.getItem("user"))
     });
+    this.dialog = !this.$store.getters.user.active;
     this.$http.interceptors.response.use(undefined, function(err) {
       return new Promise(function(resolve, reject) {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
@@ -46,6 +57,11 @@ export default {
         reject(err);
       });
     });
+  },
+  watch: {
+    $route(to, from) {
+      this.dialog = !this.$store.getters.user.active;
+    }
   },
   computed: {
     isLoggedIn: function() {
@@ -60,6 +76,10 @@ export default {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/login");
       });
+    },
+    resend: function() {
+      // send a new verification email
+      this.dialog = false;
     }
   }
 };
