@@ -21,17 +21,6 @@ v-app
     div(v-else)
       v-btn(flat small to='/login') Login
       v-btn(flat small to='/register') Register
-  v-dialog(v-model='dialog' max-width='290')
-    v-card
-      v-card-title.headline Please verify your email
-      v-card-text You must verify your email to activate your account
-      v-card-actions
-        v-spacer
-        v-btn(color='green darken-1' flat @click='resend') Resend Email
-        v-btn(color='blue darken-1' flat @click='dialog = false') Close
-  v-snackbar(v-model="snackbar" right :timeout="snackbarTimeout")
-    | {{ snackbarMessage }}
-    v-btn(flat @click="snackbar = false") Close
   v-content
     v-container(fluid='')
       router-view
@@ -40,21 +29,11 @@ v-app
 <script>
 export default {
   name: "App",
-  data() {
-    return {
-      dialog: false,
-      dialogMessage: "",
-      snackbar: false,
-      snackbarMessage: "",
-      snackbarTimeout: 5000
-    };
-  },
   created: function() {
     this.$store.dispatch("load_session", {
       token: localStorage.getItem("token"),
       user: JSON.parse(localStorage.getItem("user"))
     });
-    this.dialog = !this.$store.getters.user.active;
     this.$http.interceptors.response.use(undefined, function(err) {
       return new Promise(function(resolve, reject) {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
@@ -83,26 +62,6 @@ export default {
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/login");
       });
-    },
-    resend: function() {
-      // send a new verification email
-      this.$http({
-        url: "http://localhost:1234/users/resend/" + this.username,
-        data: { username: this.username },
-        method: "GET"
-      })
-        .then(resp => {
-          if (resp.data.err) {
-            console.error(resp.data.err);
-          } else {
-            this.dialog = false;
-            this.snackbar = true;
-            this.snackbarMessage = "Email Sent";
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
     }
   }
 };
