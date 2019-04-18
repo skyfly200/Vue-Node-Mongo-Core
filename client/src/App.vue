@@ -29,7 +29,7 @@ v-app
         v-spacer
         v-btn(color='green darken-1' flat @click='resend') Resend Email
         v-btn(color='blue darken-1' flat @click='dialog = false') Close
-  v-snackbar(v-model="snackbar" right timeout=3000)
+  v-snackbar(v-model="snackbar" right :timeout="snackbarTimeout")
     | {{ snackbarMessage }}
     v-btn(flat @click="snackbar = false") Close
   v-content
@@ -45,7 +45,8 @@ export default {
       dialog: false,
       dialogMessage: "",
       snackbar: false,
-      snackbarMessage: ""
+      snackbarMessage: "",
+      snackbarTimeout: 5000
     };
   },
   created: function() {

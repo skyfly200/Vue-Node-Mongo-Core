@@ -69,6 +69,15 @@ let router = new Router({
       }
     },
     {
+      path: "/verify-email/:username/:token",
+      name: "verifyEmail",
+      component: () =>
+        import(/* webpackChunkName: "verifyEmail" */ "./views/VerifyEmail.vue"),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: "/groups",
       name: "groups",
       component: () =>

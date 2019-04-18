@@ -95,7 +95,7 @@ exports.resendEmailVerify = async function (req, res, next) {
         text: "verify",
         html: `<h1>Thanks for signing up!</h1>
               <p>Please click the button below to verify your email address.</p>
-              <a href='${config.token.verifyURL}/${'email'}/${username}/${emailToken}'>
+              <a href='${config.token.verifyURL}/${username}/${emailToken}'>
               <button>Verify Email</button></a>
               <p>This link will expire in ${config.token.expires.value} ${config.token.expires.unit}s</p>`
       })
@@ -125,18 +125,18 @@ exports.verifyToken = function (req, res, next) {
       if (result.valid) {
         User.findOneAndUpdate({username: username}, {active: true}, {new: true}, function (err, user) {
           if (err) {
-            res.render('verifyEmail', {result: "Activation Error: " + err});
+            res.json({result: "Activation Error: " + err});
           } else if (!user) {
-            res.render('verifyEmail', {result: "User Lookup Failed"});
+            res.json({result: "User Lookup Failed"});
           } else {
-            res.render('verifyEmail', {result: 'Your email has been verified'});
+            res.json({result: 'Your email has been verified'});
           }
         });
       } else {
-        res.render('verifyEmail', {result: result.message});
+        res.json({result: result.message});
       }
     })
-    .catch( (error) => res.render('verifyEmail', {result: "An error occured: " + error}) );
+    .catch( (error) => res.json({result: "An error occured: " + error}) );
 };
 
 exports.logout = function(req, res, next){
