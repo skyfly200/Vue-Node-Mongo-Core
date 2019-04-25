@@ -2,31 +2,49 @@
 v-container(fluid grid-list-md).profile
   v-layout.layout
     v-flex.heading
-      v-card
+      v-card(color='grey lighten-4')
         .header-image
-          img(src="http://lorempixel.com/800/200/abstract")
+          v-hover
+            v-flex.mx-auto(slot-scope='{ hover }')
+              v-img(src='http://lorempixel.com/800/200/abstract')
+                v-expand-transition
+                  .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
+                    .chip-spacer
+                      v-chip(outline color="white").edit-img-chip
+                        v-avatar
+                          v-icon.edit-img photo_camera
+                        | Edit
         .header-body
           .profile-image
-            img(src="http://lorempixel.com/200/200/abstract")
+            v-hover
+              v-flex.mx-auto(slot-scope='{ hover }')
+                v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
+                  v-expand-transition
+                    .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
+                      .chip-spacer
+                        v-chip(outline color="white").edit-img-chip
+                          v-avatar
+                            v-icon.edit-img photo_camera
+                          | Edit
           .profile-info
             h1 {{ titleCase(username) }}
             h3 Name: {{ user.name }}
             h3 Joined: {{ user.joined }}
-    v-flex.body
-      v-card.bio.section
+    v-flex.sections
+      v-card.bio.section(color='grey lighten-4')
         v-card-title
-          h3 Bio
+          h2 Bio
         v-card-text
           p {{ user.bio }}
-      v-card.groups.section(v-if="user.groups")
+      v-card.groups.section(v-if="user.groups" color='grey lighten-4')
         v-card-title
-          h3 Groups
+          h2 Groups
         v-card-text
           ul
-            li(v-for="group in user.groups") {{ group }}
-      v-card.fields.section
+            li(v-for="group in user.groups") {{ group.name }} ( {{ group.role }} )
+      v-card.fields.section(color='grey lighten-4')
         v-card-title
-          h3 Profile Info
+          h2 Profile Info
         v-card-text
           p(v-for="field in user.profile") {{ field.title }}: {{ field.value }}
 </template>
@@ -87,20 +105,29 @@ export default class Profile extends Vue {}
   justify-content: center
 .header-image img
   width: 100%
+.d-flex
+  display: flex
+  justify-content: center
+.chip-spacer
+  margin: auto 50%
+  width: 200px
 .header-body
   display: flex
   justify-content: left
   .profile-image
-    margin: 1em
+    .v-image
+      border-radius: 50%
+      border: 3px solid black
   .profile-info
     margin: 2em
-.body
+.sections
   display: flex
   justify-content: center
+  flex-direction: column
   .section
-    padding: 1em
+    padding: 0.5em
     width: 100%
-    margin: 1em
+    margin: 0.5em 0
     display: flex
     flex-direction: column
     justify-content: center
