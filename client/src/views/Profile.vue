@@ -29,7 +29,7 @@ v-container(fluid grid-list-md).profile
           .profile-info
             h1 {{ titleCase(username) }}
             h3 Name: {{ user.name }}
-            h3 Joined: {{ user.joined }}
+            h3 Joined: {{ dateJoined }}
     v-flex.sections
       v-card.bio.section(color='grey lighten-4')
         v-card-title
@@ -71,7 +71,30 @@ import { Component, Vue } from "vue-property-decorator";
       : this.$store.getters.user.username;
     this.getProfile(this.username);
   },
+  computed: {
+    dateJoined: function() {
+      let date = new Date(this.user.joined);
+      return this.monthFormat(date) + " " + date.getFullYear();
+    }
+  },
   methods: {
+    monthFormat: function(date) {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+      return months[date.getMonth()];
+    },
     titleCase: function(string) {
       if (string) return string.charAt(0).toUpperCase() + string.slice(1);
       else return "";
