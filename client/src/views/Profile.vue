@@ -1,6 +1,13 @@
 <template lang="pug">
 v-container(fluid grid-list-md).profile
   v-layout.layout
+    v-dialog(v-model="imageDialog" max-width="290").image-upload-dialog
+      v-card
+        v-card-title(class="headline") Upload a new {{ imageDialogType }} image
+        v-card-text
+        v-card-actions
+          v-btn(@click="imageDialog = false") Close
+          v-btn Save
     v-flex.heading
       v-card(color='grey lighten-4')
         .header-image
@@ -9,7 +16,7 @@ v-container(fluid grid-list-md).profile
               v-img(src='http://lorempixel.com/800/200/abstract')
                 v-expand-transition
                   .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
-                    .chip-spacer
+                    .chip-spacer(@click="openImageDialog('header')")
                       v-chip(outline color="white").edit-img-chip
                         v-avatar
                           v-icon.edit-img photo_camera
@@ -21,7 +28,7 @@ v-container(fluid grid-list-md).profile
                 v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
                   v-expand-transition
                     .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
-                      .chip-spacer
+                      .chip-spacer(@click="openImageDialog('profile')")
                         v-chip(outline color="white").edit-img-chip
                           v-avatar
                             v-icon.edit-img photo_camera
@@ -55,7 +62,9 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
   data: () => ({
     user: {},
-    username: ""
+    username: "",
+    imageDialogType: "",
+    imageDialog: false
   }),
   watch: {
     $route(to, from) {
@@ -78,6 +87,10 @@ import { Component, Vue } from "vue-property-decorator";
     }
   },
   methods: {
+    openImageDialog: function(type) {
+      this.imageDialog = true;
+      this.imageDialogType = type;
+    },
     monthFormat: function(date) {
       const months = [
         "January",
