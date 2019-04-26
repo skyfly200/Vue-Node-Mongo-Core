@@ -1,5 +1,5 @@
 <template lang="pug">
-v-dialog(v-model="view").image-upload-dialog
+v-dialog(v-model="toggle").image-upload-dialog
   v-card
     v-card-title(class="headline") Upload a new {{ type }} image
     v-card-text
@@ -12,21 +12,18 @@ v-dialog(v-model="view").image-upload-dialog
         v-btn(@click="clearImages") Clear
     v-card-actions
       v-spacer
-      v-btn(@click="view = false") Close
-      v-btn Save
+      v-btn(@click="closeDialog") Close
+      v-btn(:disabled="images.length < 1" @click="uploadImages") Save
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["type", "view", "multi"],
+  props: ["type", "toggle", "multi"],
   data: () => ({
     images: []
   }),
   methods: {
-    clearImages: function() {
-      this.images = [];
-    },
     loadImages: function(e) {
       var files = e.target.files;
       var reader = new FileReader();
@@ -45,9 +42,16 @@ import { Component, Vue } from "vue-property-decorator";
         }
       }
     },
-    openImageDialog: function(type) {
-      this.imageDialog = true;
-      this.imageDialogType = type;
+    clearImages: function() {
+      this.images = [];
+    },
+    uploadImages: function() {
+      // upload selected images
+      // show alert with response
+    },
+    closeDialog: function() {
+      this.images = [];
+      this.$emit("close");
     }
   }
 })
