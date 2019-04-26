@@ -16,8 +16,8 @@ v-container(fluid grid-list-md).profile
                 v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
                   ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('profile')")
           .profile-info
-            h1 {{ titleCase(username) }}
-            h3 Name: {{ user.name }}
+            h1 {{ titleCase(user.name) }}
+            h3 Userame: {{ username }}
             h3 Joined: {{ dateJoined }}
     v-flex.sections
       v-card.bio.section(color='grey lighten-4')
@@ -182,10 +182,13 @@ export default class Profile extends Vue {}
   justify-content: left
   .profile-image
     .v-image
+      margin-top: -50%
+      margin-left: 10%
       border-radius: 50%
       border: 3px solid black
+      box-shadow: 0 0 25px 1px white
   .profile-info
-    margin: 2em
+    margin: 0 1em 1em 3em
 .sections
   display: flex
   justify-content: center
