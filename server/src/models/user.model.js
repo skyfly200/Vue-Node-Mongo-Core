@@ -21,7 +21,7 @@ const UserSchema = new Schema({
     home_phone: {type: String},
     cell_phone: {type: String},
     profile: [{title: {type: String}, value: {type: String}}],
-    activity: [{title: {title: String}, type: {type: String}}, time: {type: String}}, details: {type: String}}],
+    activity: [{title: {title: String}, type: {type: String}, time: {type: String}, details: {type: String}}],
     memberships: [{name: String}]
 });
 
