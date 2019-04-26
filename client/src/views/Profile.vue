@@ -107,22 +107,10 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
       return this.monthFormat(date) + " " + date.getFullYear();
     },
     ownProfile: function() {
-      return (
-        !this.$route.params.username ||
-        this.$route.params.username === this.$store.getters.user.username
-      );
+      return !this.$route.params.username;
     }
   },
   methods: {
-    loadImg: function(e) {
-      console.log(e.files);
-      var file = e.files[0];
-      var reader = new FileReader();
-      reader.onloadend = function() {
-        this.imgUpload = reader.result;
-      };
-      reader.readAsDataURL(file);
-    },
     openImageDialog: function(type) {
       this.imageDialog = true;
       this.imageDialogType = type;
