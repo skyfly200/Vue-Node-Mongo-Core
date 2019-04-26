@@ -17,7 +17,7 @@ v-container(fluid grid-list-md).profile
                   ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('profile')")
           .profile-info
             h1 {{ titleCase(user.name) }}
-            h3 Userame: {{ username }}
+            h3 Username: {{ username }}
             h3 Joined: {{ dateJoined }}
     v-flex.sections
       v-card.bio.section(color='grey lighten-4')
