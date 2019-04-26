@@ -3,13 +3,15 @@ v-dialog(v-model="view").image-upload-dialog
   v-card
     v-card-title(class="headline") Upload a new {{ type }} image
     v-card-text
-      .uploader
-        .drop_zone Drag and drop images here
+      .uploader(v-if="images.length < 1")
+        .drop_zone Drag and drop {{ multi ? "images" : "image"}} here
         h3 or
-        input(type="file" label="Browse for images" @change="loadImg" append-icon="photo_camera")
-      .image-preview
+        input(type="file" label="Browse images" :multiple="multi" @change="loadImages" append-icon="photo_camera")
+      .image-preview(v-else)
         v-img(v-for="img in images" :src="img" width="200px")
+        v-btn(@click="clearImages") Clear
     v-card-actions
+      v-spacer
       v-btn(@click="view = false") Close
       v-btn Save
 </template>
@@ -17,12 +19,15 @@ v-dialog(v-model="view").image-upload-dialog
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["type", "view"],
+  props: ["type", "view", "multi"],
   data: () => ({
     images: []
   }),
   methods: {
-    loadImg: function(e) {
+    clearImages: function() {
+      this.images = [];
+    },
+    loadImages: function(e) {
       var files = e.target.files;
       var reader = new FileReader();
       this.images = [];
@@ -49,8 +54,15 @@ import { Component, Vue } from "vue-property-decorator";
 export default class ImgUpload extends Vue {}
 </script>
 <style lang="sass">
-.image-upload-dialog
-  text-align: center
+.uploader
+  display: flex
+  justify-content: center
+  flex-direction: column
+  h3
+    text-align: center
+    margin: 10px
+  input
+    margin: 25px auto
 .drop_zone
   border: 2px dashed #bbb
   border-radius: 5px
