@@ -24,21 +24,34 @@ v-container(fluid grid-list-md).profile
         v-card-title
           h2 Bio
         v-card-text
-          p {{ user.bio }}
-        v-card-actions(v-if="ownProfile")
+          .section-view(v-if="!edit.bio")
+            p {{ user.bio }}
+          .section-edit(v-else)
+            v-form
+              v-textarea(name="bio" label="Bio" :value="user.bio")
+              v-btn(@click="edit.bio = false") Cancel
+              v-btn(@click="") Save
+        v-card-actions(v-if="ownProfile && !edit.bio")
           v-spacer
-          v-btn(@click="" fab dark small color="primary")
+          v-btn(@click="edit.bio = true" fab dark small color="primary")
             v-icon edit
       v-card.fields.section(color='grey lighten-4')
         v-card-title
           h2 Profile Info
         v-card-text
-          .field(v-for="field in user.profile")
-            h3 {{ field.title }}: {{ field.value }}
-            br
-        v-card-actions(v-if="ownProfile")
+          .section-view(v-if="!edit.info")
+            .field(v-for="field in user.profile")
+              h3 {{ field.title }}: {{ field.value }}
+              br
+          .section-edit(v-else)
+            v-form
+              .field-edit(v-for="field in user.profile")
+                v-text-field(:name="field.title" :label="field.title" :value="field.value")
+              v-btn(@click="edit.info = false") Cancel
+              v-btn(@click="") Save
+        v-card-actions(v-if="ownProfile && !edit.info")
           v-spacer
-          v-btn(@click="" fab dark small color="primary")
+          v-btn(@click="edit.info = true" fab dark small color="primary")
             v-icon edit
       v-card.groups.section(v-if="user.groups" color='grey lighten-4')
         v-card-title
@@ -68,7 +81,11 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
     username: "",
     imageDialogType: "",
     imageDialog: false,
-    imgUpload: ""
+    imgUpload: "",
+    edit: {
+      info: false,
+      bio: false
+    }
   }),
   watch: {
     $route(to, from) {
