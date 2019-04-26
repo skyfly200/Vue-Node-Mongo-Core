@@ -6,13 +6,13 @@ v-container(fluid grid-list-md).profile
       v-card(color='grey lighten-4')
         .header-image
           v-hover
-            v-flex.mx-auto(slot-scope='{ hover }')
+            .mx-auto(slot-scope='{ hover }')
               v-img(src='http://lorempixel.com/800/200/abstract')
                 ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('header')")
         .header-body
           .profile-image
             v-hover
-              v-flex.mx-auto(slot-scope='{ hover }')
+              .mx-auto(slot-scope='{ hover }')
                 v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
                   ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('profile')")
           .profile-info
@@ -185,7 +185,7 @@ export default class Profile extends Vue {}
       margin-top: -50%
       margin-left: 10%
       border-radius: 50%
-      border: 3px solid black
+      border: 1px solid black
       box-shadow: 0 0 25px 1px white
   .profile-info
     margin: 0 1em 1em 3em
