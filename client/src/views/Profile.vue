@@ -1,13 +1,7 @@
 <template lang="pug">
 v-container(fluid grid-list-md).profile
   v-layout.layout
-    v-dialog(v-model="imageDialog" max-width="290").image-upload-dialog
-      v-card
-        v-card-title(class="headline") Upload a new {{ imageDialogType }} image
-        v-card-text
-        v-card-actions
-          v-btn(@click="imageDialog = false") Close
-          v-btn Save
+    ImgUpload(:type="imageDialogType" :view="imageDialog")
     v-flex.heading
       v-card(color='grey lighten-4')
         .header-image
@@ -58,13 +52,16 @@ v-container(fluid grid-list-md).profile
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
+import ImgUpload from "@/components/ImgUpload.vue";
 
 @Component({
+  components: {ImgUpload},
   data: () => ({
     user: {},
     username: "",
     imageDialogType: "",
-    imageDialog: false
+    imageDialog: false,
+    imgUpload: ""
   }),
   watch: {
     $route(to, from) {
@@ -87,6 +84,15 @@ import { Component, Vue } from "vue-property-decorator";
     }
   },
   methods: {
+    loadImg: function(e) {
+      console.log(e.files);
+      var file = e.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        this.imgUpload = reader.result;
+      };
+      reader.readAsDataURL(file);
+    },
     openImageDialog: function(type) {
       this.imageDialog = true;
       this.imageDialogType = type;
