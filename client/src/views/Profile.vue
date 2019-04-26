@@ -5,16 +5,10 @@ v-container(fluid grid-list-md).profile
     v-flex.heading
       v-card(color='grey lighten-4')
         .header-image
-          v-hover
-            .mx-auto(slot-scope='{ hover }')
-              v-img(src='http://lorempixel.com/800/200/abstract')
-                ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('header')")
+          ImgEditHover(v-if="ownProfile" v-on:open="openImageDialog('header')" src='http://lorempixel.com/800/200/abstract')
         .header-body
           .profile-image
-            v-hover
-              .mx-auto(slot-scope='{ hover }')
-                v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
-                  ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('profile')")
+            ImgEditHover(v-if="ownProfile" v-on:open="openImageDialog('profile')" width='200px' src='http://lorempixel.com/200/200/abstract')
           .profile-info
             h1 {{ titleCase(user.name) }}
             h3 Username: {{ username }}
@@ -53,13 +47,13 @@ v-container(fluid grid-list-md).profile
           v-spacer
           v-btn(@click="edit.info = true" fab dark small color="primary")
             v-icon edit
-      v-card.groups.section(v-if="user.groups.length" color='grey lighten-4')
+      v-card.groups.section(v-if="user === undefined" color='grey lighten-4')
         v-card-title
           h2 Groups
         v-card-text
           ul
             li(v-for="group in user.groups") {{ group.name }} ( {{ group.role }} )
-      v-card.actions.section(v-if="user.activity.length" color='grey lighten-4')
+      v-card.actions.section(v-if="false" color='grey lighten-4')
         v-card-title
           h2 Recent Activity
         v-card-text
@@ -158,7 +152,7 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
 export default class Profile extends Vue {}
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .layout
   display: flex
   flex-direction: column
