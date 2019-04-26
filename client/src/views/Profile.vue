@@ -8,25 +8,13 @@ v-container(fluid grid-list-md).profile
           v-hover
             v-flex.mx-auto(slot-scope='{ hover }')
               v-img(src='http://lorempixel.com/800/200/abstract')
-                v-expand-transition(v-if="ownProfile")
-                  .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
-                    .chip-spacer(@click="openImageDialog('header')")
-                      v-chip(outline color="white").edit-img-chip
-                        v-avatar
-                          v-icon.edit-img photo_camera
-                        | Edit
+                ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('header')")
         .header-body
           .profile-image
             v-hover
               v-flex.mx-auto(slot-scope='{ hover }')
                 v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
-                  v-expand-transition(v-if="ownProfile")
-                    .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
-                      .chip-spacer(@click="openImageDialog('profile')")
-                        v-chip(outline color="white").edit-img-chip
-                          v-avatar
-                            v-icon.edit-img photo_camera
-                          | Edit
+                  ImgEditHover(v-if="ownProfile" :hover="hover" v-on:open="openImageDialog('profile')")
           .profile-info
             h1 {{ titleCase(username) }}
             h3 Name: {{ user.name }}
@@ -53,9 +41,10 @@ v-container(fluid grid-list-md).profile
 <script>
 import { Component, Vue } from "vue-property-decorator";
 import ImgUpload from "@/components/ImgUpload.vue";
+import ImgEditHover from "@/components/ImgEditHover.vue";
 
 @Component({
-  components: { ImgUpload },
+  components: { ImgUpload, ImgEditHover },
   data: () => ({
     user: {},
     username: "",
@@ -153,12 +142,6 @@ export default class Profile extends Vue {}
   justify-content: center
 .header-image img
   width: 100%
-.d-flex
-  display: flex
-  justify-content: center
-.chip-spacer
-  margin: auto 50%
-  width: 200px
 .header-body
   display: flex
   justify-content: left
