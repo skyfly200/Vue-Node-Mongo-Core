@@ -164,7 +164,8 @@ exports.profile = function (req, res, next) {
           joined: user.joined,
           name: user.name,
           groups: user.groups,
-          profile: user.profile
+          profile: user.profile,
+          activity: user.activity
         });
       })
     } else {

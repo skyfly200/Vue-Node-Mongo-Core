@@ -36,6 +36,14 @@ v-container(fluid grid-list-md).profile
           h2 Profile Info
         v-card-text
           p(v-for="field in user.profile") {{ field.title }}: {{ field.value }}
+      v-card.actions.section(color='grey lighten-4')
+        v-card-title
+          h2 Recent Activity
+        v-card-text
+          .event(v-for="event in user.activity")
+            h3 {{ event.title }} - {{ event.type }}
+            h4 {{ event.time }}
+            p {{ event.details }}
 </template>
 
 <script>
