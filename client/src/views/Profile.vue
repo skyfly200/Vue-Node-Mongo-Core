@@ -8,7 +8,7 @@ v-container(fluid grid-list-md).profile
           v-hover
             v-flex.mx-auto(slot-scope='{ hover }')
               v-img(src='http://lorempixel.com/800/200/abstract')
-                v-expand-transition
+                v-expand-transition(v-if="ownProfile")
                   .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
                     .chip-spacer(@click="openImageDialog('header')")
                       v-chip(outline color="white").edit-img-chip
@@ -20,7 +20,7 @@ v-container(fluid grid-list-md).profile
             v-hover
               v-flex.mx-auto(slot-scope='{ hover }')
                 v-img(width='200px' src='http://lorempixel.com/200/200/abstract')
-                  v-expand-transition
+                  v-expand-transition(v-if="ownProfile")
                     .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
                       .chip-spacer(@click="openImageDialog('profile')")
                         v-chip(outline color="white").edit-img-chip
@@ -55,7 +55,7 @@ import { Component, Vue } from "vue-property-decorator";
 import ImgUpload from "@/components/ImgUpload.vue";
 
 @Component({
-  components: {ImgUpload},
+  components: { ImgUpload },
   data: () => ({
     user: {},
     username: "",
@@ -81,6 +81,12 @@ import ImgUpload from "@/components/ImgUpload.vue";
     dateJoined: function() {
       let date = new Date(this.user.joined);
       return this.monthFormat(date) + " " + date.getFullYear();
+    },
+    ownProfile: function() {
+      return (
+        !this.$route.params.username ||
+        this.$route.params.username === this.$store.getters.user.username
+      );
     }
   },
   methods: {
