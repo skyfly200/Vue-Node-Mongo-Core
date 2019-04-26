@@ -25,17 +25,27 @@ v-container(fluid grid-list-md).profile
           h2 Bio
         v-card-text
           p {{ user.bio }}
+        v-card-actions(v-if="ownProfile")
+          v-spacer
+          v-btn(@click="" fab dark small color="primary")
+            v-icon edit
+      v-card.fields.section(color='grey lighten-4')
+        v-card-title
+          h2 Profile Info
+        v-card-text
+          .field(v-for="field in user.profile")
+            h3 {{ field.title }}: {{ field.value }}
+            br
+        v-card-actions(v-if="ownProfile")
+          v-spacer
+          v-btn(@click="" fab dark small color="primary")
+            v-icon edit
       v-card.groups.section(v-if="user.groups" color='grey lighten-4')
         v-card-title
           h2 Groups
         v-card-text
           ul
             li(v-for="group in user.groups") {{ group.name }} ( {{ group.role }} )
-      v-card.fields.section(color='grey lighten-4')
-        v-card-title
-          h2 Profile Info
-        v-card-text
-          p(v-for="field in user.profile") {{ field.title }}: {{ field.value }}
       v-card.actions.section(color='grey lighten-4')
         v-card-title
           h2 Recent Activity
