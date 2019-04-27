@@ -12,7 +12,7 @@ v-container(fluid grid-list-md).chat
               h4 {{ c.title }}
             v-list-tile-sub-title
               p {{ c.lastMessage.body }}
-              p {{ c.lastMessage.timestamp }}
+              i {{ c.lastMessage.timestamp }}
               v-icon(v-if="c.unread") exclimation
     v-divider(vertical)
     v-flex.active-conversation(sm8)
@@ -46,6 +46,7 @@ import { Component, Vue } from "vue-property-decorator";
         avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         title: "Example",
         id: "",
+        unread: false,
         lastMessage: { body: "Another from you", timestamp: "1 min ago" }
       }
     ],
@@ -105,6 +106,9 @@ export default class Profile extends Vue {}
   text-align: center
 .conversation-list
   height: 100%
+  .conversation
+    p
+      margin: 0
 .search-field
   width: 100%
 .reply-field
