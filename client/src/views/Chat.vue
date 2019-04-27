@@ -7,13 +7,12 @@ v-container(fluid grid-list-md).chat
         v-list-tile.conversation(v-for="c in conversations")
           v-list-tile-avatar
             v-img(:src="c.avitar")
-          v-list-tile-content
+          v-list-tile-content(:class="{ unread: c.unread }")
             v-list-tile-title
               h4 {{ c.title }}
             v-list-tile-sub-title
               p {{ c.lastMessage.body }}
               i {{ c.lastMessage.timestamp }}
-              v-icon(v-if="c.unread") exclimation
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       .header
@@ -45,9 +44,16 @@ import { Component, Vue } from "vue-property-decorator";
       {
         avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         title: "Example",
-        id: "",
+        id: "4574693653",
         unread: false,
         lastMessage: { body: "Another from you", timestamp: "1 min ago" }
+      },
+      {
+        avitar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+        title: "Example 2",
+        id: "4425767546",
+        unread: true,
+        lastMessage: { body: "Hey, whats up?", timestamp: "2 hours ago" }
       }
     ],
     title: "Example",
@@ -56,19 +62,19 @@ import { Component, Vue } from "vue-property-decorator";
         avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         author: "Test2",
         body: "This is a message from another user",
-        timestamp: "8 min ago"
+        timestamp: "8 mins ago"
       },
       {
         avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         author: "Test",
         body: "This is a message you sent",
-        timestamp: "5 min ago"
+        timestamp: "5 mins ago"
       },
       {
         avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         author: "Test2",
         body: "Another message from another user",
-        timestamp: "3 min ago"
+        timestamp: "3 mins ago"
       },
       {
         avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
@@ -107,6 +113,9 @@ export default class Profile extends Vue {}
 .conversation-list
   height: 100%
   .conversation
+    .unread p
+      font-weight: bold
+      color: black
     p
       margin: 0
 .search-field
