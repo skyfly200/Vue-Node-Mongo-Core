@@ -1,4 +1,5 @@
 <template lang="pug">
+v-container(fluid='')
   .home
     HelloWorld(msg="Welcome to Your Vue.js + TypeScript App")
 </template>

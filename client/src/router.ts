@@ -90,6 +90,15 @@ let router = new Router({
       }
     },
     {
+      path: "/chat",
+      name: "chat",
+      component: () =>
+        import(/* webpackChunkName: "chat" */ "./views/Chat.vue"),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: "*",
       name: "404",
       component: () => import(/* webpackChunkName: "404" */ "./views/404.vue")

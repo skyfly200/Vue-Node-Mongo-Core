@@ -22,8 +22,7 @@ v-app
       v-btn(flat small to='/login') Login
       v-btn(flat small to='/register') Register
   v-content
-    v-container(fluid='')
-      router-view
+    router-view
 </template>
 
 <script>
