@@ -40,7 +40,7 @@ exports.create = async function (req, res, next) {
       text: "verify",
       html: `<h1>Thanks for signing up!</h1>
             <p>Please click the button below to verify your email address.</p>
-            <a href='${config.token.verifyURL}/${'email'}/${req.body.username}/${emailToken}'>
+            <a href='${config.token.verifyURL}/${req.body.username}/${emailToken}'>
             <button>Verify Email</button></a>
             <p>This link will expire in ${config.token.expires.value} ${config.token.expires.unit}s</p>`
     })
