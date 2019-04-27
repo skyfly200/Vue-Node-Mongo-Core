@@ -46,10 +46,10 @@ import { Component, Vue } from "vue-property-decorator";
         avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         title: "Example",
         id: "",
-        lastMessage: { body: "Sample conversation", timestamp: "1 in ago" }
+        lastMessage: { body: "Another from you", timestamp: "1 min ago" }
       }
     ],
-    title: "Active Conversation",
+    title: "Example",
     messages: [
       {
         avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
