@@ -14,20 +14,34 @@ v-container(fluid grid-list-md).dashboard
   v-layout.layout
     v-flex.heading
       h1 Welcome to the dashboard {{ username }}
+    v-divider
     v-flex.body
       v-card.buttons
-        v-btn(primary to="/profile")
-          v-icon(left) person
-          span Your Profile
-        v-btn(primary to="/chat")
-          v-icon(left) message
-          span Chat
-        v-btn(primary to="/groups")
-          v-icon(left) people
-          span Groups
-        v-btn(primary to="/password")
-          v-icon(left) lock
-          span Change Password
+        v-card-title
+          h3 Quick Links
+        v-card-text
+          v-btn(primary to="/profile")
+            v-icon(left) person
+            span Your Profile
+          v-btn(primary to="/chat")
+            v-icon(left) message
+            span Chat
+          v-btn(primary to="/groups")
+            v-icon(left) group
+            span Groups
+      v-card.settings
+        v-card-title
+          h3 Account Setting
+        v-card-text
+          v-btn(primary)
+            v-icon(left) person
+            span Change Username
+          v-btn(primary)
+            v-icon(left) email
+            span Change Email
+          v-btn(primary to="/password")
+            v-icon(left) lock
+            span Change Password
 </template>
 
 <script>
@@ -82,11 +96,15 @@ export default {
   flex-direction: column
 .flex
   display: flex
-  justify-content: center
+  justify-content: space-around
+.body
+  margin-top: 25px
+  flex-wrap: wrap
 .buttons
-  display: flex
-  flex-direction: column
   padding: 1em
+  .v-card__text
+    display: flex
+    flex-direction: column
   .v-btn
     margin: 1em auto
     width: 200px
