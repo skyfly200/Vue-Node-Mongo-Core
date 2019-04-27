@@ -30,7 +30,7 @@ v-container(fluid).dashboard
           EditableField(title="Phone" :v="user.phone").account-field.phone
           v-divider
           br
-          v-btn(primary to="/password")
+          v-btn(primary to="/password").password-btn
             v-icon(left) lock
             span Change Password
 </template>
@@ -84,13 +84,15 @@ export default class Dashboard extends Vue {}
 .body
   margin-top: 25px
 .links
-  padding: 1em
+  padding-right: 1em
   .v-card__text
     display: flex
     flex-direction: column
   .v-btn
     width: fill-available
 .settings
+  .password-btn
+    margin-left: auto
   .v-card__text
     display: flex
     flex-direction: column
