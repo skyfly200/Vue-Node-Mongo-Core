@@ -101,6 +101,8 @@ export default class Profile extends Vue {}
   display: flex
   justify-content: center
   flex-direction: column
+.header
+  text-align: center
 .conversation-list
   height: 100%
 .search-field
