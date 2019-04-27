@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container(fluid grid-list-md).dashboard
+v-container(fluid).dashboard
   v-dialog(v-model='dialog' max-width='290')
     v-card
       v-card-title.headline Please verify your email
@@ -11,12 +11,12 @@ v-container(fluid grid-list-md).dashboard
   v-snackbar(v-model="snackbar" right :timeout="snackbarTimeout")
     | {{ snackbarMessage }}
     v-btn(flat @click="snackbar = false") Close
-  v-layout.layout
-    v-flex.heading
-      h1 Welcome to the dashboard {{ username }}
-    v-divider
-    v-flex.body
-      v-card.links
+  v-layout.heading
+    h1 Welcome to the dashboard {{ username }}
+  v-divider
+  v-layout(row).body
+    v-flex(shrink).links.card
+      v-card
         v-card-title
           h3 Quick Links
         v-card-text
@@ -29,23 +29,33 @@ v-container(fluid grid-list-md).dashboard
           v-btn(primary to="/groups")
             v-icon(left) group
             span Groups
-      v-card.settings
+    v-flex(grow).settings.card
+      v-card
         v-card-title
           h3 Account Setting
         v-card-text
           .account-field.username
-            span {{ username }}
-            v-tooltip(right).edit-btn
-              template(v-slot:activator="{ on }")
-                v-btn(fab small color="primary" v-on="on")
-                  v-icon person
-              span Change Username
-          v-btn(primary)
-            v-icon(left) email
-            span Change Email
-          v-btn(primary)
-            v-icon(left) phone
-            span Change Phone
+            .field-value
+              h4 Username:&nbsp;
+              span {{ username }}
+            v-spacer
+            FabBtn(:tooltip="{text: 'Change Username', left: true}" icon="person").edit-btn
+          v-divider
+          .account-field.email
+            .field-value
+              h4 Email:&nbsp;
+              span {{ user.email }}
+            v-spacer
+            FabBtn(:tooltip="{text: 'Change Email', left: true}" icon="email").edit-btn
+          v-divider
+          .account-field.phone
+            .field-value
+              h4 Phone:&nbsp;
+              span {{ user.phone }}
+            v-spacer
+            FabBtn(:tooltip="{text: 'Change Phone', left: true}" icon="phone").edit-btn
+          v-divider
+          br
           v-btn(primary to="/password")
             v-icon(left) lock
             span Change Password
@@ -53,11 +63,16 @@ v-container(fluid grid-list-md).dashboard
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import ImgUpload from "@/components/ImgUpload.vue";
+import FabBtn from "@/components/FabBtn.vue";
+import VerifyEmailDialog from "@/components/VerifyEmailDialog.vue";
 
 @Component({
+  components: { FabBtn, VerifyEmailDialog },
   data: () => ({
-    user: {},
+    user: {
+      email: "user@example.com",
+      phone: "720-555-5555"
+    },
     dialog: false,
     dialogMessage: "",
     snackbar: false,
@@ -73,7 +88,7 @@ import ImgUpload from "@/components/ImgUpload.vue";
     this.dialog =
       this.$store.getters.isLoggedIn && !this.$store.getters.user.active;
     // load user info
-    this.getProfile(this.username);
+    //this.getUser(this.username);
   },
   methods: {
     resend: function() {
@@ -96,7 +111,7 @@ import ImgUpload from "@/components/ImgUpload.vue";
           console.error(err);
         });
     },
-    getProfile: function(username) {
+    getUser: function(username) {
       this.$http({
         url: "http://localhost:1234/users/profile/" + username,
         data: { username: username },
@@ -115,25 +130,27 @@ import ImgUpload from "@/components/ImgUpload.vue";
     }
   }
 })
-export default class Profile extends Vue {}
+export default class Dashboard extends Vue {}
 </script>
 
 <style lang="sass" scoped>
-.layout
-  display: flex
-  flex-direction: column
-.flex
-  display: flex
-  justify-content: space-around
 .body
   margin-top: 25px
-  flex-wrap: wrap
 .links
   padding: 1em
   .v-card__text
     display: flex
     flex-direction: column
-  .settings .v-card__text
+  .v-btn
+    width: fill-available
+.settings
+  .v-card__text
     display: flex
     flex-direction: column
+.v-btn
+  width: fit-content
+.account-field, .field-value
+  display: flex
+.field-value
+  margin: auto
 </style>
