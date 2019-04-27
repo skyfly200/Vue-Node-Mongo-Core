@@ -4,15 +4,17 @@ v-container(fluid grid-list-md).chat
     v-flex.conversations(sm4)
       v-text-field(name="search" v-model="query" label="Search").search-field
       v-list(three-line).conversation-list
-        v-list-tile.conversation(v-for="c in conversations")
-          v-list-tile-avatar
-            v-img(:src="c.avitar")
-          v-list-tile-content(:class="{ unread: c.unread }")
-            v-list-tile-title
-              h4 {{ c.title }}
-            v-list-tile-sub-title
-              p {{ c.lastMessage.body }}
-              i {{ c.lastMessage.timestamp }}
+        template(v-for="(c, i) in conversations")
+          v-divider(v-if="i > 0")
+          v-list-tile.conversation
+            v-list-tile-avatar
+              v-img(:src="c.avitar")
+            v-list-tile-content(:class="{ unread: c.unread }")
+              v-list-tile-title
+                h5 {{ c.title }}
+              v-list-tile-sub-title
+                .message-body {{ c.lastMessage.body }}
+                .timestamp {{ c.lastMessage.timestamp }}
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       .header
@@ -20,18 +22,18 @@ v-container(fluid grid-list-md).chat
       v-divider
       .body
         .messages
-          v-list(three-line)
+          v-list
             v-list-tile.message(v-for="m in messages")
-              v-list-tile-avatar
+              v-list-tile-avatar(v-if="m.author !== nickname")
                 v-img(:src="m.avitar")
               v-list-tile-content
-                v-list-tile-title
-                  h2 {{ m.author }}
                 v-list-tile-sub-title
-                  p {{ m.body }}
-                  i Sent: {{ m.timestamp }}
+                  .message-body {{ m.body }}
+                  .timestamp Sent: {{ m.timestamp }}
+              v-list-tile-avatar(v-if="m.author === nickname")
+                v-img(:src="m.avitar")
         .reply-bar
-          v-text-field(name="reply" v-model="reply" label="Reply" flat).reply-field
+          v-text-field(name="reply" v-model="reply" label="Reply" solo).reply-field
           v-btn(fab small color="green")
             v-icon send
 </template>
@@ -42,6 +44,7 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
   name: "Chat",
   data: () => ({
+    nickname: "Test",
     query: "",
     conversations: [
       {
@@ -121,12 +124,18 @@ export default class Profile extends Vue {}
       color: black
     p
       margin: 0
+.v-input__slot
+  margin: 0
+  padding: 0
+.v-list__tile__content
+  height: auto
 .search-field
   width: 100%
 .reply-field
   width: 100%
 .reply-bar
   display: flex
+  margin-bottom: -30px
 .active-conversation
   height: 100%
   margin-left: -1px
@@ -137,12 +146,21 @@ export default class Profile extends Vue {}
     flex-direction: column
     .messages
       height: 100%
-      display: flex
-      justify-content: space-between
-      flex-direction: column
+      .v-list
+        padding: 0
+        height: 100%
+        display: flex
+        flex-direction: column
+        justify-content: flex-end
+        .v-list__tile__content
+          padding: 5px
+          background-color: #eee
+          border-radius: 10px
+          .message-body
+            color: black
+          .timestamp
+            font-size: 0.8em
       .message
-        border: 1px solid black
-        border-radius: 10px
         margin: 10px
         p
           margin: 0
