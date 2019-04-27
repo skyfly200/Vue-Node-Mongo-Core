@@ -16,13 +16,13 @@ v-container(fluid grid-list-md).dashboard
       h1 Welcome to the dashboard {{ username }}
     v-divider
     v-flex.body
-      v-card.buttons
+      v-card.links
         v-card-title
           h3 Quick Links
         v-card-text
           v-btn(primary to="/profile")
             v-icon(left) person
-            span Your Profile
+            span Profile
           v-btn(primary to="/chat")
             v-icon(left) message
             span Chat
@@ -33,12 +33,19 @@ v-container(fluid grid-list-md).dashboard
         v-card-title
           h3 Account Setting
         v-card-text
-          v-btn(primary)
-            v-icon(left) person
-            span Change Username
+          .account-field.username
+            span {{ username }}
+            v-tooltip(right).edit-btn
+              template(v-slot:activator="{ on }")
+                v-btn(fab small color="primary" v-on="on")
+                  v-icon person
+              span Change Username
           v-btn(primary)
             v-icon(left) email
             span Change Email
+          v-btn(primary)
+            v-icon(left) phone
+            span Change Phone
           v-btn(primary to="/password")
             v-icon(left) lock
             span Change Password
@@ -49,6 +56,7 @@ export default {
   name: "Dashboard",
   data() {
     return {
+      user: {},
       dialog: false,
       dialogMessage: "",
       snackbar: false,
@@ -64,6 +72,8 @@ export default {
   created() {
     this.dialog =
       this.$store.getters.isLoggedIn && !this.$store.getters.user.active;
+    // load user info
+    this.getProfile(this.username);
   },
   methods: {
     resend: function() {
@@ -85,6 +95,23 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+    getProfile: function(username) {
+      this.$http({
+        url: "http://localhost:1234/users/profile/" + username,
+        data: { username: username },
+        method: "GET"
+      })
+        .then(resp => {
+          if (resp.data.err) {
+            console.error(resp.data.err);
+          } else {
+            this.user = resp.data;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   }
 };
@@ -100,12 +127,12 @@ export default {
 .body
   margin-top: 25px
   flex-wrap: wrap
-.buttons
+.links
   padding: 1em
   .v-card__text
     display: flex
     flex-direction: column
-  .v-btn
-    margin: 1em auto
-    width: 200px
+  .settings .v-card__text
+    display: flex
+    flex-direction: column
 </style>
