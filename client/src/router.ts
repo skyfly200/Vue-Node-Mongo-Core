@@ -47,7 +47,8 @@ let router = new Router({
       component: () =>
         import(/* webpackChunkName: "admin" */ "./views/Admin.vue"),
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        requiresRole: "admin"
       }
     },
     {

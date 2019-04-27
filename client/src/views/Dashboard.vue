@@ -17,10 +17,16 @@ v-container(fluid grid-list-md).dashboard
     v-flex.body
       v-card.buttons
         v-btn(primary to="/profile")
-          v-icon person
+          v-icon(left) person
           span Your Profile
+        v-btn(primary to="/chat")
+          v-icon(left) message
+          span Chat
+        v-btn(primary to="/groups")
+          v-icon(left) people
+          span Groups
         v-btn(primary to="/password")
-          v-icon lock
+          v-icon(left) lock
           span Change Password
 </template>
 
