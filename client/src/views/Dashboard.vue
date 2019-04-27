@@ -23,26 +23,11 @@ v-container(fluid).dashboard
         v-card-title
           h3 Account Setting
         v-card-text
-          .account-field.username
-            .field-value
-              h4 Username:&nbsp;
-              span {{ username }}
-            v-spacer
-            FabBtn(:tooltip="{text: 'Change Username', left: true}" icon="person").edit-btn
+          EditableField(title="Username" :v="username").account-field.username
           v-divider
-          .account-field.email
-            .field-value
-              h4 Email:&nbsp;
-              span {{ user.email }}
-            v-spacer
-            FabBtn(:tooltip="{text: 'Change Email', left: true}" icon="email").edit-btn
+          EditableField(title="Email" :v="user.email").account-field.email
           v-divider
-          .account-field.phone
-            .field-value
-              h4 Phone:&nbsp;
-              span {{ user.phone }}
-            v-spacer
-            FabBtn(:tooltip="{text: 'Change Phone', left: true}" icon="phone").edit-btn
+          EditableField(title="Phone" :v="user.phone").account-field.phone
           v-divider
           br
           v-btn(primary to="/password")
@@ -53,9 +38,10 @@ v-container(fluid).dashboard
 <script>
 import { Component, Vue } from "vue-property-decorator";
 import FabBtn from "@/components/FabBtn.vue";
+import EditableField from "@/components/EditableField.vue";
 
 @Component({
-  components: { FabBtn },
+  components: { FabBtn, EditableField },
   data: () => ({
     user: {
       email: "user@example.com",
@@ -110,8 +96,4 @@ export default class Dashboard extends Vue {}
     flex-direction: column
 .v-btn
   width: fit-content
-.account-field, .field-value
-  display: flex
-.field-value
-  margin: auto
 </style>
