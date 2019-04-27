@@ -3,11 +3,17 @@ v-container(fluid grid-list-md).chat
   v-layout.layout(wrap)
     v-flex.conversations(sm4)
       v-text-field(name="search" v-model="query" label="Search").search-field
-      v-flex.conversation(v-for="c in conversations")
-        h4 {{ c.title }}
-        p {{ c.lastMessage.body }}
-        h6 {{ c.lastMessage.timestamp }}
-        v-icon(v-if="c.unread") exclimation
+      v-list(three-line).conversation-list
+        v-list-tile.conversation(v-for="c in conversations")
+          v-list-tile-avatar
+            v-img(:src="c.avitar")
+          v-list-tile-content
+            v-list-tile-title
+              h4 {{ c.title }}
+            v-list-tile-sub-title
+              p {{ c.lastMessage.body }}
+              p {{ c.lastMessage.timestamp }}
+              v-icon(v-if="c.unread") exclimation
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       .header
@@ -15,10 +21,16 @@ v-container(fluid grid-list-md).chat
       v-divider
       .body
         .messages
-          v-flex.message(v-for="m in messages")
-            h4 {{ m.author }}
-            p {{ m.body }}
-            i Sent: {{ m.timestamp }}
+          v-list(three-line)
+            v-list-tile.message(v-for="m in messages")
+              v-list-tile-avatar
+                v-img(:src="m.avitar")
+              v-list-tile-content
+                v-list-tile-title
+                  h2 {{ m.author }}
+                v-list-tile-sub-title
+                  p {{ m.body }}
+                  i Sent: {{ m.timestamp }}
         v-text-field(name="reply" v-model="reply" label="Reply" flat).reply-field
 </template>
 
@@ -29,25 +41,36 @@ import { Component, Vue } from "vue-property-decorator";
   name: "Chat",
   data: () => ({
     query: "",
-    conversations: [],
+    conversations: [
+      {
+        avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+        title: "Example",
+        id: "",
+        lastMessage: { body: "Sample conversation", timestamp: "1 in ago" }
+      }
+    ],
     title: "Active Conversation",
     messages: [
       {
+        avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         author: "Test2",
         body: "This is a message from another user",
         timestamp: "8 min ago"
       },
       {
+        avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         author: "Test",
         body: "This is a message you sent",
         timestamp: "5 min ago"
       },
       {
+        avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
         author: "Test2",
         body: "Another message from another user",
         timestamp: "3 min ago"
       },
       {
+        avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         author: "Test",
         body: "Another from you",
         timestamp: "1 min ago"
@@ -78,6 +101,8 @@ export default class Profile extends Vue {}
   display: flex
   justify-content: center
   flex-direction: column
+.conversation-list
+  height: 100%
 .search-field
   width: 100%
 .reply-field
