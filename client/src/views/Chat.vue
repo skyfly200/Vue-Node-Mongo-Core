@@ -30,7 +30,10 @@ v-container(fluid grid-list-md).chat
                 v-list-tile-sub-title
                   p {{ m.body }}
                   i Sent: {{ m.timestamp }}
-        v-text-field(name="reply" v-model="reply" label="Reply" flat).reply-field
+        .reply-bar
+          v-text-field(name="reply" v-model="reply" label="Reply" flat).reply-field
+          v-btn(fab small color="green")
+            v-icon send
 </template>
 
 <script>
@@ -122,6 +125,8 @@ export default class Profile extends Vue {}
   width: 100%
 .reply-field
   width: 100%
+.reply-bar
+  display: flex
 .active-conversation
   height: 100%
   margin-left: -1px
