@@ -153,7 +153,7 @@ export default class Profile extends Vue {}
         flex-direction: column
         justify-content: flex-end
         .v-list__tile__content
-          padding: 5px
+          padding: 7px
           background-color: #eee
           border-radius: 10px
           .message-body
