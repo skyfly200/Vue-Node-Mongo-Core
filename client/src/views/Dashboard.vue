@@ -52,18 +52,18 @@ v-container(fluid grid-list-md).dashboard
 </template>
 
 <script>
-export default {
-  name: "Dashboard",
-  data() {
-    return {
-      user: {},
-      dialog: false,
-      dialogMessage: "",
-      snackbar: false,
-      snackbarMessage: "",
-      snackbarTimeout: 5000
-    };
-  },
+import { Component, Vue } from "vue-property-decorator";
+import ImgUpload from "@/components/ImgUpload.vue";
+
+@Component({
+  data: () => ({
+    user: {},
+    dialog: false,
+    dialogMessage: "",
+    snackbar: false,
+    snackbarMessage: "",
+    snackbarTimeout: 5000
+  }),
   computed: {
     username: function() {
       return this.$store.getters.user.username;
@@ -114,7 +114,8 @@ export default {
         });
     }
   }
-};
+})
+export default class Profile extends Vue {}
 </script>
 
 <style lang="sass" scoped>
