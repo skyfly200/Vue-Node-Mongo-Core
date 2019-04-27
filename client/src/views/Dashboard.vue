@@ -1,16 +1,5 @@
 <template lang="pug">
 v-container(fluid).dashboard
-  v-dialog(v-model='dialog' max-width='290')
-    v-card
-      v-card-title.headline Please verify your email
-      v-card-text You must verify your email to activate your account
-      v-card-actions
-        v-spacer
-        v-btn(color='green darken-1' flat @click='resend') Resend Email
-        v-btn(color='blue darken-1' flat @click='dialog = false') Close
-  v-snackbar(v-model="snackbar" right :timeout="snackbarTimeout")
-    | {{ snackbarMessage }}
-    v-btn(flat @click="snackbar = false") Close
   v-layout.heading
     h1 Welcome to the dashboard {{ username }}
   v-divider
@@ -64,20 +53,14 @@ v-container(fluid).dashboard
 <script>
 import { Component, Vue } from "vue-property-decorator";
 import FabBtn from "@/components/FabBtn.vue";
-import VerifyEmailDialog from "@/components/VerifyEmailDialog.vue";
 
 @Component({
-  components: { FabBtn, VerifyEmailDialog },
+  components: { FabBtn },
   data: () => ({
     user: {
       email: "user@example.com",
       phone: "720-555-5555"
     },
-    dialog: false,
-    dialogMessage: "",
-    snackbar: false,
-    snackbarMessage: "",
-    snackbarTimeout: 5000
   }),
   computed: {
     username: function() {
@@ -85,32 +68,10 @@ import VerifyEmailDialog from "@/components/VerifyEmailDialog.vue";
     }
   },
   created() {
-    this.dialog =
-      this.$store.getters.isLoggedIn && !this.$store.getters.user.active;
     // load user info
     //this.getUser(this.username);
   },
   methods: {
-    resend: function() {
-      // send a new verification email
-      this.$http({
-        url: "http://localhost:1234/users/resend/" + this.username,
-        data: { username: this.username },
-        method: "GET"
-      })
-        .then(resp => {
-          if (resp.data.err) {
-            console.error(resp.data.err);
-          } else {
-            this.dialog = false;
-            this.snackbar = true;
-            this.snackbarMessage = "Email Sent";
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
     getUser: function(username) {
       this.$http({
         url: "http://localhost:1234/users/profile/" + username,

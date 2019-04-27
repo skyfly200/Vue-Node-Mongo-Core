@@ -1,5 +1,6 @@
 <template lang="pug">
 v-app
+  VerifyEmailDialog
   v-toolbar(app)
     v-toolbar-title.headline.text-uppercase
       span App Name
@@ -26,8 +27,11 @@ v-app
 </template>
 
 <script>
-export default {
-  name: "App",
+import { Component, Vue } from "vue-property-decorator";
+import VerifyEmailDialog from "@/components/VerifyEmailDialog.vue";
+
+@Component({
+  components: { VerifyEmailDialog },
   created: function() {
     this.$store.dispatch("load_session", {
       token: localStorage.getItem("token"),
@@ -63,7 +67,8 @@ export default {
       });
     }
   }
-};
+})
+export default class App extends Vue {}
 </script>
 
 <style lang="sass" scoped>
