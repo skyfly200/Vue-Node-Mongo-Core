@@ -119,11 +119,16 @@ export default class Profile extends Vue {}
 .conversation-list
   height: 100%
   .conversation
-    .unread p
+    margin-top: 5px
+    .v-list__tile__content
+      margin-top: -15px
+    .unread .message-body
       font-weight: bold
       color: black
-    p
+    .message-body
       margin: 0
+    .timestamp
+      font-size: 0.8em
 .v-input__slot
   margin: 0
   padding: 0
