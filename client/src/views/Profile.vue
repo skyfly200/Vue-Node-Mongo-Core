@@ -47,13 +47,13 @@ v-container(fluid grid-list-md).profile
           v-spacer
           v-btn(@click="edit.info = true" fab dark small color="primary")
             v-icon edit
-      v-card.groups.section(v-if="user === undefined" color='grey lighten-4')
+      v-card.groups.section(v-if="user.groups !== undefined && user.groups.length" color='grey lighten-4')
         v-card-title
           h2 Groups
         v-card-text
           ul
             li(v-for="group in user.groups") {{ group.name }} ( {{ group.role }} )
-      v-card.actions.section(v-if="false" color='grey lighten-4')
+      v-card.activity.section(v-if="user.activity !== undefined && user.activity.length" color='grey lighten-4')
         v-card-title
           h2 Recent Activity
         v-card-text
