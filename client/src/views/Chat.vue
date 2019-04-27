@@ -34,7 +34,7 @@ v-container(fluid grid-list-md).chat
                 v-img(:src="m.avitar")
         .reply-bar
           v-text-field(name="reply" v-model="reply" label="Reply" solo).reply-field
-          v-btn(fab small color="green")
+          v-btn(fab small color="green").send
             v-icon send
 </template>
 
@@ -138,6 +138,8 @@ export default class Profile extends Vue {}
   width: 100%
 .reply-field
   width: 100%
+  button i
+    transform: rotate(-90deg)
 .reply-bar
   display: flex
   margin-bottom: -30px
