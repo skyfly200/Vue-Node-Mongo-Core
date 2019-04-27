@@ -31,7 +31,7 @@ v-container(fluid grid-list-md).chat
                   p {{ m.body }}
                   i Sent: {{ m.timestamp }}
         .reply-bar
-          v-text-field(name="reply" v-model="reply" label="Reply" flat).reply-field
+          v-text-field(name="reply" v-model="reply" label="Reply" solo).reply-field
           v-btn(fab small color="green")
             v-icon send
 </template>
@@ -121,12 +121,16 @@ export default class Profile extends Vue {}
       color: black
     p
       margin: 0
+.v-input__slot
+  margin: 0
+  padding: 0
 .search-field
   width: 100%
 .reply-field
   width: 100%
 .reply-bar
   display: flex
+  margin-bottom: -30px
 .active-conversation
   height: 100%
   margin-left: -1px
@@ -140,6 +144,9 @@ export default class Profile extends Vue {}
       display: flex
       justify-content: space-between
       flex-direction: column
+      .v-list
+        padding: 0
+        height: 100%
       .message
         border: 1px solid black
         border-radius: 10px
