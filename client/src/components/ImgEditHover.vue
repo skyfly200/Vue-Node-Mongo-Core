@@ -1,7 +1,7 @@
 <template lang="pug">
 v-hover
   .mx-auto(slot-scope='{ hover }')
-    v-img(:src="src" :width="width")
+    v-img(:src="src" :width="w" :class="{ profile: profile }")
       v-expand-transition
         .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
           .chip-spacer(@click="$emit('open')")
@@ -14,7 +14,12 @@ v-hover
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["src", "width"]
+  props: ["src", "profile", "width"],
+  computed: {
+    w: function() {
+      return this.profile ? '200px' : (this.width ? this.width : '');
+    }
+  }
 })
 export default class ImgEditHover extends Vue {}
 </script>
@@ -25,4 +30,9 @@ export default class ImgEditHover extends Vue {}
 .chip-spacer
   margin: auto 50%
   width: 200px
+.profile
+  margin-top: -50%
+  border-radius: 50%
+  border: 1px solid black
+  box-shadow: 0 0 25px 1px white
 </style>
