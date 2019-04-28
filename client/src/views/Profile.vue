@@ -5,10 +5,10 @@ v-container(fluid grid-list-md).profile
     v-flex.heading
       v-card(color='grey lighten-4')
         .header-image
-          ImgEditHover(v-if="ownProfile" v-on:open="openImageDialog('header')" src='http://lorempixel.com/800/200/abstract')
+          ImgEditHover(:editable="ownProfile" v-on:open="openImageDialog('header')" src='http://lorempixel.com/800/200/abstract')
         .header-body
           .profile-image
-            ImgEditHover(profile="true" v-if="ownProfile" v-on:open="openImageDialog('profile')" width='200px' src='http://lorempixel.com/200/200/abstract')
+            ImgEditHover(profile="true" :editable="ownProfile" v-on:open="openImageDialog('profile')" width='200px' src='http://lorempixel.com/200/200/abstract')
           .profile-info
             h1 {{ titleCase(user.name) }}
             h3 Username: {{ username }}

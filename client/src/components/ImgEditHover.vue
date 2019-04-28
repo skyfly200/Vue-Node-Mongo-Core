@@ -2,7 +2,7 @@
 v-hover
   .mx-auto(slot-scope='{ hover }')
     v-img(:src="src" :width="w" :class="{ profile: profile }")
-      v-expand-transition
+      v-expand-transition(v-if="editable")
         .d-flex.transition-fast-in-fast-out.black.v-card--reveal.display-3(v-if='hover' style='height: 100%;')
           .chip-spacer(@click="$emit('open')")
             v-chip(outline color="white").edit-img-chip
@@ -14,7 +14,7 @@ v-hover
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["src", "profile", "width"],
+  props: ["src", "profile", "width", "editable"],
   computed: {
     w: function() {
       return this.profile ? '200px' : (this.width ? this.width : '');
