@@ -5,7 +5,7 @@
       h3 {{ title }}:&nbsp;
       span {{ value }}
     v-spacer
-    FabBtn(v-on:select="edit" :tooltip="{text: 'Change Username', left: true}" icon="person").edit-btn
+    FabBtn(v-on:select="edit" :tooltip="{text: 'Change Username', left: true}" :icon="icon").edit-btn
   v-form.edit(v-else)
     .field-edit
       v-text-area(v-if="textarea" :name="title" :label="title" :value="value")
@@ -19,7 +19,7 @@ import FabBtn from "@/components/FabBtn.vue";
 
 @Component({
   components: { FabBtn },
-  props: ["title", "v", "textarea"],
+  props: ["title", "v", "textarea", "icon"],
   data: () => ({
     editing: false,
     value: ""

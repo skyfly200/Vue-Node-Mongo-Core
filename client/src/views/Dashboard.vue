@@ -23,11 +23,11 @@ v-container(fluid).dashboard
         v-card-title
           h3 Account Setting
         v-card-text
-          EditableField(title="Username" :v="username").account-field.username
+          EditableField(title="Username" :v="username" icon="person").account-field.username
           v-divider
-          EditableField(title="Email" :v="user.email").account-field.email
+          EditableField(title="Email" :v="user.email" icon="email").account-field.email
           v-divider
-          EditableField(title="Phone" :v="user.phone").account-field.phone
+          EditableField(title="Phone" :v="user.phone" icon="phone").account-field.phone
           v-divider
           br
           v-btn(primary to="/password").password-btn
