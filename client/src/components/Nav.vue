@@ -1,29 +1,33 @@
 <template lang="pug">
-v-toolbar(app)
+v-toolbar(app scroll-off-screen)
+  v-toolbar-side-icon
   v-toolbar-title.headline.text-uppercase
     span PWA Core
     span.font-weight-light Vue, Express, Mongo
   v-spacer
-  #nav
-    router-link(to='/') Home
-    |  |&nbsp;
-    router-link(to='/about') About
+  v-toolbar-items#nav.hidden-sm-and-down
+    v-btn(flat small to='/') Home
+    v-btn(flat small to='/about') About
     template(v-if='isLoggedIn')
-      |  |&nbsp;
-      router-link(to='/groups') Groups
-      |  |&nbsp;
-      router-link(to='/chat') Chat
-      |  |&nbsp;
-      router-link(to='/dashboard') Dashboard
-  #user(v-if='isLoggedIn')
-    span
-      | Welcome&nbsp;
-      router-link(to='/profile') {{ username }}
-    v-btn(flat)
-      a(@click='logout') Logout
-  div(v-else)
-    v-btn(flat small to='/login') Login
-    v-btn(flat small to='/register') Register
+      v-btn(flat small to='/groups') Groups
+      v-btn(flat small to='/chat') Chat
+      v-btn(flat small to='/dashboard') Dashboard
+  v-divider(vertical)
+  v-toolbar-items#user
+    template(v-if='isLoggedIn')
+      .user-img
+        v-img(src="http://lorempixel.com/200/200/nature" width="40")
+      .controls
+        .welcome
+          span Welcome&nbsp;
+          router-link(to='/profile') {{ username }}
+        .logout
+          v-btn(flat small @click='logout') Logout
+    template(v-else)
+      .login
+        v-btn(flat small to='/login') Login
+      .register
+        v-btn(flat small to='/register') Register
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
@@ -48,6 +52,20 @@ import { Component, Vue } from "vue-property-decorator";
 export default class Nav extends Vue {}
 </script>
 <style lang="sass" scoped>
+#nav
+  margin: auto 1em
 #user
-  margin-left: 3vw
+  margin-left: 24px
+  display: flex
+  align-items: center
+  justify-content: center
+  .user-img
+    margin-right: 0.5em
+    .v-image
+      border-radius: 50%
+  .controls
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
 </style>
