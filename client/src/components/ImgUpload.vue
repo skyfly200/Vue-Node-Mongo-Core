@@ -10,14 +10,21 @@ v-dialog(v-model="toggle").image-upload-dialog
           p Drag and drop here
           span or
           br
-          v-btn.browse-btn(@click="$refs.fileInput.click()" color="primary") Choose a file
+          v-btn.browse-btn(@click="$refs.fileInput.click()" color="primary") Browse Files
           h4 {{ sizeLimit }}MB size limit
         .browse-only(v-else)
-          v-btn.browse-btn(@click="$refs.fileInput.click()" color="primary") Choose a file
+          v-btn.browse-btn(@click="$refs.fileInput.click()" color="primary") Browse Files
           h4 {{ sizeLimit }}MB size limit
         v-alert(:value="error" type="error") {{ message }}
       .image-preview(v-else)
-        v-img(v-for="f in fileUrls" :src="f" width="200px")
+        .images
+          .preview(v-for="(f, key) in fileUrls")
+            v-img.image(:src="f" width="200px" v-bind:ref="'preview'+parseInt( key )")
+            h4.img-title {{ files[key].name }}
+            .img-size {{ toMB(files[key].size).toFixed(2) }}MB
+            v-btn.remove-btn(v-if="multi" small flat @click="remove(key)")
+              v-icon(small) close
+              | remove
         v-btn(@click="clear") Clear
         v-alert(:value="error" type="error") {{ message }}
     v-card-actions
@@ -123,6 +130,13 @@ import { Component, Vue } from "vue-property-decorator";
       // Call reader with file
       reader.readAsDataURL(file);
     },
+    remove: function(key) {
+      this.files.splice( key, 1 );
+      this.fileUrls.splice( key, 1 );
+    },
+    toMB: function(bytes) {
+      return bytes / 1048576.0;
+    },
     determineDragAndDropCapable(){
       var div = document.createElement('div');
       return ( ( 'draggable' in div ) || ( 'ondragstart' in div && 'ondrop' in div ) )
@@ -184,4 +198,16 @@ export default class ImgUpload extends Vue {}
   margin: 1.5em auto
 .v-alert
   width: 100%
+.images
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  .preview
+    padding: 10px
+    border: 1px solid #ddd
+    .image
+      width: 100px
+    .remove-btn, .v-btn
+      color: red
+      margin: auto
 </style>
