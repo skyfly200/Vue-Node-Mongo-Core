@@ -26,6 +26,7 @@ v-dialog(v-model="toggle" max-width="1000").image-upload-dialog
               v-icon(small) close
               | remove
         v-btn(@click="clear") Clear
+        progress(v-if="uploading" max="100" :value.prop="uploadPercentage")
         v-alert(:value="error" type="error") {{ message }}
     v-card-actions
       v-spacer
@@ -43,6 +44,8 @@ import { Component, Vue } from "vue-property-decorator";
     fileUrls: [],
     dragAndDropCapable: false,
     dragging: false,
+    uploading: false,
+    uploadPercentage: 0,
     types: ["image.*"],
     message: "",
     error: false,
@@ -153,12 +156,17 @@ import { Component, Vue } from "vue-property-decorator";
     clear: function() {
       this.files = [];
       this.fileUrls = [];
-      this.message = "";
+      this.uploading = false;
+      this.uploadPercentage = 0;
       this.error = false;
+      this.message = "";
     },
     upload: function() {
       // || REFRENCE || File API, Axios, Vuetify Loader
       // upload selected files and show progress
+      this.uploading = true;
+      this.error = false;
+      this.message = "";
       let formData = new FormData();
       for( var i = 0; i < this.files.length; i++ ){
         formData.append('files[' + i + ']', this.files[i]);
@@ -167,7 +175,10 @@ import { Component, Vue } from "vue-property-decorator";
         url: "http://localhost:1234/images/" + this.type,
         data: formData,
         method: "POST",
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: function( progressEvent ) {
+          this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+        }.bind(this)
       })
       .then(function(resp){
         // emit done event, passing the upload response & clear data
@@ -176,6 +187,7 @@ import { Component, Vue } from "vue-property-decorator";
       }.bind(this))
       .catch(function(error){
         // Display upload Error message
+        this.uploading = false;
         this.message = error;
         this.error = true;
       }.bind(this));
@@ -224,4 +236,10 @@ export default class ImgUpload extends Vue {}
     .remove-btn, .v-btn
       color: red
       margin: auto
+progress
+  width: 400px
+  margin: auto
+  display: block
+  margin-top: 20px
+  margin-bottom: 20px
 </style>
