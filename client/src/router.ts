@@ -24,24 +24,6 @@ let router = new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
-      path: "/login",
-      name: "login",
-      component: () =>
-        import(/* webpackChunkName: "login" */ "./views/Login.vue"),
-      meta: {
-        guest: true
-      }
-    },
-    {
-      path: "/register",
-      name: "Register",
-      component: () =>
-        import(/* webpackChunkName: "Register" */ "./views/Register.vue"),
-      meta: {
-        guest: true
-      }
-    },
-    {
       path: "/admin",
       name: "admin",
       component: () =>
@@ -70,22 +52,19 @@ let router = new Router({
       }
     },
     {
-      path: "/verify-email/:username/:token",
-      name: "verifyEmail",
-      component: () =>
-        import(/* webpackChunkName: "verifyEmail" */ "./views/VerifyEmail.vue")
-    },
-    {
-      path: "/password/:username?/:token?",
-      name: "password",
-      component: () =>
-        import(/* webpackChunkName: "password" */ "./views/Password.vue")
-    },
-    {
       path: "/groups",
       name: "groups",
       component: () =>
         import(/* webpackChunkName: "groups" */ "./views/Groups.vue"),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/group/:title",
+      name: "group",
+      component: () =>
+        import(/* webpackChunkName: "group" */ "./views/Group.vue"),
       meta: {
         requiresAuth: true
       }
@@ -98,6 +77,36 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: () =>
+        import(/* webpackChunkName: "login" */ "./views/Login.vue"),
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: () =>
+        import(/* webpackChunkName: "Register" */ "./views/Register.vue"),
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: "/verify-email/:username/:token",
+      name: "verifyEmail",
+      component: () =>
+        import(/* webpackChunkName: "verifyEmail" */ "./views/VerifyEmail.vue")
+    },
+    {
+      path: "/password/:username?/:token?",
+      name: "password",
+      component: () =>
+        import(/* webpackChunkName: "password" */ "./views/Password.vue")
     },
     {
       path: "*",

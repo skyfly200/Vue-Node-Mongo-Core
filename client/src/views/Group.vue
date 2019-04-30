@@ -1,0 +1,175 @@
+<template lang="pug">
+v-container(fluid grid-list-md).group
+  ImgUpload(:type="imageDialogType" @done="console.log($event)" @close="imageDialog = false" :toggle="imageDialog" :multi="false")
+  v-layout.layout
+    v-flex.heading
+      v-card(color='grey lighten-4')
+        .header-image
+          ImgEditHover(:editable="isGroupAdmin" v-on:open="openImageDialog('header')" src='http://lorempixel.com/800/200/abstract')
+        .header-body
+          .group-image
+            ImgEditHover(profile="true" :editable="isGroupAdmin" v-on:open="openImageDialog('profile')" width='200px' src='http://lorempixel.com/200/200/abstract')
+          .group-info
+            h1 {{ titleCase(title) }}
+            h3 Created: {{ dateCreated }}
+    v-flex.sections
+      v-card.bio.section(color='grey lighten-4')
+        v-card-title
+          h2 Bio
+        v-card-text
+          .section-view(v-if="!edit.bio")
+            p {{ group.bio }}
+          .section-edit(v-else)
+            v-form
+              v-textarea(name="bio" label="Bio" :value="group.bio")
+              v-btn(@click="edit.bio = false") Cancel
+              v-btn(@click="") Save
+        v-card-actions(v-if="isGroupAdmin && !edit.bio")
+          v-spacer
+          v-btn(@click="edit.bio = true" fab dark small color="primary")
+            v-icon edit
+      v-card.fields.section(color='grey lighten-4')
+        v-card-title
+          h2 Profile Info
+        v-card-text
+          .section-view(v-if="!edit.info")
+            .field(v-for="field in group.profile")
+              h3 {{ field.title }}: {{ field.value }}
+              br
+          .section-edit(v-else)
+            v-form
+              .field-edit(v-for="field in group.profile")
+                v-text-field(:name="field.title" :label="field.title" :value="field.value")
+              v-btn(@click="edit.info = false") Cancel
+              v-btn(@click="") Save
+        v-card-actions(v-if="isGroupAdmin && !edit.info")
+          v-spacer
+          v-btn(@click="edit.info = true" fab dark small color="primary")
+            v-icon edit
+      v-card.activity.section(v-if="group.activity !== undefined && group.activity.length" color='grey lighten-4')
+        v-card-title
+          h2 Recent Activity
+        v-card-text
+          .event(v-for="event in group.activity")
+            h3 {{ event.title }} - {{ event.type }}
+            h4 {{ event.time }}
+            p {{ event.details }}
+</template>
+
+<script>
+import { Component, Vue } from "vue-property-decorator";
+import ImgUpload from "@/components/ImgUpload.vue";
+import ImgEditHover from "@/components/ImgEditHover.vue";
+
+@Component({
+  components: { ImgUpload, ImgEditHover },
+  data: () => ({
+    group: {},
+    title: "",
+    imageDialogType: "",
+    imageDialog: false,
+    imgUpload: "",
+    edit: {
+      info: false,
+      bio: false
+    }
+  }),
+  watch: {
+    $route(to, from) {
+      this.title = this.$route.params.title;
+      this.getGroup(this.title);
+    }
+  },
+  created() {
+    this.title = this.$route.params.title;
+    this.getGroup(this.title);
+  },
+  computed: {
+    dateCreated: function() {
+      let date = new Date(this.group.created);
+      return this.monthFormat(date) + " " + date.getFullYear();
+    },
+    isGroupAdmin: function() {
+      // check if current user is a group admin
+      let groups = this.$store.getters.user.groups;
+      return groups && groups[this.title].role === "admin";
+    }
+  },
+  methods: {
+    openImageDialog: function(type) {
+      this.imageDialog = true;
+      this.imageDialogType = type;
+    },
+    monthFormat: function(date) {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+      return months[date.getMonth()];
+    },
+    titleCase: function(string) {
+      if (string) return string.charAt(0).toUpperCase() + string.slice(1);
+      else return "";
+    },
+    getGroup: function(title) {
+      this.$http({
+        url: "http://localhost:1234/groups/" + title,
+        method: "GET"
+      })
+        .then(resp => {
+          if (resp.data.err) {
+            console.error(resp.data.err);
+          } else {
+            this.group = resp.data;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  }
+})
+export default class Group extends Vue {}
+</script>
+
+<style lang="sass" scoped>
+.layout
+  display: flex
+  flex-direction: column
+  justify-content: center
+.header-image img
+  width: 100%
+.header-body
+  display: flex
+  justify-content: left
+  .group-image
+    margin-left: 10%
+  .group-info
+    margin: 0 1em 1em 3em
+.sections
+  display: flex
+  justify-content: center
+  flex-direction: column
+  .section
+    padding: 0.5em
+    width: 100%
+    margin: 0.5em 0
+    display: flex
+    flex-direction: column
+    justify-content: center
+    .v-card__text
+      height: 100%
+      min-height: 20vh
+  .bio
+    flex: 1 100%
+</style>
