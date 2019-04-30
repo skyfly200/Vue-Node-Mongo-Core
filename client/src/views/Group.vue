@@ -17,7 +17,7 @@ v-container(fluid grid-list-md).group
         v-card-actions
           v-spacer
           .group-actions
-            v-btn(v-if="group.social.facebook" href="'https://www.facebook.com/' + group.social.facebook" target="blank" color="primary")
+            v-btn(v-if="group.social.facebook" :href="'https://www.facebook.com/' + group.social.facebook" target="blank" color="primary")
               v-icon(left) share
               | Facebook
             v-btn(v-if="group.website" href="group.website" target="blank" color="primary")
