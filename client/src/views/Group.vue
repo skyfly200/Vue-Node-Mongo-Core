@@ -12,10 +12,23 @@ v-container(fluid grid-list-md).group
           .group-info
             h1 {{ titleCase(title) }}
             h3 Created: {{ dateCreated }}
+            a(v-if="group.website" href="group.website" target="blank")
+              h3 {{ group.website }}
+        v-card-actions
           v-spacer
           .group-actions
-            v-btn(@click="" color="primary") Join
-            v-btn(@click="" color="primary") Follow
+            v-btn(v-if="group.social.facebook" href="'https://www.facebook.com/' + group.social.facebook" target="blank" color="primary")
+              v-icon(left) share
+              | Facebook
+            v-btn(v-if="group.website" href="group.website" target="blank" color="primary")
+              v-icon(left) public
+              | Website
+            v-btn(@click="" color="primary")
+              v-icon(left) person_add
+              | Join
+            v-btn(@click="" color="primary")
+              v-icon(left) notifications
+              | Follow
     v-flex.sections
       v-card.bio.section(color='grey lighten-4')
         v-card-title
@@ -87,12 +100,16 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
   data: () => ({
     group: {
       bio: "This is a test group",
+      website: "example.com",
+      created: new Date(),
+      social: {
+        facebook: "skyfly"
+      },
       info: [
         {title: "location", value: "Boulder, CO"},
         {title: "type", value: "Meetup"},
         {title: "topic", value: "Web Dev"}
       ],
-      created: new Date(),
       members: [
         { name: "Supreme Leader", username: "test", role: "admin", joined: new Date()},
         { name: "Skyler", username: "skyfly", role: "user", joined: new Date()}
