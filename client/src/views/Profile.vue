@@ -64,10 +64,16 @@ v-container(fluid grid-list-md).profile
         v-card-title
           h2 Recent Activity
         v-card-text
-          .event(v-for="event in user.activity")
-            h3 {{ event.title }} - {{ event.type }}
-            h4 {{ event.time }}
-            p {{ event.details }}
+          v-timeline
+            v-timeline-item.event(v-for="event in user.activity")
+              template(v-slot:opposite)
+                h4 {{ fullDateFormat(event.time) }}
+              v-card.elevation-2
+                v-card-title.headline
+                  h3 {{ event.title }}
+                v-card-text
+                  h4 {{ event.type }}
+                  p {{ event.details }}
 </template>
 
 <script>
@@ -105,7 +111,7 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
   computed: {
     dateJoined: function() {
       let date = new Date(this.user.joined);
-      return this.monthFormat(date) + " " + date.getFullYear();
+      return this.fullDateFormat(date);
     },
     ownProfile: function() {
       return !this.$route.params.username;
@@ -116,7 +122,44 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
       this.imageDialog = true;
       this.imageDialogType = type;
     },
-    monthFormat: function(date) {
+    monthFormat: function(d) {
+      let date = new Date(d);
+      return this.monthName(date) + " " + date.getFullYear();
+    },
+    dateFormat: function(d) {
+      let date = new Date(d);
+      return  date.getDate() + " " + this.monthFormat(d);
+    },
+    fullDateFormat: function(d) {
+      return this.dayName(d) + " " + this.dateFormat(d);
+    },
+    timeFormat: function(d) {
+      let date = new Date(d);
+      return date.getHours() + ":" + date.getMinutes();
+    },
+    preciseTimeFormat: function(d) {
+      let date = new Date(d);
+      return this.timeFormat(d) + ":" + date.getSeconds();
+    },
+    timestampFormat: function(d) {
+      return this.timeFormat(d) + " " + this.dateFormat(d);
+    },
+    fullTimestampFormat: function(d) {
+      return this.timeFormat(d) + " " + this.fullDateFormat(d);
+    },
+    dayName: function(date) {
+      const days= [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      return days[date.getDay()];
+    },
+    monthName: function(date) {
       const months = [
         "January",
         "February",
@@ -151,6 +194,12 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
             this.user.groups = [
               {title: "test", role: "admin", img: "http://lorempixel.com/200/200/nature"}
             ];
+            this.user.activity = [
+              {title: "Event 1", time: new Date("4/29/19"), type: "Test", details: "Test Event 1"},
+              {title: "Event 2", time: new Date("4/27/19"), type: "Test", details: "Test Event 2"},
+              {title: "Event 3", time: new Date("4/22/19"), type: "Test", details: "Test Event 3"}
+            ];
+            this.user.bio = "This is the users bio section. It can be customized to serve as an introduction for other users visiting their profile page."
           }
         })
         .catch(err => {
