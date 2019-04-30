@@ -30,15 +30,15 @@ v-container(fluid grid-list-md).group
             v-icon edit
       v-card.fields.section(color='grey lighten-4')
         v-card-title
-          h2 Profile Info
+          h2 Group Info
         v-card-text
           .section-view(v-if="!edit.info")
-            .field(v-for="field in group.profile")
+            .field(v-for="field in group.info")
               h3 {{ field.title }}: {{ field.value }}
               br
           .section-edit(v-else)
             v-form
-              .field-edit(v-for="field in group.profile")
+              .field-edit(v-for="field in group.info")
                 v-text-field(:name="field.title" :label="field.title" :value="field.value")
               v-btn(@click="edit.info = false") Cancel
               v-btn(@click="") Save
@@ -46,6 +46,17 @@ v-container(fluid grid-list-md).group
           v-spacer
           v-btn(@click="edit.info = true" fab dark small color="primary")
             v-icon edit
+      v-card.members.section(color='grey lighten-4')
+        v-card-title
+          h2 Members
+        v-card-text
+          .member-list
+            .member(v-for="member in group.members")
+              router-link(:to="'/profile/' + member.username")
+                v-img.profile-img(src="http://lorempixel.com/200/200/abstract" width="4em")
+                h4 {{ member.name }}
+                  v-icon(v-if="member.role === 'admin'" color="purple") star
+                span Joined: {{ dateFormat(member.joined) }}
       v-card.activity.section(v-if="group.activity !== undefined && group.activity.length" color='grey lighten-4')
         v-card-title
           h2 Recent Activity
@@ -64,7 +75,12 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
 @Component({
   components: { ImgUpload, ImgEditHover },
   data: () => ({
-    group: {},
+    group: {
+      members: [
+        { name: "Supreme Leader", username: "test", role: "admin", joined: new Date()},
+        { name: "Skyler", username: "skyfly", role: "user", joined: new Date()}
+      ]
+    },
     title: "",
     imageDialogType: "",
     imageDialog: false,
@@ -86,8 +102,7 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
   },
   computed: {
     dateCreated: function() {
-      let date = new Date(this.group.created);
-      return this.monthFormat(date) + " " + date.getFullYear();
+      return this.dateFormat(this.group.created);
     },
     isGroupAdmin: function() {
       // check if current user is a group admin
@@ -99,6 +114,10 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
     openImageDialog: function(type) {
       this.imageDialog = true;
       this.imageDialogType = type;
+    },
+    dateFormat: function(d) {
+      let date = new Date(d);
+      return this.monthFormat(date) + " " + date.getFullYear();
     },
     monthFormat: function(date) {
       const months = [
@@ -172,4 +191,18 @@ export default class Group extends Vue {}
       min-height: 20vh
   .bio
     flex: 1 100%
+  .member-list
+    display: flex
+    .member
+      padding: 0.5em
+      margin: 0.5em
+      border: 1px solid black
+      text-align: center
+      a
+        text-decoration: none
+      h4, span
+        color: black
+      .profile-img
+        margin: auto
+        border-radius: 50%
 </style>
