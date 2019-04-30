@@ -9,7 +9,11 @@ v-toolbar(app)
     |  |&nbsp;
     router-link(to='/about') About
     template(v-if='isLoggedIn')
-      span  |&nbsp;
+      |  |&nbsp;
+      router-link(to='/groups') Groups
+      |  |&nbsp;
+      router-link(to='/chat') Chat
+      |  |&nbsp;
       router-link(to='/dashboard') Dashboard
   #user(v-if='isLoggedIn')
     span
