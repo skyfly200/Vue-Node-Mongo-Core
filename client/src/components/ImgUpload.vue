@@ -10,7 +10,7 @@ v-dialog(v-model="toggle").image-upload-dialog
         h4 {{ sizeLimit }}MB max per image
         v-alert(:value="error" type="error") {{ message }}
       .image-preview(v-else)
-        v-img(v-for="img in images" :src="img" width="200px")
+        v-img(v-for="f in files" :src="f" width="200px")
         v-btn(@click="clear") Clear
         v-alert(:value="error" type="error") {{ message }}
     v-card-actions
@@ -24,23 +24,25 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
   props: ["type", "toggle", "multi"],
   data: () => ({
-    images: [],
+    files: [],
+    types: ["image.*"],
     message: "",
     error: false,
-    sizeLimit: 5 // in MB
+    sizeLimit: 10 // in MB
   }),
   computed: {
     noFiles: function() {
-      return this.images.length < 1;
+      return this.files.length < 1;
     }
   },
   methods: {
     load: function(e) {
-      var files = e.target.files;
+      // || TODO || show spinning loader here to improve UX
+      var fileList = e.target.files;
       var reader = new FileReader();
       this.clear();
-      for (var f in files) {
-        let file = files[f];
+      for (var f in fileList) {
+        let file = fileList[f];
         // Check file against type and size constraints
         if (file.type && !this.checkType(file)) {
           this.message = "Invalid File Type";
@@ -52,29 +54,35 @@ import { Component, Vue } from "vue-property-decorator";
           // Setup file reader callback
           reader.onload = ( (cb) => {
             return (e) => { cb(e.target.result) };
-          })(result => this.images.push(result));
+          })(result => this.files.push(result));
           // Call reader with file
           reader.readAsDataURL(file);
         }
       }
     },
     checkType: function(file) {
-      return file.type && file.type.match("image.*");
+      let validType;
+      for (let t in this.types) validType = validType || file.type && file.type.match(this.types[t]);
+      return validType;
     },
     checkSize: function(file) {
       let byteSize = this.sizeLimit * 1048576;
       return file.size <= byteSize;
     },
     clear: function() {
-      this.images = [];
+      this.files = [];
       this.message = "";
       this.error = false;
     },
     upload: function() {
       // upload selected files and show progress
-      // || IMPLEMENTATION REFRENCE || File API, Vuetify Loader
-      // emit done event passing it a result
-      //this.$emit("done");
+      // || REFRENCE || File API, Axios, Vuetify Loader
+      // Display upload Error message
+      // this.message = "Error Uploading";
+      // this.error = true;
+      // emit done event, passing the upload result & clear data
+      // this.$emit("done");
+      this.clear();
     },
     closeDialog: function() {
       this.$emit("close");
