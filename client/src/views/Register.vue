@@ -17,10 +17,8 @@ v-container(fluid grid-list-md).register
           :rules="[rules.required]"
           label="Email"
           required)
-        v-text-field( v-model="user.homePhone"
-          label="Home Phone")
-        v-text-field( v-model="user.cellPhone"
-          label="Cell Phone")
+        v-text-field( v-model="user.phone"
+          label="Phone")
         v-text-field(
           :append-icon="show ? 'visibility' : 'visibility_off'"
           :rules="[rules.required]"
@@ -57,8 +55,7 @@ import { Component, Vue } from "vue-property-decorator";
       password: "",
       passwordConf: "",
       email: "",
-      homePhone: "",
-      cellPhone: ""
+      phone: ""
     },
     rules: {
       required: value => !!value || "Required."
@@ -79,8 +76,7 @@ import { Component, Vue } from "vue-property-decorator";
             username: this.user.username,
             email: this.user.email,
             password: this.user.password,
-            homePhone: this.user.homePhone,
-            cellPhone: this.user.cellPhone
+            phone: this.user.phone
           };
           this.$store
             .dispatch("register", data)

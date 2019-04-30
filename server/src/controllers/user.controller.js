@@ -58,8 +58,7 @@ exports.create = async function (req, res, next) {
         username: req.body.username,
         password: req.body.password,
         email: req.body.email,
-        home_phone: req.body.home_phone,
-        cell_phone: req.body.cell_phone,
+        phone: req.body.phone,
         profile: [
           {title: "Bio", value: ""},
           {title: "Favorite Color", value: ""},

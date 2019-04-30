@@ -18,8 +18,7 @@ const UserSchema = new Schema({
     joined: { type: Date, default: Date.now },
     roles: [{type: String}],
     groups: [{type: String}],
-    home_phone: {type: String},
-    cell_phone: {type: String},
+    phone: {type: String},
     profile: [{title: {type: String}, value: {type: String}}],
     activity: [{title: {title: String}, type: {type: String}, time: {type: String}, details: {type: String}}],
     memberships: [{name: String}]
