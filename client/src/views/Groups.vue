@@ -17,6 +17,9 @@ v-container(fluid grid-list-md).groups
         v-card-actions
           v-spacer
           v-btn(:to="'/group/' + group.title" flat) Visit
+    v-flex.new-group
+      h3 Don't see what your looking for?
+      v-btn(@click="" color="primary") Create a New Group
 </template>
 
 <script>
@@ -72,4 +75,7 @@ export default class Groups extends Vue {}
   max-width: 400px
 .group
   width: 400px
+.new-group
+  margin: 10em auto
+  flex-direction: column
 </style>
