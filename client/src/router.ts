@@ -24,6 +24,15 @@ let router = new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () =>
+        import(/* webpackChunkName: "dashboard" */ "./views/Dashboard.vue"),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: "/admin",
       name: "admin",
       component: () =>
@@ -34,12 +43,13 @@ let router = new Router({
       }
     },
     {
-      path: "/dashboard",
-      name: "dashboard",
+      path: "/root",
+      name: "root",
       component: () =>
-        import(/* webpackChunkName: "dashboard" */ "./views/Dashboard.vue"),
+        import(/* webpackChunkName: "root" */ "./views/Root.vue"),
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        requiresRole: "root"
       }
     },
     {
