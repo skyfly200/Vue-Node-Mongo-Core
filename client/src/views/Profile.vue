@@ -51,8 +51,15 @@ v-container(fluid grid-list-md).profile
         v-card-title
           h2 Groups
         v-card-text
-          ul
-            li(v-for="group in user.groups") {{ group.name }} ( {{ group.role }} )
+          v-list.groups-list
+            v-list-tile.group(v-for="group in user.groups")
+              v-list-tile-avatar
+                v-img(:src="group.img")
+              v-list-tile-content
+                v-list-tile-title {{ titleCase(group.title) }}
+                v-list-tile-sub-title {{ group.role }}
+              v-list-tile-action
+                v-btn(:to="'/group/' + group.title" flat small) Visit
       v-card.activity.section(v-if="user.activity !== undefined && user.activity.length" color='grey lighten-4')
         v-card-title
           h2 Recent Activity
@@ -141,6 +148,9 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
             console.error(resp.data.err);
           } else {
             this.user = resp.data;
+            this.user.groups = [
+              {title: "test", role: "admin", img: "http://lorempixel.com/200/200/nature"}
+            ];
           }
         })
         .catch(err => {
