@@ -12,6 +12,10 @@ v-container(fluid grid-list-md).group
           .group-info
             h1 {{ titleCase(title) }}
             h3 Created: {{ dateCreated }}
+          v-spacer
+          .group-actions
+            v-btn(@click="" color="primary") Join
+            v-btn(@click="" color="primary") Follow
     v-flex.sections
       v-card.bio.section(color='grey lighten-4')
         v-card-title
@@ -34,7 +38,7 @@ v-container(fluid grid-list-md).group
         v-card-text
           .section-view(v-if="!edit.info")
             .field(v-for="field in group.info")
-              h3 {{ field.title }}: {{ field.value }}
+              h3 {{ titleCase(field.title) }}:  {{ field.value }}
               br
           .section-edit(v-else)
             v-form
@@ -82,6 +86,13 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
   components: { ImgUpload, ImgEditHover },
   data: () => ({
     group: {
+      bio: "This is a test group",
+      info: [
+        {title: "location", value: "Boulder, CO"},
+        {title: "type", value: "Meetup"},
+        {title: "topic", value: "Web Dev"}
+      ],
+      created: new Date(),
       members: [
         { name: "Supreme Leader", username: "test", role: "admin", joined: new Date()},
         { name: "Skyler", username: "skyfly", role: "user", joined: new Date()}
@@ -90,7 +101,8 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
         {src: "http://lorempixel.com/200/200/nature"},
         {src: "http://lorempixel.com/200/200/nature"},
         {src: "http://lorempixel.com/200/200/nature"}
-      ]
+      ],
+      activity: []
     },
     title: "",
     imageDialogType: "",
@@ -186,6 +198,9 @@ export default class Group extends Vue {}
     margin-left: 10%
   .group-info
     margin: 0 1em 1em 3em
+  .group-actions
+    margin: auto
+    margin-right: 2em
 .sections
   display: flex
   justify-content: center
