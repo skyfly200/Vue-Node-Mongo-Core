@@ -71,6 +71,7 @@ import { Component, Vue } from "vue-property-decorator";
           e.preventDefault();
           e.stopPropagation();
           this.dragging = true;
+          e.dataTransfer.dropEffect = "copy";
         }.bind(this));
       }.bind(this), false);
       ['dragleave', 'dragend'].forEach( function( evt ) {
