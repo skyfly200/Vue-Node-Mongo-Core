@@ -6,9 +6,10 @@ v-container(fluid grid-list-md).about
 </template>
 
 <script>
-export default {
-  name: "About"
-};
+import { Component, Vue } from "vue-property-decorator";
+
+@Component({})
+export default class About extends Vue {}
 </script>
 
 <style lang="sass" scoped>

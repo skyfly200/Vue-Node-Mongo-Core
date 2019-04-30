@@ -10,8 +10,9 @@ v-container(fluid grid-list-md).verify-email
 </template>
 
 <script>
-export default {
-  name: "VerifyEmail",
+import { Component, Vue } from "vue-property-decorator";
+
+@Component({
   data: () => ({
     verified: false,
     username: "",
@@ -41,7 +42,8 @@ export default {
         console.error(err);
       });
   }
-};
+})
+export default class VerifyEmail extends Vue {}
 </script>
 
 <style lang="sass" scoped>

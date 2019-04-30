@@ -9,7 +9,6 @@ v-container(fluid grid-list-md).root-dashboard
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  name: "Root",
   computed: {
     username: function() {
       return this.$store.getters.user.username;

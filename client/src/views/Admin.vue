@@ -6,14 +6,16 @@ v-container(fluid grid-list-md).admin-dashboard
 </template>
 
 <script>
-export default {
-  name: "Admin",
+import { Component, Vue } from "vue-property-decorator";
+
+@Component({
   computed: {
     username: function() {
       return this.$store.getters.user.username;
     }
   }
-};
+})
+export default class Admin extends Vue {}
 </script>
 
 <style lang="sass" scoped>
