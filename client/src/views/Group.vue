@@ -65,6 +65,12 @@ v-container(fluid grid-list-md).group
             h3 {{ event.title }} - {{ event.type }}
             h4 {{ event.time }}
             p {{ event.details }}
+      v-card.activity.section(color='grey lighten-4')
+        v-card-title
+          h2 Images
+        v-card-text
+          .gallery
+            v-img.image(:src="img.src" v-for="img in group.images")
 </template>
 
 <script>
@@ -79,6 +85,11 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
       members: [
         { name: "Supreme Leader", username: "test", role: "admin", joined: new Date()},
         { name: "Skyler", username: "skyfly", role: "user", joined: new Date()}
+      ],
+      images: [
+        {src: "http://lorempixel.com/200/200/nature"},
+        {src: "http://lorempixel.com/200/200/nature"},
+        {src: "http://lorempixel.com/200/200/nature"}
       ]
     },
     title: "",
@@ -205,4 +216,9 @@ export default class Group extends Vue {}
       .profile-img
         margin: auto
         border-radius: 50%
+.gallery
+  display: flex
+  .image
+    width: auto
+    max-width: 200px
 </style>
