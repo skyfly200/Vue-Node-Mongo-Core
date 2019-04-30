@@ -1,5 +1,5 @@
 <template lang="pug">
-v-dialog(v-model="toggle").image-upload-dialog
+v-dialog(v-model="toggle" max-width="1000").image-upload-dialog
   v-card
     v-card-title(class="headline") Upload a new {{ type }} image
     v-card-text
@@ -157,14 +157,28 @@ import { Component, Vue } from "vue-property-decorator";
       this.error = false;
     },
     upload: function() {
-      // upload selected files and show progress
       // || REFRENCE || File API, Axios, Vuetify Loader
-      // Display upload Error message
-      // this.message = "Error Uploading";
-      // this.error = true;
-      // emit done event, passing the upload result & clear data
-      // this.$emit("done");
-      this.clear();
+      // upload selected files and show progress
+      let formData = new FormData();
+      for( var i = 0; i < this.files.length; i++ ){
+        formData.append('files[' + i + ']', this.files[i]);
+      }
+      this.$http({
+        url: "http://localhost:1234/images/" + this.type,
+        data: formData,
+        method: "POST",
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then(function(resp){
+        // emit done event, passing the upload response & clear data
+        this.$emit("done", resp);
+        this.clear();
+      }.bind(this))
+      .catch(function(error){
+        // Display upload Error message
+        this.message = error;
+        this.error = true;
+      }.bind(this));
     },
     closeDialog: function() {
       this.$emit("close");

@@ -1,6 +1,6 @@
 <template lang="pug">
 v-container(fluid grid-list-md).profile
-  ImgUpload(:type="imageDialogType" v-on:close="imageDialog = false" :toggle="imageDialog" :multi="false")
+  ImgUpload(:type="imageDialogType" @done="console.log($event)" @close="imageDialog = false" :toggle="imageDialog" :multi="false")
   v-layout.layout
     v-flex.heading
       v-card(color='grey lighten-4')
