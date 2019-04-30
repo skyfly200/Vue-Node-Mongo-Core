@@ -68,11 +68,11 @@ v-container(fluid grid-list-md).group
           h2 Members
         v-card-text
           .member-list
-            .member(v-for="member in group.members")
-              router-link(:to="'/profile/' + member.username")
-                v-img.profile-img(src="http://lorempixel.com/200/200/abstract" width="4em")
-                h4 {{ member.name }}
-                  v-icon(v-if="member.role === 'admin'" color="purple") star
+            router-link(v-for="member in group.members" :to="'/profile/' + member.username")
+              .member
+                v-img.profile-img(:src="member.img" width="4em")
+                h4 {{ member.name }}&nbsp;
+                  v-icon(v-if="member.role === 'admin'" small color="purple") star
                 span Joined: {{ dateFormat(member.joined) }}
       v-card.activity.section(v-if="group.activity !== undefined && group.activity.length" color='grey lighten-4')
         v-card-title
@@ -111,13 +111,13 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
         {title: "topic", value: "Web Dev"}
       ],
       members: [
-        { name: "Supreme Leader", username: "test", role: "admin", joined: new Date()},
-        { name: "Skyler", username: "skyfly", role: "user", joined: new Date()}
+        { name: "Supreme Leader", username: "test", role: "admin", joined: new Date(), img: "http://lorempixel.com/200/200/animals/0"},
+        { name: "Skyler", username: "skyfly", role: "user", joined: new Date(), img: "http://lorempixel.com/200/200/animals/1"}
       ],
       images: [
-        {src: "http://lorempixel.com/200/200/nature"},
-        {src: "http://lorempixel.com/200/200/nature"},
-        {src: "http://lorempixel.com/200/200/nature"}
+        {src: "http://lorempixel.com/200/200/nature/0"},
+        {src: "http://lorempixel.com/200/200/nature/1"},
+        {src: "http://lorempixel.com/200/200/nature/2"}
       ],
       activity: []
     },
@@ -236,18 +236,21 @@ export default class Group extends Vue {}
     flex: 1 100%
   .member-list
     display: flex
+    a
+      text-decoration: none
     .member
       padding: 0.5em
       margin: 0.5em
-      border: 1px solid black
+      height: 8em
       text-align: center
-      a
-        text-decoration: none
+      h4 i
+        margin-bottom: 0.1em
       h4, span
         color: black
       .profile-img
         margin: auto
         border-radius: 50%
+        border: 2px solid black
 .gallery
   display: flex
   .image
