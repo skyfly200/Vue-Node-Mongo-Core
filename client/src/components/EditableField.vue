@@ -5,20 +5,20 @@
       h3 {{ title }}:&nbsp;
       span {{ value }}
     v-spacer
-    FabBtn(v-on:select="edit" :tooltip="{text: 'Change Username', left: true}" :icon="icon").edit-btn
+    EditBtn(@select="edit" :tooltip="{text: 'Change Username', left: true}").edit-btn
   v-form.edit(v-else)
     .field-edit
       v-text-area(v-if="textarea" :name="title" :label="title" :value="value")
-      v-text-field(v-else :name="title" :label="title" :value="value")
+      v-text-field(v-else :prepend-icon="icon" :name="title" :label="title" :value="value")
     v-btn(@click="editing = false") Cancel
     v-btn(@click="") Save
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import FabBtn from "@/components/FabBtn.vue";
+import EditBtn from "@/components/EditBtn.vue";
 
 @Component({
-  components: { FabBtn },
+  components: { EditBtn },
   props: ["title", "v", "textarea", "icon"],
   data: () => ({
     editing: false,

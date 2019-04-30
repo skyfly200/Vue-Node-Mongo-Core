@@ -1,15 +1,15 @@
 <template lang="pug">
 v-tooltip(:right="tooltip.right" :left="tooltip.left" :top="tooltip.top" :bottom="tooltip.bottom")
   template(v-slot:activator="{ on }")
-    v-btn(@click="$emit('select')" fab :small="size === 'small'" :large="size === 'large'" :color="color || 'primary'" v-on="on")
-      v-icon {{ icon }}
+    v-btn(@click="$emit('select')" icon small)
+      v-icon edit
   span {{ tooltip.text }}
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["icon", "tooltip", "color", "action", "size"]
+  props: ["tooltip"]
 })
 export default class FabBtn extends Vue {}
 </script>
