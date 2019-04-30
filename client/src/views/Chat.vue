@@ -136,13 +136,13 @@ export default class Profile extends Vue {}
   height: auto
 .search-field
   width: 100%
-.reply-field
-  width: 100%
-  button i
-    transform: rotate(-90deg)
 .reply-bar
   display: flex
   margin-bottom: -30px
+  button i
+    transform: rotate(-90deg)
+.reply-field
+  width: 100%
 .active-conversation
   height: 100%
   margin-left: -1px
