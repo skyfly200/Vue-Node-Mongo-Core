@@ -1,8 +1,8 @@
 <template lang="pug">
 v-toolbar(app)
   v-toolbar-title.headline.text-uppercase
-    span App Name
-    span.font-weight-light Vue Powered
+    span PWA Core
+    span.font-weight-light Vue, Express, Mongo
   v-spacer
   #nav
     router-link(to='/') Home
