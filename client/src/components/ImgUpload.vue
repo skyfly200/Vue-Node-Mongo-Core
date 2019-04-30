@@ -48,26 +48,7 @@ import { Component, Vue } from "vue-property-decorator";
     // wait until the entire view has been rendered
     this.$nextTick(() => {
       if( this.dragAndDropCapable && this.$refs.dropZone ){
-        // bind an event listener to all of the drag events
-        ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach( function( evt ) {
-          this.$refs.dropZone.addEventListener(evt, function(e){
-            e.preventDefault();
-            e.stopPropagation();
-          }.bind(this), false);
-        }.bind(this));
-        ['dragover', 'dragenter'].forEach( function( evt ) {
-          this.$refs.dropZone.addEventListener(evt, function(e) {this.dragging = true}.bind(this));
-        }.bind(this), false);
-        ['dragleave', 'dragend', 'drop'].forEach( function( evt ) {
-          this.$refs.dropZone.addEventListener(evt, function(e) {this.dragging = false}.bind(this));
-        }.bind(this), false);
-        this.$refs.dropZone.addEventListener('drop', function(e){
-          for( let i = 0; i < e.dataTransfer.files.length; i++ ){
-            this.files.push( e.dataTransfer.files[i] );
-            console.log(e.dataTransfer.files[i], i);
-            this.load(e.dataTransfer.files[i]);
-          }
-        }.bind(this));
+        this.register();
       }
     });
   },
@@ -77,8 +58,40 @@ import { Component, Vue } from "vue-property-decorator";
     }
   },
   methods: {
+    register: function() {
+      // bind an event listener to all of the drag events
+      ['drag', 'dragstart'].forEach( function( evt ) {
+        this.$refs.dropZone.addEventListener(evt, function(e){
+          e.preventDefault();
+          e.stopPropagation();
+        }.bind(this), false);
+      }.bind(this));
+      ['dragover', 'dragenter'].forEach( function( evt ) {
+        this.$refs.dropZone.addEventListener(evt, function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.dragging = true;
+        }.bind(this));
+      }.bind(this), false);
+      ['dragleave', 'dragend'].forEach( function( evt ) {
+        this.$refs.dropZone.addEventListener(evt, function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.dragging = false;
+        }.bind(this));
+      }.bind(this), false);
+      this.$refs.dropZone.addEventListener('drop', function(e){
+        if (this.dragging) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.dragging = false;
+          for( let i = 0; i < e.dataTransfer.files.length; i++ ){
+            this.load(e.dataTransfer.files[i]);
+          }
+        }
+      }.bind(this));
+    },
     select: function(e) {
-      // || TODO || show spinning loader here to improve UX
       var fileList = e.target.files;
       this.clear();
       for (var i=0; i<fileList.length; i++) {
@@ -86,6 +99,7 @@ import { Component, Vue } from "vue-property-decorator";
       }
     },
     load: function(file) {
+      // || TODO || show spinning loader here to improve UX
       // Check file against type and size constraints
       if (!this.checkType(file)) {
         this.message = "Invalid File Type";
