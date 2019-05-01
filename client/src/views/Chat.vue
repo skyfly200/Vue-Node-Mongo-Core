@@ -2,7 +2,14 @@
 v-container(fluid grid-list-md).chat
   v-layout.layout(wrap)
     v-flex.conversations(sm4)
-      v-text-field(name="search" v-model="query" label="Search").search-field
+      v-toolbar.convo-toolbar(flat compact)
+        v-toolbar-items.tools
+          v-text-field(name="search" solo v-model="query" label="Search").search-field
+          .buttons
+            v-btn.show-filters(icon @click="")
+              v-icon filter_list
+            v-btn.new-conversation(icon @click="")
+              v-icon add
       v-list(three-line).conversation-list
         template(v-for="(c, i) in conversations")
           v-divider(v-if="i > 0")
@@ -17,9 +24,8 @@ v-container(fluid grid-list-md).chat
                 .timestamp {{ c.lastMessage.timestamp }}
     v-divider(vertical)
     v-flex.active-conversation(sm8)
-      .header
+      v-toolbar.header(flat compact)
         h2 {{ title }}
-      v-divider
       .body
         .messages
           v-list
@@ -134,8 +140,16 @@ export default class Profile extends Vue {}
   padding: 0
 .v-list__tile__content
   height: auto
+.tools
+  width: 100%
+  margin: auto
 .search-field
   width: 100%
+  margin: auto
+  padding-top: 8px
+.buttons
+  display: flex
+  flex-direction: row
 .reply-bar
   display: flex
   margin-bottom: -30px
