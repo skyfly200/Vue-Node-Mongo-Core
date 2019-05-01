@@ -221,6 +221,7 @@ export default class Profile extends Vue {}
 .header-body
   display: flex
   justify-content: left
+  flex-wrap: wrap
   .profile-image
     margin-left: 10%
   .profile-info
@@ -228,7 +229,7 @@ export default class Profile extends Vue {}
 .sections
   display: flex
   justify-content: center
-  flex-direction: column
+  flex-wrap: wrap
   .section
     padding: 0.5em
     width: 100%
@@ -239,6 +240,6 @@ export default class Profile extends Vue {}
     .v-card__text
       height: 100%
       min-height: 20vh
-  .bio
-    flex: 1 100%
+  .bio, .fields
+    flex: 1 50%
 </style>
