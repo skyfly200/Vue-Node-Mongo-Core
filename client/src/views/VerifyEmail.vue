@@ -23,10 +23,8 @@ import { Component, Vue } from "vue-property-decorator";
     this.username = this.$route.params.username;
     this.$http({
       url:
-        "http://localhost:1234/users/verify/email/" +
-        this.username +
-        "/" +
-        this.$route.params.token,
+        "http://localhost:1234/users/verify/email/" + this.username +
+        "/" + this.$route.params.token,
       data: { username: this.username },
       method: "GET"
     })
