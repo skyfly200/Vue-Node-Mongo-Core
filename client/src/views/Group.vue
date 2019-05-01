@@ -12,17 +12,16 @@ v-container(fluid grid-list-md).group
           .group-info
             h1 {{ titleCase(title) }}
             h3 Created: {{ dateCreated }}
-            a(v-if="group.website" href="group.website" target="blank")
-              h3 {{ group.website }}
+            .link-icons
+              v-btn(v-if="group.website" flat icon href="group.website" target="blank")
+                v-icon public
+              v-btn(v-if="group.stream" flat icon :href="group.stream" target="blank")
+                v-icon headset
+              v-btn(v-if="group.social.facebook" flat icon :href="'https://www.facebook.com/' + group.social.facebook" target="blank")
+                v-icon share
         v-card-actions
           v-spacer
           .group-actions
-            v-btn(v-if="group.social.facebook" :href="'https://www.facebook.com/' + group.social.facebook" target="blank" color="primary")
-              v-icon(left) share
-              | Facebook
-            v-btn(v-if="group.website" href="group.website" target="blank" color="primary")
-              v-icon(left) public
-              | Website
             v-btn(@click="" color="primary")
               v-icon(left) person_add
               | Join
@@ -73,7 +72,7 @@ v-container(fluid grid-list-md).group
                 v-img.profile-img(:src="member.img" width="4em")
                 h4 {{ member.name }}&nbsp;
                   v-icon(v-if="member.role === 'admin'" small color="purple") star
-                span Joined: {{ dateFormat(member.joined) }}
+                span Since {{ dateFormat(member.joined) }}
       v-card.activity.section(v-if="group.activity !== undefined && group.activity.length" color='grey lighten-4')
         v-card-title
           h2 Recent Activity
@@ -210,6 +209,7 @@ export default class Group extends Vue {}
   width: 100%
 .header-body
   display: flex
+  flex-wrap: wrap
   justify-content: left
   .group-image
     margin-left: 10%
@@ -221,7 +221,7 @@ export default class Group extends Vue {}
 .sections
   display: flex
   justify-content: center
-  flex-direction: column
+  flex-wrap: wrap
   .section
     padding: 0.5em
     width: 100%
@@ -233,7 +233,11 @@ export default class Group extends Vue {}
       height: 100%
       min-height: 20vh
   .bio
-    flex: 1 100%
+    flex: 1 50%
+  .fields
+    flex: 1 50%
+    .section-view
+      margin-left: 4em
   .member-list
     display: flex
     a
@@ -255,5 +259,6 @@ export default class Group extends Vue {}
   display: flex
   .image
     width: auto
+    margin: auto
     max-width: 200px
 </style>
