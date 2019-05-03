@@ -2,14 +2,14 @@
 v-container(fluid grid-list-md).chat
   v-layout.layout(wrap)
     v-flex.conversations(sm4)
-      v-toolbar.convo-toolbar(flat compact)
+      v-toolbar.convo-toolbar(flat dense)
         v-toolbar-items.tools
-          v-text-field(name="search" solo v-model="query" label="Search").search-field
-          .buttons
-            v-btn.show-filters(icon @click="")
-              v-icon filter_list
-            v-btn.new-conversation(icon @click="newConversation")
-              v-icon add
+          v-text-field.search-field(flat full-width hide-details single-line name="search" v-model="query" label="Search"
+            prepend-inner-icon="search"
+            append-icon="filter_list"
+            append-outer-icon="add_circle"
+            @click:append=""
+            @click:append-outer="newConversation")
       v-list(three-line).conversation-list
         template(v-for="(c, i) in conversations")
           v-divider(v-if="i > 0")
@@ -23,22 +23,30 @@ v-container(fluid grid-list-md).chat
                 template(v-if="c.messages.length")
                   .message-body {{ c.messages[getLast(c)].body }}
                   .timestamp {{ c.messages[getLast(c)].timestamp }}
+            v-btn(v-if="c.members.length < 2" icon flat @click="deleteConvo(i)")
+              v-icon close
     v-divider(vertical)
     v-flex.active-conversation(sm8)
-      v-toolbar.header(flat compact)
-        v-toolbar-title.title-view(v-if="!editTitle")
-          h2 {{ conversations[selected].title }}
-          v-btn(small icon @click="editTitle = true")
-            v-icon edit
-        v-toolbar-title.title-edit(v-else)
-          v-text-field(name="title" v-model="conversations[selected].title" label="Conversation Title" solo)
-          v-btn(:disabled="conversations[selected].title === ''" @click="editTitle = false" flat) Done
-        v-btn(v-if="!editRecipients && isRecipients" small icon @click="editRecipients = true")
-          v-icon add
-        template(v-slot:extension)
-          .recipients(v-if="editRecipients || !isRecipients")
-            v-text-field(name="recipients" v-model="recipients" label="To" solo)
-            v-btn(:disabled="!isRecipients" @click="editRecipients = false" flat) Done
+      v-toolbar.view-toolbar(flat dense)
+        template(v-if="editRecipients || !isRecipients")
+          v-autocomplete.recipients(label="To" chips full-width hide-details hide-no-data hide-selected multiple single-line
+            v-model="recipients"
+            :items="contacts"
+            append-outer-icon="check"
+            @click:append-outer="editRecipients = false")
+        template(v-else-if="editTitle")
+          v-text-field.title-edit(name="title" label="Conversation Title" single-line full-width hide-details
+            v-model="conversations[selected].title"
+            append-icon="check"
+            @click:append="editTitle = (conversations[selected].title === '')")
+        template(v-else)
+          v-spacer
+          v-toolbar-title.title-view {{ conversations[selected].title }}
+          v-spacer
+          v-btn(v-if="!isMulti" small icon @click="editTitle = true")
+            v-icon(small) edit
+          v-btn(v-if="!isMulti" small icon @click="editRecipients = true")
+            v-icon(small) person_add
       .body
         .messages
           v-list
@@ -53,7 +61,7 @@ v-container(fluid grid-list-md).chat
               v-list-tile-avatar(v-if="m.author === username")
                 v-img(:src="getAvitar(m.author)")
         v-form.reply-bar(@submit.prevent="sendMessage")
-          v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus solo).reply-field
+          v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus single-line full-width hide-details).reply-field
           v-btn(fab small color="green" @click="sendMessage").send
             v-icon send
 </template>
@@ -71,6 +79,13 @@ import { Component, Vue } from "vue-property-decorator";
       recipients: "",
       editRecipients: false,
       editTitle: false,
+      contacts: [
+        {username: this.$store.getters.user.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+        {username: "test2", avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
+        {username: "test3", avitar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
+        {username: "test4", avitar: "https://cdn.vuetifyjs.com/images/lists/4.jpg"},
+        {username: "test5", avitar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+      ],
       conversations: [
         {
           id: "4345735646",
@@ -146,13 +161,16 @@ import { Component, Vue } from "vue-property-decorator";
           messages: []
         };
         this.conversations.unshift(conversation);
-        this.selected = 0;
       }
+      this.selected = 0;
     },
     selectConvo: function(i) {
       this.selected = i;
       this.editRecipients = false;
       this.editTitle = false;
+    },
+    deleteConvo: function(i) {
+      this.conversations.splice(i,1);
     },
     getLast: function(c) {
       return c.messages.length - 1;
@@ -191,7 +209,7 @@ export default class Profile extends Vue {}
   width: 100%
   display: flex
   .v-toolbar__content
-    width: 100% !important
+    color: red
   .title-view
     display: flex
     width: 100%
@@ -227,10 +245,6 @@ export default class Profile extends Vue {}
 .tools
   width: 100%
   margin: auto
-.search-field
-  width: 100%
-  margin: auto
-  padding-top: 8px
 .buttons
   display: flex
   flex-direction: row
