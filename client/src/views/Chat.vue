@@ -135,32 +135,29 @@ import { Component, Vue } from "vue-property-decorator";
     }
   },
   computed: {
+    activeConvo: function() {
+      return this.conversations[this.selected];
+    },
     username: function() {
       return this.$store.getters.user.username;
     },
     isMulti: function() {
-      return this.conversations[this.selected].members.length > 2;
+      return this.activeConvo.members.length > 2;
     },
     isRecipients: function() {
-      return this.conversations[this.selected].members.length > 1;
+      return this.activeConvo.members.length > 1;
     },
     isNew: function() {
-      let c = this.conversations[0];
-      return c.members.length === 1;
+      return this.conversations[0].members.length === 1;
     }
   },
   created() {},
   methods: {
     sendMessage: function() {
-      let body = this.reply;
-      if (body && this.isRecipients) {
-        let message = {
-          author: this.username,
-          body: body,
-          timestamp: new Date()
-        };
-        this.reply = ""
-        this.conversations[this.selected].messages.push(message);
+      let message = { author: this.username, body: this.reply, timestamp: new Date() };
+      if (this.reply && this.isRecipients) {
+        this.reply = "";
+        this.activeConvo.messages.push(message);
       }
     },
     newConversation: function() {
@@ -170,9 +167,7 @@ import { Component, Vue } from "vue-property-decorator";
           unread: false,
           title: "",
           creator: this.username,
-          members: [
-            {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
-          ],
+          members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
           messages: []
         };
         this.conversations.unshift(conversation);
@@ -186,31 +181,28 @@ import { Component, Vue } from "vue-property-decorator";
     },
     selectConvo: function(i) {
       this.selected = i;
-      this.editRecipients = this.conversations[this.selected].members.length <= 1;
+      this.editRecipients = this.activeConvo.members.length <= 1;
       this.editTitle = false;
     },
     deleteConvo: function(i) {
       this.conversations.splice(i,1);
     },
     removeRecipient: function(user) {
-      const index = this.conversations[this.selected].members.findIndex( (m) => (m.username === user.username) );
-      if (index >= 0) this.conversations[this.selected].members.splice(index, 1);
+      const index = this.activeConvo.members.findIndex( (m) => (m.username === user.username) );
+      if (index >= 0) this.activeConvo.members.splice(index, 1);
     },
     getAvatar: function(author) {
-      let member = this.conversations[this.selected].members.find( (m) => (m.username === author) );
-      return member.avatar;
+      return this.activeConvo.members.find( (m) => (m.username === author) ).avitar;
     },
     getOtherMembers: function(members) {
       return members.filter( (m) => (m.username !== this.username));
     },
     selectConvoAvatar: function(c) {
       let members = this.getOtherMembers(c.members);
-      let avatar = members.length && members[0] ? members[0].avatar : null;
-      return avatar;
+      return members.length && members[0] ? members[0].avatar : null;
     },
     titleCase: function(string) {
-      if (string) return string.charAt(0).toUpperCase() + string.slice(1);
-      else return "";
+      return (string ? string.charAt(0).toUpperCase() + string.slice(1) : "");
     }
   }
 })
