@@ -166,7 +166,6 @@ export default class Profile extends Vue {}
 .conversation-list
   height: 100%
   .conversation
-    margin-top: 5px
     .v-list__tile__content
       margin-top: -15px
     .unread .message-body
