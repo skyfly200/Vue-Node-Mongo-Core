@@ -3,13 +3,12 @@ v-container(fluid grid-list-md).chat
   v-layout.layout(wrap)
     v-flex.conversations(sm4)
       v-toolbar.convo-toolbar(flat dense)
-        v-toolbar-items.tools
-          v-text-field.search-field(flat full-width hide-details single-line name="search" v-model="query" label="Search"
-            prepend-inner-icon="search"
-            append-icon="filter_list"
-            append-outer-icon="add_circle"
-            @click:append=""
-            @click:append-outer="newConversation")
+        v-text-field.search-field(flat full-width hide-details single-line name="search" v-model="query" label="Search"
+          prepend-inner-icon="search"
+          append-icon="filter_list"
+          append-outer-icon="add_circle"
+          @click:append=""
+          @click:append-outer="newConversation")
       v-list(three-line).conversation-list
         template(v-for="(c, i) in conversations")
           v-divider(v-if="i > 0")
@@ -55,7 +54,7 @@ v-container(fluid grid-list-md).chat
           v-text-field.title-edit(name="title" label="Conversation Title" single-line full-width hide-details
             v-model="conversations[selected].title"
             append-icon="check"
-            @click:append="editTitle = (conversations[selected].title === '')")
+            @click:append="editTitle = false")
         template(v-else)
           v-spacer
           v-toolbar-title.title-view {{ autoTitle(conversations[selected]) }}
@@ -107,9 +106,9 @@ import { Component, Vue } from "vue-property-decorator";
           id: 4345735646,
           unread: false,
           title: "",
-          creator: this.username,
+          creator: this.$store.getters.user.username,
           members: [
-            {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
             {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
           ],
           messages: [
@@ -125,7 +124,7 @@ import { Component, Vue } from "vue-property-decorator";
           title: "",
           creator: "test3",
           members: [
-            {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
             {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"}
           ],
           messages: [
@@ -206,7 +205,7 @@ import { Component, Vue } from "vue-property-decorator";
     },
     selectConvoAvatar: function(c) {
       let members = this.getOtherMembers(c.members);
-      let avatar = members.length ? members[0].avatar : null;
+      let avatar = members.length && members[0] ? members[0].avatar : null;
       return avatar;
     },
     titleCase: function(string) {
@@ -230,26 +229,6 @@ export default class Profile extends Vue {}
   display: flex
   justify-content: center
   flex-direction: column
-.header
-  width: 100%
-  display: flex
-  .v-toolbar__content
-    color: red
-  .title-view
-    display: flex
-    width: 100%
-    flex: 1 100%
-    h2
-      margin: auto
-  .title-edit
-    display: flex
-    width: 100%
-    flex: 1 100%
-  .recipients
-    display: flex
-    width: 100%
-    .v-input
-      flex: 1 100%
 .conversation-list
   height: 100%
   .conversation
@@ -267,19 +246,11 @@ export default class Profile extends Vue {}
   padding: 0
 .v-list__tile__content
   height: auto
-.tools
-  width: 100%
-  margin: auto
-.buttons
-  display: flex
-  flex-direction: row
 .reply-bar
   display: flex
   margin-bottom: -30px
   button i
     transform: rotate(-90deg)
-.reply-field
-  width: 100%
 .active-conversation
   height: 100%
   margin-left: -1px
