@@ -193,8 +193,8 @@ import { Component, Vue } from "vue-property-decorator";
       this.conversations.splice(i,1);
     },
     removeRecipient: function(user) {
-      console.log(user)
-      const index = this.conversations[this.selected].members.indexOf(user.username);
+      const index = this.conversations[this.selected].members.findIndex( (m) => (m.username === user.username) );
+      console.log(user.username, index, this.conversations[this.selected].members);
       if (index >= 0) this.conversations[this.selected].members.splice(index, 1);
     },
     getLast: function(c) {
