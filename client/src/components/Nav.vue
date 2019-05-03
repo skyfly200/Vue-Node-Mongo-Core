@@ -48,7 +48,7 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   data: () => ({
-    drawer: null
+    drawer: false
   }),
   computed: {
     isLoggedIn: function() {

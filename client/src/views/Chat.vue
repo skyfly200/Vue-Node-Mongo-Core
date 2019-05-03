@@ -20,7 +20,7 @@ v-container(fluid grid-list-md).chat
               v-list-tile-title
                 h5 {{ c.title }}
               v-list-tile-sub-title
-                template(v-if="c.messages")
+                template(v-if="c.messages.length")
                   .message-body {{ c.messages[getLast(c)].body }}
                   .timestamp {{ c.messages[getLast(c)].timestamp }}
     v-divider(vertical)
@@ -122,9 +122,8 @@ import { Component, Vue } from "vue-property-decorator";
         ],
         messages: []
       };
-      console.log(conversation)
-      this.conversations.push(conversation);
-      this.selected = -1;
+      this.conversations.unshift(conversation);
+      this.selected = 0;
     },
     selectConvo: function(i) {
       this.selected = i;
