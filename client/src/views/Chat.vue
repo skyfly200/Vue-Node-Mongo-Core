@@ -13,13 +13,13 @@ v-container(fluid grid-list-md).chat
       v-list(three-line).conversation-list
         template(v-for="(c, i) in conversations")
           v-divider(v-if="i > 0")
-          v-list-tile.conversation(@click="selectConvo(i)")
+          v-list-tile.conversation(@click="selectConvo(i)" :key="c.id")
             v-list-tile-avatar
               v-img(v-if="c.members.length > 1" :src="selectConvoAvatar(c)")
               v-icon(v-else large) person
             v-list-tile-content(:class="{ unread: c.unread }")
               v-list-tile-title
-                h5 {{ c.title }}
+                h5 {{ autoTitle(c) }}
               v-list-tile-sub-title
                 template(v-if="c.messages.length")
                   .message-body {{ c.messages[getLast(c)].body }}
@@ -36,6 +36,7 @@ v-container(fluid grid-list-md).chat
             item-text="username"
             item-value="username"
             append-outer-icon="check"
+            @select=""
             @click:append-outer="editRecipients = false")
             template(v-slot:selection='data')
               v-chip.chip--select-multi(:selected='data.selected' close @input='removeRecipient(data.item)')
@@ -57,7 +58,7 @@ v-container(fluid grid-list-md).chat
             @click:append="editTitle = (conversations[selected].title === '')")
         template(v-else)
           v-spacer
-          v-toolbar-title.title-view {{ conversations[selected].title }}
+          v-toolbar-title.title-view {{ autoTitle(conversations[selected]) }}
           v-spacer
           v-btn(v-if="isMulti" small icon @click="editTitle = true")
             v-icon(small) edit
@@ -66,7 +67,7 @@ v-container(fluid grid-list-md).chat
       .body
         .messages
           v-list
-            v-list-tile.message(v-for="m in conversations[selected].messages")
+            v-list-tile.message(v-for="m in conversations[selected].messages" :key="m.timestamp")
               v-list-tile-avatar(v-if="m.author !== username")
                 v-img(:src="getAvatar(m.author)")
               v-list-tile-content
@@ -103,9 +104,9 @@ import { Component, Vue } from "vue-property-decorator";
       ],
       conversations: [
         {
-          id: "4345735646",
+          id: 4345735646,
           unread: false,
-          title: "Example",
+          title: "",
           creator: this.$store.getters.user.username,
           members: [
             {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
@@ -119,9 +120,9 @@ import { Component, Vue } from "vue-property-decorator";
           ]
         },
         {
-          id: "4425735646",
+          id: 4425735646,
           unread: true,
-          title: "Example 2",
+          title: "",
           creator: "test3",
           members: [
             {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
@@ -166,9 +167,9 @@ import { Component, Vue } from "vue-property-decorator";
     newConversation: function() {
       if (!this.isNew) {
         let conversation = {
-          id: "4425735646",
+          id: 4425735346,
           unread: false,
-          title: "New Conversation",
+          title: "",
           creator: this.username,
           members: [
             {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
@@ -178,17 +179,21 @@ import { Component, Vue } from "vue-property-decorator";
         this.conversations.unshift(conversation);
       }
       this.selected = 0;
+      this.editRecipients = true;
+    },
+    autoTitle: function(c) {
+      return c.title ? c.title : (c.members.length > 1 ? this.getOtherMembers(c.members).map(m => (this.titleCase(m.username))).join(', ') : "New Message");
     },
     selectConvo: function(i) {
       this.selected = i;
-      this.editRecipients = false;
+      this.editRecipients = this.conversations[this.selected].members.length <= 1;
       this.editTitle = false;
     },
-    loadRecipients: function() {},
     deleteConvo: function(i) {
       this.conversations.splice(i,1);
     },
     removeRecipient: function(user) {
+      console.log(user)
       const index = this.conversations[this.selected].members.indexOf(user.username);
       if (index >= 0) this.conversations[this.selected].members.splice(index, 1);
     },
@@ -199,9 +204,11 @@ import { Component, Vue } from "vue-property-decorator";
       let member = this.conversations[this.selected].members.find( (m) => (m.username === author) );
       return member.avatar;
     },
+    getOtherMembers: function(members) {
+      return members.filter( (m) => (m.username !== this.username));
+    },
     selectConvoAvatar: function(c) {
-      let members = c.members.filter( (m) => (m.username !== this.username));
-      console.log(members)
+      let members = this.getOtherMembers(c.members);
       let avatar = members.length ? members[0].avatar : null;
       return avatar;
     },
