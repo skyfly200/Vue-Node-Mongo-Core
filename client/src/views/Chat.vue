@@ -8,39 +8,40 @@ v-container(fluid grid-list-md).chat
           .buttons
             v-btn.show-filters(icon @click="")
               v-icon filter_list
-            v-btn.new-conversation(icon @click="")
+            v-btn.new-conversation(icon @click="newConversation")
               v-icon add
       v-list(three-line).conversation-list
         template(v-for="(c, i) in conversations")
           v-divider(v-if="i > 0")
-          v-list-tile.conversation
+          v-list-tile.conversation(@click="selectConvo(i)")
             v-list-tile-avatar
-              v-img(:src="c.avitar")
+              v-img(:src="selectConvoAvatar(c)")
             v-list-tile-content(:class="{ unread: c.unread }")
               v-list-tile-title
                 h5 {{ c.title }}
               v-list-tile-sub-title
-                .message-body {{ c.lastMessage.body }}
-                .timestamp {{ c.lastMessage.timestamp }}
+                .message-body {{ c.messages[getLast(c)].body }}
+                .timestamp {{ c.messages[getLast(c)].timestamp }}
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       v-toolbar.header(flat compact)
-        h2 {{ title }}
+        h2 {{ conversations[selected].title }}
       .body
         .messages
           v-list
-            v-list-tile.message(v-for="m in messages")
-              v-list-tile-avatar(v-if="m.author !== nickname")
-                v-img(:src="m.avitar")
+            v-list-tile.message(v-for="m in conversations[selected].messages")
+              v-list-tile-avatar(v-if="m.author !== username")
+                v-img(:src="getAvitar(m.author)")
               v-list-tile-content
                 v-list-tile-sub-title
+                  .author(v-if="isMulti && m.author !== username") {{ m.author }}
                   .message-body {{ m.body }}
                   .timestamp Sent: {{ m.timestamp }}
-              v-list-tile-avatar(v-if="m.author === nickname")
-                v-img(:src="m.avitar")
-        .reply-bar
+              v-list-tile-avatar(v-if="m.author === username")
+                v-img(:src="getAvitar(m.author)")
+        v-form.reply-bar(@submit.prevent="sendMessage")
           v-text-field(name="reply" v-model="reply" label="Reply" solo).reply-field
-          v-btn(fab small color="green").send
+          v-btn(fab small color="green" @click="sendMessage").send
             v-icon send
 </template>
 
@@ -49,61 +50,101 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   name: "Chat",
-  data: () => ({
-    nickname: "Test",
-    query: "",
-    conversations: [
-      {
-        avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: "Example",
-        id: "4574693653",
-        unread: false,
-        lastMessage: { body: "Another from you", timestamp: "1 min ago" }
-      },
-      {
-        avitar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Example 2",
-        id: "4425767546",
-        unread: true,
-        lastMessage: { body: "Hey, whats up?", timestamp: "2 hours ago" }
-      }
-    ],
-    title: "Example",
-    messages: [
-      {
-        avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        author: "Test2",
-        body: "This is a message from another user",
-        timestamp: "8 mins ago"
-      },
-      {
-        avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        author: "Test",
-        body: "This is a message you sent",
-        timestamp: "5 mins ago"
-      },
-      {
-        avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        author: "Test2",
-        body: "Another message from another user",
-        timestamp: "3 mins ago"
-      },
-      {
-        avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        author: "Test",
-        body: "Another from you",
-        timestamp: "1 min ago"
-      }
-    ],
-    reply: ""
-  }),
+  data: function() {
+    return {
+      nickname: "test",
+      query: "",
+      reply: "",
+      selected: 0,
+      conversations: [
+        {
+          id: "4345735646",
+          unread: false,
+          title: "Example",
+          creator: this.$store.getters.user.username,
+          members: [
+            {username: this.$store.getters.user.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: "test2", avitar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
+          ],
+          messages: [
+            { author: "test2", body: "This is a message from another user", timestamp: "8 mins ago" },
+            { author: "test", body: "This is a message you sent", timestamp: "5 mins ago" },
+            { author: "test2", body: "Another message from another user", timestamp: "3 mins ago" },
+            { author: "test", body: "Another from you", timestamp: "1 min ago" }
+          ]
+        },
+        {
+          id: "4425735646",
+          unread: true,
+          title: "Example 2",
+          creator: this.$store.getters.user.username,
+          members: [
+            {username: this.$store.getters.user.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: "test3", avitar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"}
+          ],
+          messages: [
+            { author: "test3", body: "Hey, whats up?", timestamp: "2 hours ago" }
+          ]
+        }
+      ]
+    }
+  },
   computed: {
     username: function() {
       return this.$store.getters.user.username;
+    },
+    isMulti: function() {
+      return this.conversations[this.selected].members.length > 2;
     }
   },
   created() {},
-  methods: {}
+  methods: {
+    sendMessage: function() {
+      let body = this.reply;
+      if (body) {
+        let message = {
+          author: this.username,
+          body: body,
+          timestamp: new Date()
+        };
+        this.reply = ""
+        this.conversations[this.selected].messages.push(message);
+      }
+    },
+    newConversation: function() {
+      let conversation = {
+        title: "New Conversation",
+        creator: this.username,
+        members: [
+          {username: this.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
+        ],
+        id: "4425735646",
+        unread: false,
+        messages: []
+      };
+      this.conversations.push(conversation);
+    },
+    selectConvo: function(i) {
+      this.selected = i;
+    },
+    getLast: function(c) {
+      return c.messages.length - 1;
+    },
+    getAvitar: function(author) {
+      let member = this.conversations[this.selected].members.find( (m) => (m.username === author) );
+      return member.avitar;
+    },
+    selectConvoAvatar: function(c) {
+      //let display = c.messages.length - 1;
+      let username = c.messages[0].author;
+      let avitar = c.members.find( (m) => (m.username === username) ).avitar;
+      return avitar;
+    },
+    titleCase: function(string) {
+      if (string) return string.charAt(0).toUpperCase() + string.slice(1);
+      else return "";
+    }
+  }
 })
 export default class Profile extends Vue {}
 </script>
