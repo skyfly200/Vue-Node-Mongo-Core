@@ -22,8 +22,8 @@ v-container(fluid grid-list-md).chat
                 h5 {{ autoTitle(c) }}
               v-list-tile-sub-title
                 template(v-if="c.messages.length")
-                  .message-body {{ c.messages[getLast(c)].body }}
-                  .timestamp {{ c.messages[getLast(c)].timestamp }}
+                  .message-body {{ c.messages[c.messages.length - 1].body }}
+                  .timestamp {{ c.messages[c.messages.length - 1].timestamp }}
             v-btn(v-if="c.members.length < 2" icon flat @click="deleteConvo(i)")
               v-icon close
     v-divider(vertical)
@@ -182,7 +182,8 @@ import { Component, Vue } from "vue-property-decorator";
       this.editRecipients = true;
     },
     autoTitle: function(c) {
-      return c.title ? c.title : (c.members.length > 1 ? this.getOtherMembers(c.members).map(m => (this.titleCase(m.username))).join(', ') : "New Message");
+      let auto = this.getOtherMembers(c.members).map(m => (this.titleCase(m.username))).join(', ');
+      return c.title ? c.title : (c.members.length > 1 ? auto : "New Message");
     },
     selectConvo: function(i) {
       this.selected = i;
@@ -194,11 +195,7 @@ import { Component, Vue } from "vue-property-decorator";
     },
     removeRecipient: function(user) {
       const index = this.conversations[this.selected].members.findIndex( (m) => (m.username === user.username) );
-      console.log(user.username, index, this.conversations[this.selected].members);
       if (index >= 0) this.conversations[this.selected].members.splice(index, 1);
-    },
-    getLast: function(c) {
-      return c.messages.length - 1;
     },
     getAvatar: function(author) {
       let member = this.conversations[this.selected].members.find( (m) => (m.username === author) );
