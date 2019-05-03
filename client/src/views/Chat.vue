@@ -107,9 +107,9 @@ import { Component, Vue } from "vue-property-decorator";
           id: 4345735646,
           unread: false,
           title: "",
-          creator: this.$store.getters.user.username,
+          creator: this.username,
           members: [
-            {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
             {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
           ],
           messages: [
@@ -125,7 +125,7 @@ import { Component, Vue } from "vue-property-decorator";
           title: "",
           creator: "test3",
           members: [
-            {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
             {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"}
           ],
           messages: [
