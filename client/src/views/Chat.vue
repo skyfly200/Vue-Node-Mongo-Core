@@ -20,8 +20,9 @@ v-container(fluid grid-list-md).chat
               v-list-tile-title
                 h5 {{ c.title }}
               v-list-tile-sub-title
-                .message-body {{ c.messages[getLast(c)].body }}
-                .timestamp {{ c.messages[getLast(c)].timestamp }}
+                template(v-if="c.messages")
+                  .message-body {{ c.messages[getLast(c)].body }}
+                  .timestamp {{ c.messages[getLast(c)].timestamp }}
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       v-toolbar.header(flat compact)
@@ -40,7 +41,7 @@ v-container(fluid grid-list-md).chat
               v-list-tile-avatar(v-if="m.author === username")
                 v-img(:src="getAvitar(m.author)")
         v-form.reply-bar(@submit.prevent="sendMessage")
-          v-text-field(name="reply" v-model="reply" label="Reply" solo).reply-field
+          v-text-field(name="reply" v-model="reply" label="Reply" autofocus solo).reply-field
           v-btn(fab small color="green" @click="sendMessage").send
             v-icon send
 </template>
@@ -52,7 +53,6 @@ import { Component, Vue } from "vue-property-decorator";
   name: "Chat",
   data: function() {
     return {
-      nickname: "test",
       query: "",
       reply: "",
       selected: 0,
@@ -77,7 +77,7 @@ import { Component, Vue } from "vue-property-decorator";
           id: "4425735646",
           unread: true,
           title: "Example 2",
-          creator: this.$store.getters.user.username,
+          creator: "test3",
           members: [
             {username: this.$store.getters.user.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
             {username: "test3", avitar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"}
@@ -113,16 +113,18 @@ import { Component, Vue } from "vue-property-decorator";
     },
     newConversation: function() {
       let conversation = {
+        id: "4425735646",
+        unread: false,
         title: "New Conversation",
         creator: this.username,
         members: [
           {username: this.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
         ],
-        id: "4425735646",
-        unread: false,
         messages: []
       };
+      console.log(conversation)
       this.conversations.push(conversation);
+      this.selected = -1;
     },
     selectConvo: function(i) {
       this.selected = i;
@@ -135,8 +137,7 @@ import { Component, Vue } from "vue-property-decorator";
       return member.avitar;
     },
     selectConvoAvatar: function(c) {
-      //let display = c.messages.length - 1;
-      let username = c.messages[0].author;
+      let username = c.creator;
       let avitar = c.members.find( (m) => (m.username === username) ).avitar;
       return avitar;
     },
