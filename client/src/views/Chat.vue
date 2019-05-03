@@ -26,7 +26,19 @@ v-container(fluid grid-list-md).chat
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       v-toolbar.header(flat compact)
-        h2 {{ conversations[selected].title }}
+        v-toolbar-title.title-view(v-if="!editTitle")
+          h2 {{ conversations[selected].title }}
+          v-btn(small icon @click="editTitle = true")
+            v-icon edit
+        v-toolbar-title.title-edit(v-else)
+          v-text-field(name="title" v-model="conversations[selected].title" label="Conversation Title" solo)
+          v-btn(:disabled="conversations[selected].title === ''" @click="editTitle = false" flat) Done
+        v-btn(v-if="!editRecipients && isRecipients" small icon @click="editRecipients = true")
+          v-icon add
+        template(v-slot:extension)
+          .recipients(v-if="editRecipients || !isRecipients")
+            v-text-field(name="recipients" v-model="recipients" label="To" solo)
+            v-btn(:disabled="!isRecipients" @click="editRecipients = false" flat) Done
       .body
         .messages
           v-list
@@ -41,7 +53,7 @@ v-container(fluid grid-list-md).chat
               v-list-tile-avatar(v-if="m.author === username")
                 v-img(:src="getAvitar(m.author)")
         v-form.reply-bar(@submit.prevent="sendMessage")
-          v-text-field(name="reply" v-model="reply" label="Reply" autofocus solo).reply-field
+          v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus solo).reply-field
           v-btn(fab small color="green" @click="sendMessage").send
             v-icon send
 </template>
@@ -56,6 +68,9 @@ import { Component, Vue } from "vue-property-decorator";
       query: "",
       reply: "",
       selected: 0,
+      recipients: "",
+      editRecipients: false,
+      editTitle: false,
       conversations: [
         {
           id: "4345735646",
@@ -95,13 +110,20 @@ import { Component, Vue } from "vue-property-decorator";
     },
     isMulti: function() {
       return this.conversations[this.selected].members.length > 2;
+    },
+    isRecipients: function() {
+      return this.conversations[this.selected].members.length > 1;
+    },
+    isNew: function() {
+      let c = this.conversations[0];
+      return c.members.length === 1;
     }
   },
   created() {},
   methods: {
     sendMessage: function() {
       let body = this.reply;
-      if (body) {
+      if (body && this.isRecipients) {
         let message = {
           author: this.username,
           body: body,
@@ -112,21 +134,25 @@ import { Component, Vue } from "vue-property-decorator";
       }
     },
     newConversation: function() {
-      let conversation = {
-        id: "4425735646",
-        unread: false,
-        title: "New Conversation",
-        creator: this.username,
-        members: [
-          {username: this.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
-        ],
-        messages: []
-      };
-      this.conversations.unshift(conversation);
-      this.selected = 0;
+      if (!this.isNew) {
+        let conversation = {
+          id: "4425735646",
+          unread: false,
+          title: "New Conversation",
+          creator: this.username,
+          members: [
+            {username: this.username, avitar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
+          ],
+          messages: []
+        };
+        this.conversations.unshift(conversation);
+        this.selected = 0;
+      }
     },
     selectConvo: function(i) {
       this.selected = i;
+      this.editRecipients = false;
+      this.editTitle = false;
     },
     getLast: function(c) {
       return c.messages.length - 1;
@@ -162,7 +188,25 @@ export default class Profile extends Vue {}
   justify-content: center
   flex-direction: column
 .header
-  text-align: center
+  width: 100%
+  display: flex
+  .v-toolbar__content
+    width: 100% !important
+  .title-view
+    display: flex
+    width: 100%
+    flex: 1 100%
+    h2
+      margin: auto
+  .title-edit
+    display: flex
+    width: 100%
+    flex: 1 100%
+  .recipients
+    display: flex
+    width: 100%
+    .v-input
+      flex: 1 100%
 .conversation-list
   height: 100%
   .conversation
