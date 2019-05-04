@@ -84,6 +84,7 @@ v-container(fluid grid-list-md).chat
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
+const isToday = require('date-fns/is_today');
 
 @Component({
   name: "Chat",
