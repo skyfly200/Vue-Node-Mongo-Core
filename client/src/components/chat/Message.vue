@@ -14,7 +14,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["author", "avatar", "body". "timestamp", "own", "showName"]
+  props: ["author", "avatar", "body", "timestamp", "own", "showName"]
 })
 export default class Message extends Vue {}
 </script>
