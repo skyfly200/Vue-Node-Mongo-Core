@@ -182,7 +182,10 @@ const format = require('date-fns/format');
         let direct = this.filters.direct || c.members.length > 2;
         let group = this.filters.group || c.members.length < 3;
         // filter by query here
-        return (unread && created && direct && group);
+        let query = this.query === "" ||
+          c.members.find( m => ( m.username.toLowerCase().includes(this.query.toLowerCase()) ))
+          || c.title.toLowerCase().includes(this.query.toLowerCase());
+        return (unread && created && direct && group && query);
       });
     },
   },
