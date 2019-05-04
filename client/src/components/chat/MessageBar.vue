@@ -6,6 +6,6 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
   props: []
 })
-export default class ConvoBar extends Vue {}
+export default class MessageBar extends Vue {}
 </script>
 <style lang="sass" scoped></style>

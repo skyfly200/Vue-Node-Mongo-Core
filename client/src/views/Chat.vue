@@ -91,7 +91,7 @@ import Filters from "@/components/chat/Filters.vue";
 import ConvoList from "@/components/chat/ConvoList.vue";
 import ConvoTile from "@/components/chat/ConvoTile.vue";
 import Conversation from "@/components/chat/Conversation.vue";
-import ConvoBar from "@/components/chat/ConvoBar.vue";
+import MessageBar from "@/components/chat/MessageBar.vue";
 import UserSelector from "@/components/chat/UserSelector.vue";
 import UserTile from "@/components/chat/UserTile.vue";
 import MessageList from "@/components/chat/MessageList.vue";
@@ -106,7 +106,7 @@ const format = require('date-fns/format');
 
 @Component({
   name: "Chat",
-  components: {ConversationIndex, ListBar, Filters, ConvoList, ConvoTile, Conversation, ConvoBar, UserSelector, UserTile, MessageList, Message, ReplyBar},
+  components: {ConversationIndex, ListBar, Filters, ConvoList, ConvoTile, Conversation, MessageBar, UserSelector, UserTile, MessageList, Message, ReplyBar},
   data: function() {
     return {
       query: "",
