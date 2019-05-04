@@ -97,6 +97,17 @@ v-container(fluid grid-list-md).chat
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
+import ConversationsList from "@/components/chat/ConversationsList.vue";
+import ListBar from "@/components/chat/ListBar.vue";
+import Filters from "@/components/chat/Filters.vue";
+import ConvoTile from "@/components/chat/ConvoTile.vue";
+import Conversation from "@/components/chat/Conversation.vue";
+import ConvoBar from "@/components/chat/ConvoBar.vue";
+import UserSelector from "@/components/chat/UserSelector.vue";
+import UserTile from "@/components/chat/UserTile.vue";
+import Message from "@/components/chat/Message.vue";
+import ReplyBar from "@/components/chat/ReplyBar.vue";
+// import date-fns utils
 const isToday = require('date-fns/is_today');
 const isThisWeek = require('date-fns/is_this_week');
 const isThisYear = require('date-fns/is_this_year');
@@ -105,6 +116,7 @@ const format = require('date-fns/format');
 
 @Component({
   name: "Chat",
+  components: [ConversationsList, ListBar, Filters, ConvoTile, Conversation, ConvoBar, UserSelector, UserTile, Message, ReplyBar],
   data: function() {
     return {
       query: "",
