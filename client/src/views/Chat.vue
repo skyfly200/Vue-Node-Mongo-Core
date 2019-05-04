@@ -22,7 +22,7 @@ v-container(fluid grid-list-md).chat
               v-list-tile-sub-title
                 template(v-if="c.messages.length")
                   .message-body {{ c.messages[c.messages.length - 1].body }}
-                  .timestamp {{ c.messages[c.messages.length - 1].timestamp }}
+                  .timestamp {{ formatTimestamp(c.messages[c.messages.length - 1].timestamp) }}
             v-btn(v-if="c.members.length < 2" icon flat @click="deleteConvo(i)")
               v-icon close
     v-divider(vertical)
@@ -66,14 +66,14 @@ v-container(fluid grid-list-md).chat
       .body
         .messages
           v-list
-            v-list-tile.message(v-for="m in conversations[selected].messages" :key="m.timestamp")
+            v-list-tile.message(v-for="m in conversations[selected].messages" :key="getTime(m.timestamp)")
               v-list-tile-avatar(v-if="m.author !== username")
                 v-img(:src="getAvatar(m.author)")
               v-list-tile-content
                 v-list-tile-sub-title
                   .author(v-if="isMulti && m.author !== username") {{ m.author }}
                   .message-body {{ m.body }}
-                  .timestamp Sent: {{ m.timestamp }}
+                  .timestamp {{ formatTimestamp(m.timestamp) }}
               v-list-tile-avatar(v-if="m.author === username")
                 v-img(:src="getAvatar(m.author)")
         v-form.reply-bar(@submit.prevent="sendMessage")
@@ -85,6 +85,10 @@ v-container(fluid grid-list-md).chat
 <script>
 import { Component, Vue } from "vue-property-decorator";
 const isToday = require('date-fns/is_today');
+const isThisWeek = require('date-fns/is_this_week');
+const isThisYear = require('date-fns/is_this_year');
+const getTime = require('date-fns/get_time');
+const format = require('date-fns/format');
 
 @Component({
   name: "Chat",
@@ -113,10 +117,10 @@ const isToday = require('date-fns/is_today');
             {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
           ],
           messages: [
-            { author: "test2", body: "This is a message from another user", timestamp: "8 mins ago" },
-            { author: "test", body: "This is a message you sent", timestamp: "5 mins ago" },
-            { author: "test2", body: "Another message from another user", timestamp: "3 mins ago" },
-            { author: "test", body: "Another from you", timestamp: "1 min ago" }
+            { author: "test2", body: "This is a message from another user", timestamp: new Date(2018,11,28) },
+            { author: "test", body: "This is a message you sent", timestamp: new Date(2019,2,22) },
+            { author: "test2", body: "Another message from another user", timestamp: new Date(2019,3,20) },
+            { author: "test", body: "Another from you", timestamp: new Date() }
           ]
         },
         {
@@ -129,7 +133,7 @@ const isToday = require('date-fns/is_today');
             {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"}
           ],
           messages: [
-            { author: "test3", body: "Hey, whats up?", timestamp: "2 hours ago" }
+            { author: "test3", body: "Hey, whats up?", timestamp: new Date(2019,4,3) }
           ]
         }
       ]
@@ -192,8 +196,13 @@ const isToday = require('date-fns/is_today');
       const index = this.activeConvo.members.findIndex( (m) => (m.username === user.username) );
       if (index >= 0) this.activeConvo.members.splice(index, 1);
     },
+    formatTimestamp: function(t) {
+      let f = isToday(t) ? format(t, "h:mm a") : (isThisWeek(t) ? format(t, "ddd") : (isThisYear ? format(t, "MMM Do") : format(t, "M/D/YY")));
+      return f;
+    },
+    getTime: getTime,
     getAvatar: function(author) {
-      return this.activeConvo.members.find( (m) => (m.username === author) ).avitar;
+      return this.activeConvo.members.find( (m) => (m.username === author) ).avatar;
     },
     getOtherMembers: function(members) {
       return members.filter( (m) => (m.username !== this.username));
