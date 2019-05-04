@@ -187,7 +187,8 @@ const format = require('date-fns/format');
     selectConvo: function(i) {
       this.selected = i;
       this.editRecipients = this.activeConvo.members.length <= 1;
-      this.editTitle = false;
+      this.editTitle = false
+      this.conversations[i].unread = false;
     },
     deleteConvo: function(i) {
       this.conversations.splice(i,1);
