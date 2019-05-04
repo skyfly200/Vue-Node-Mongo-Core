@@ -9,14 +9,16 @@ v-container(fluid grid-list-md).chat
           append-outer-icon="add_circle"
           @click:append="showFilters = !showFilters ? -1 : 0"
           @click:append-outer="newConversation")
-      v-expansion-panel(v-model="showFilters" pa-3)
+      v-expansion-panel(v-model="showFilters")
         v-expansion-panel-content
           v-flex(px-3)
-            .flex-row
-              v-checkbox(v-model="filters.direct" label="Direct")
-              v-checkbox(v-model="filters.groups" label="Groups")
-            v-switch(v-model="filters.created" label="Your Created Only" height="auto")
-            v-switch(v-model="filters.unread" label="Unread Only" height="auto")
+            .filters-types
+              h5 Types
+              v-checkbox(v-model="filters.direct" label="Direct" hide-details)
+              v-checkbox(v-model="filters.group" label="Group" hide-details)
+            v-divider
+            v-switch(v-model="filters.created" label="Your Created Only" height="28px" hide-details)
+            v-switch(v-model="filters.unread" label="Unread Only" height="28px" hide-details)
       v-list(two-line).conversation-list
         v-slide-y-transition(group)
           template(v-for="(c, i) in filteredConversations")
@@ -114,7 +116,7 @@ const format = require('date-fns/format');
       showFilters: -1,
       filters: {
         direct: true,
-        groups: true,
+        group: true,
         created: false,
         unread: false
       },
@@ -178,8 +180,8 @@ const format = require('date-fns/format');
         let unread = !this.filters.unread || c.unread || c.messages.length === 0;
         let created = !this.filters.created || c.creator === this.$store.getters.user.username;
         let direct = this.filters.direct || c.members.length > 2;
-        let group = this.filters.groups || c.members.length < 3;
-        console.log(c, unread, created, direct, group);
+        let group = this.filters.group || c.members.length < 3;
+        // filter by query here
         return (unread && created && direct && group);
       });
     },
@@ -264,9 +266,10 @@ export default class Profile extends Vue {}
   display: flex
   justify-content: center
   flex-direction: column
-.flex-row
+.filters-types
   display: flex
   justify-content: center
+  padding-bottom: 1em
 .conversation-list
   height: 100%
   .conversation
@@ -291,7 +294,7 @@ export default class Profile extends Vue {}
     transform: rotate(-90deg)
 .active-conversation
   height: 100%
-  margin-left: -1px
+  margin-right: -1px
   .body
     height: 100%
     display: flex
