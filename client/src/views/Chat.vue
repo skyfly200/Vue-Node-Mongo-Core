@@ -10,22 +10,23 @@ v-container(fluid grid-list-md).chat
           @click:append=""
           @click:append-outer="newConversation")
       v-list(two-line).conversation-list
-        template(v-for="(c, i) in conversations")
-          v-divider(v-if="i > 0")
-          v-list-tile.conversation(@click="selectConvo(i)" :key="c.id")
-            v-list-tile-avatar
-              v-img(v-if="c.members.length > 1" :src="selectConvoAvatar(c)")
-              v-icon(v-else large) person
-            v-list-tile-content(:class="{ unread: c.unread }")
-              v-list-tile-title
-                h5
-                  span {{ autoTitle(c) }}
-              v-list-tile-sub-title
-                span(v-if="c.messages.length").message-body {{ c.messages[c.messages.length - 1].body }}
-            v-list-tile-action
-              v-btn(v-if="!c.messages.length" icon flat @click="deleteConvo(i)")
-                v-icon close
-              span(v-else).timestamp {{ formatTimestamp(c.messages[c.messages.length - 1].timestamp) }}
+        v-slide-y-transition(group)
+          template(v-for="(c, i) in conversations")
+            v-divider(v-if="i > 0" :key="c.id + '-div'")
+            v-list-tile.conversation(@click="selectConvo(i)" :key="c.id")
+              v-list-tile-avatar
+                v-img(v-if="c.members.length > 1" :src="selectConvoAvatar(c)")
+                v-icon(v-else large) person
+              v-list-tile-content(:class="{ unread: c.unread }")
+                v-list-tile-title
+                  h5
+                    span {{ autoTitle(c) }}
+                v-list-tile-sub-title
+                  span(v-if="c.messages.length").message-body {{ c.messages[c.messages.length - 1].body }}
+              v-list-tile-action
+                v-btn(v-if="!c.messages.length" icon flat @click="deleteConvo(i)")
+                  v-icon close
+                span(v-else).timestamp {{ formatTimestamp(c.messages[c.messages.length - 1].timestamp) }}
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       v-toolbar.view-toolbar(flat dense)
@@ -67,16 +68,17 @@ v-container(fluid grid-list-md).chat
       .body
         .messages
           v-list
-            v-list-tile.message(v-for="m in conversations[selected].messages" :key="getTime(m.timestamp)")
-              v-list-tile-avatar(v-if="m.author !== username")
-                v-img(:src="getAvatar(m.author)")
-              v-list-tile-content
-                v-list-tile-sub-title
-                  .author(v-if="isMulti && m.author !== username") {{ m.author }}
-                  .message-body {{ m.body }}
-                  .timestamp {{ formatTimestamp(m.timestamp) }}
-              v-list-tile-avatar(v-if="m.author === username")
-                v-img(:src="getAvatar(m.author)")
+            v-fade-transition(group)
+              v-list-tile.message(v-for="m in conversations[selected].messages" :key="getTime(m.timestamp)")
+                v-list-tile-avatar(v-if="m.author !== username")
+                  v-img(:src="getAvatar(m.author)")
+                v-list-tile-content
+                  v-list-tile-sub-title
+                    .author(v-if="isMulti && m.author !== username") {{ m.author }}
+                    .message-body {{ m.body }}
+                    .timestamp {{ formatTimestamp(m.timestamp) }}
+                v-list-tile-avatar(v-if="m.author === username")
+                  v-img(:src="getAvatar(m.author)")
         v-form.reply-bar(@submit.prevent="sendMessage")
           v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus single-line full-width hide-details).reply-field
           v-btn(fab small color="green" @click="sendMessage").send
