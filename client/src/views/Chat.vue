@@ -177,7 +177,7 @@ import { Component, Vue } from "vue-property-decorator";
     },
     autoTitle: function(c) {
       let auto = this.getOtherMembers(c.members).map(m => (this.titleCase(m.username))).join(', ');
-      return c.title ? c.title : (c.members.length > 1 ? auto : "New Message");
+      return c.title ? c.title : (c.members.length > 1 ? (c.messages.length > 0 ? auto : "New Message to " + auto) : "New Message");
     },
     selectConvo: function(i) {
       this.selected = i;
