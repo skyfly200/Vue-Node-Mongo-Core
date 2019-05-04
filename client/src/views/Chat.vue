@@ -7,8 +7,16 @@ v-container(fluid grid-list-md).chat
           prepend-inner-icon="search"
           append-icon="filter_list"
           append-outer-icon="add_circle"
-          @click:append=""
+          @click:append="showFilters = !showFilters ? -1 : 0"
           @click:append-outer="newConversation")
+      v-expansion-panel(v-model="showFilters" pa-3)
+        v-expansion-panel-content
+          v-flex(px-3)
+            .flex-row
+              v-checkbox(v-model="filters.direct" label="Direct")
+              v-checkbox(v-model="filters.groups" label="Groups")
+            v-switch(v-model="filters.created" label="Your Created Only" height="auto")
+            v-switch(v-model="filters.unread" label="Unread Only" height="auto")
       v-list(two-line).conversation-list
         v-slide-y-transition(group)
           template(v-for="(c, i) in conversations")
@@ -103,6 +111,13 @@ const format = require('date-fns/format');
       recipients: "",
       editRecipients: false,
       editTitle: false,
+      showFilters: -1,
+      filters: {
+        direct: true,
+        groups: true,
+        created: false,
+        unread: false
+      },
       contacts: [
         {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
         {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
@@ -239,6 +254,9 @@ export default class Profile extends Vue {}
   display: flex
   justify-content: center
   flex-direction: column
+.flex-row
+  display: flex
+  justify-content: center
 .conversation-list
   height: 100%
   .conversation
