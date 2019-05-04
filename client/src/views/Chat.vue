@@ -9,7 +9,7 @@ v-container(fluid grid-list-md).chat
           append-outer-icon="add_circle"
           @click:append=""
           @click:append-outer="newConversation")
-      v-list(three-line).conversation-list
+      v-list(two-line).conversation-list
         template(v-for="(c, i) in conversations")
           v-divider(v-if="i > 0")
           v-list-tile.conversation(@click="selectConvo(i)" :key="c.id")
@@ -18,13 +18,14 @@ v-container(fluid grid-list-md).chat
               v-icon(v-else large) person
             v-list-tile-content(:class="{ unread: c.unread }")
               v-list-tile-title
-                h5 {{ autoTitle(c) }}
+                h5
+                  span {{ autoTitle(c) }}
               v-list-tile-sub-title
-                template(v-if="c.messages.length")
-                  .message-body {{ c.messages[c.messages.length - 1].body }}
-                  .timestamp {{ formatTimestamp(c.messages[c.messages.length - 1].timestamp) }}
-            v-btn(v-if="c.members.length < 2" icon flat @click="deleteConvo(i)")
-              v-icon close
+                span(v-if="c.messages.length").message-body {{ c.messages[c.messages.length - 1].body }}
+            v-list-tile-action
+              v-btn(v-if="!c.messages.length" icon flat @click="deleteConvo(i)")
+                v-icon close
+              span(v-else).timestamp {{ formatTimestamp(c.messages[c.messages.length - 1].timestamp) }}
     v-divider(vertical)
     v-flex.active-conversation(sm8)
       v-toolbar.view-toolbar(flat dense)
@@ -163,6 +164,8 @@ const format = require('date-fns/format');
       if (this.reply && this.isRecipients) {
         this.reply = "";
         this.activeConvo.messages.push(message);
+        this.editRecipients = false;
+        this.editTitle = false;
       }
     },
     newConversation: function() {
@@ -192,6 +195,8 @@ const format = require('date-fns/format');
     },
     deleteConvo: function(i) {
       this.conversations.splice(i,1);
+      this.editRecipients = false;
+      this.editTitle = false;
     },
     removeRecipient: function(user) {
       const index = this.activeConvo.members.findIndex( (m) => (m.username === user.username) );
