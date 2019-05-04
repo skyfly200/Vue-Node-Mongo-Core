@@ -77,10 +77,7 @@ v-container(fluid grid-list-md).chat
             v-icon(small) person_add
       .body
         MessageList(:convo="activeConvo" :multi="isMulti" :username="username")
-        v-form.reply-bar(@submit.prevent="sendMessage")
-          v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus single-line full-width hide-details).reply-field
-          v-btn(fab small color="green" @click="sendMessage").send
-            v-icon send
+        ReplyBar(@send="sendMessage($event)" :disabled="!isRecipients")
 </template>
 
 <script>
@@ -110,7 +107,6 @@ const format = require('date-fns/format');
   data: function() {
     return {
       query: "",
-      reply: "",
       selected: 0,
       recipients: "",
       editRecipients: false,
@@ -193,10 +189,9 @@ const format = require('date-fns/format');
   },
   created() {},
   methods: {
-    sendMessage: function() {
-      let message = { author: this.username, body: this.reply, timestamp: new Date() };
-      if (this.reply && this.isRecipients) {
-        this.reply = "";
+    sendMessage: function(body) {
+      let message = { author: this.username, body: body, timestamp: new Date() };
+      if (this.isRecipients) {
         this.activeConvo.messages.push(message);
         this.editRecipients = false;
         this.editTitle = false;
@@ -292,11 +287,6 @@ export default class Profile extends Vue {}
   padding: 0
 .v-list__tile__content
   height: auto
-.reply-bar
-  display: flex
-  margin-bottom: -30px
-  button i
-    transform: rotate(-90deg)
 .active-conversation
   height: 100%
   margin-right: -1px
