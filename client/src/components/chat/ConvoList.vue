@@ -6,6 +6,6 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
   props: []
 })
-export default class ConversationsList extends Vue {}
+export default class ConvoList extends Vue {}
 </script>
 <style lang="sass" scoped></style>

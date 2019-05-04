@@ -76,17 +76,7 @@ v-container(fluid grid-list-md).chat
           v-btn(v-if="isMulti" small icon @click="editRecipients = true")
             v-icon(small) person_add
       .body
-        .messages
-          v-list
-            v-fade-transition(group)
-              Message(v-for="m in conversations[selected].messages"
-                :key="getTime(m.timestamp)"
-                :author="m.author",
-                :avatar="getAvatar(m.author)",
-                :body="m.body",
-                :timestamp="formatTimestamp(m.timestamp)",
-                :own="m.author === username",
-                :showName="isMulti && m.author !== username")
+        MessageList(:convo="activeConvo" :multi="isMulti" :username="username")
         v-form.reply-bar(@submit.prevent="sendMessage")
           v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus single-line full-width hide-details).reply-field
           v-btn(fab small color="green" @click="sendMessage").send
@@ -95,9 +85,10 @@ v-container(fluid grid-list-md).chat
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import ConversationsList from "@/components/chat/ConversationsList.vue";
+import ConversationIndex from "@/components/chat/ConversationIndex.vue";
 import ListBar from "@/components/chat/ListBar.vue";
 import Filters from "@/components/chat/Filters.vue";
+import ConvoList from "@/components/chat/ConvoList.vue";
 import ConvoTile from "@/components/chat/ConvoTile.vue";
 import Conversation from "@/components/chat/Conversation.vue";
 import ConvoBar from "@/components/chat/ConvoBar.vue";
@@ -115,7 +106,7 @@ const format = require('date-fns/format');
 
 @Component({
   name: "Chat",
-  components: {ConversationsList, ListBar, Filters, ConvoTile, Conversation, ConvoBar, UserSelector, UserTile, MessageList, Message, ReplyBar},
+  components: {ConversationIndex, ListBar, Filters, ConvoList, ConvoTile, Conversation, ConvoBar, UserSelector, UserTile, MessageList, Message, ReplyBar},
   data: function() {
     return {
       query: "",
