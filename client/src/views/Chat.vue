@@ -19,7 +19,7 @@ v-container(fluid grid-list-md).chat
             v-switch(v-model="filters.unread" label="Unread Only" height="auto")
       v-list(two-line).conversation-list
         v-slide-y-transition(group)
-          template(v-for="(c, i) in conversations")
+          template(v-for="(c, i) in filteredConversations")
             v-divider(v-if="i > 0" :key="c.id + '-div'")
             v-list-tile.conversation(@click="selectConvo(i)" :key="c.id")
               v-list-tile-avatar
@@ -172,7 +172,17 @@ const format = require('date-fns/format');
     },
     isNew: function() {
       return this.conversations[0].members.length === 1;
-    }
+    },
+    filteredConversations: function() {
+      return this.conversations.filter( c => {
+        let unread = !this.filters.unread || c.unread || c.messages.length === 0;
+        let created = !this.filters.created || c.creator === this.$store.getters.user.username;
+        let direct = this.filters.direct || c.members.length > 2;
+        let group = this.filters.groups || c.members.length < 3;
+        console.log(c, unread, created, direct, group);
+        return (unread && created && direct && group);
+      });
+    },
   },
   created() {},
   methods: {
