@@ -41,27 +41,7 @@ v-container(fluid grid-list-md).chat
     v-flex.active-conversation(sm8)
       v-toolbar.view-toolbar(flat dense)
         template(v-if="editRecipients || !isRecipients")
-          v-autocomplete.recipients(label="To" chips full-width return-object hide-details hide-no-data hide-selected multiple single-line dense
-            v-model="conversations[selected].members"
-            :items="contacts"
-            item-text="username"
-            item-value="username"
-            append-outer-icon="check"
-            @select=""
-            @click:append-outer="editRecipients = false")
-            template(v-slot:selection='data')
-              v-chip.chip--select-multi(:selected='data.selected' close @input='removeRecipient(data.item)')
-                v-avatar
-                  img(:src='data.item.avatar')
-                | {{ data.item.username }}
-            template(v-slot:item='data')
-              template(v-if="typeof data.item !== 'object'")
-                v-list-tile-content(v-text='data.item')
-              template(v-else)
-                v-list-tile-avatar
-                  img(:src='data.item.avatar')
-                v-list-tile-content
-                  v-list-tile-title {{ data.item.username }}
+          UserSelector(:previous="conversations[selected].members" :contacts="contacts" @done="updateRecipients($event)")
         template(v-else-if="editTitle")
           v-text-field.title-edit(name="title" label="Conversation Title" single-line full-width hide-details
             v-model="conversations[selected].title"
@@ -90,7 +70,6 @@ import ConvoTile from "@/components/chat/ConvoTile.vue";
 import Conversation from "@/components/chat/Conversation.vue";
 import MessageBar from "@/components/chat/MessageBar.vue";
 import UserSelector from "@/components/chat/UserSelector.vue";
-import UserTile from "@/components/chat/UserTile.vue";
 import MessageList from "@/components/chat/MessageList.vue";
 import Message from "@/components/chat/Message.vue";
 import ReplyBar from "@/components/chat/ReplyBar.vue";
@@ -103,7 +82,7 @@ const format = require('date-fns/format');
 
 @Component({
   name: "Chat",
-  components: {ConversationIndex, ListBar, Filters, ConvoList, ConvoTile, Conversation, MessageBar, UserSelector, UserTile, MessageList, Message, ReplyBar},
+  components: {ConversationIndex, ListBar, Filters, ConvoList, ConvoTile, Conversation, MessageBar, UserSelector, MessageList, Message, ReplyBar},
   data: function() {
     return {
       query: "",
@@ -226,6 +205,10 @@ const format = require('date-fns/format');
       this.conversations.splice(i,1);
       this.editRecipients = false;
       this.editTitle = false;
+    },
+    updateRecipients: function(recipients) {
+      this.activeConvo.members = recipients;
+      this.editRecipients = false;
     },
     removeRecipient: function(user) {
       const index = this.activeConvo.members.findIndex( (m) => (m.username === user.username) );
