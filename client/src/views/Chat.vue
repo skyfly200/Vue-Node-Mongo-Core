@@ -79,16 +79,14 @@ v-container(fluid grid-list-md).chat
         .messages
           v-list
             v-fade-transition(group)
-              v-list-tile.message(v-for="m in conversations[selected].messages" :key="getTime(m.timestamp)")
-                v-list-tile-avatar(v-if="m.author !== username")
-                  v-img(:src="getAvatar(m.author)")
-                v-list-tile-content
-                  v-list-tile-sub-title
-                    .author(v-if="isMulti && m.author !== username") {{ m.author }}
-                    .message-body {{ m.body }}
-                    .timestamp {{ formatTimestamp(m.timestamp) }}
-                v-list-tile-avatar(v-if="m.author === username")
-                  v-img(:src="getAvatar(m.author)")
+              Message(v-for="m in conversations[selected].messages"
+                :key="getTime(m.timestamp)"
+                :author="m.author",
+                :avatar="getAvatar(m.author)",
+                :body="m.body",
+                :timestamp="formatTimestamp(m.timestamp)",
+                :own="m.author === username",
+                :showName="isMulti && m.author !== username")
         v-form.reply-bar(@submit.prevent="sendMessage")
           v-text-field(name="reply" v-model="reply" label="Reply" :disabled="!isRecipients" autofocus single-line full-width hide-details).reply-field
           v-btn(fab small color="green" @click="sendMessage").send
@@ -105,6 +103,7 @@ import Conversation from "@/components/chat/Conversation.vue";
 import ConvoBar from "@/components/chat/ConvoBar.vue";
 import UserSelector from "@/components/chat/UserSelector.vue";
 import UserTile from "@/components/chat/UserTile.vue";
+import MessageList from "@/components/chat/MessageList.vue";
 import Message from "@/components/chat/Message.vue";
 import ReplyBar from "@/components/chat/ReplyBar.vue";
 // import date-fns utils
@@ -116,7 +115,7 @@ const format = require('date-fns/format');
 
 @Component({
   name: "Chat",
-  components: [ConversationsList, ListBar, Filters, ConvoTile, Conversation, ConvoBar, UserSelector, UserTile, Message, ReplyBar],
+  components: {ConversationsList, ListBar, Filters, ConvoTile, Conversation, ConvoBar, UserSelector, UserTile, MessageList, Message, ReplyBar},
   data: function() {
     return {
       query: "",
@@ -323,16 +322,4 @@ export default class Profile extends Vue {}
         display: flex
         flex-direction: column
         justify-content: flex-end
-        .v-list__tile__content
-          padding: 7px
-          background-color: #eee
-          border-radius: 10px
-          .message-body
-            color: black
-          .timestamp
-            font-size: 0.8em
-      .message
-        margin: 10px
-        p
-          margin: 0
 </style>
