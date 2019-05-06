@@ -1,11 +1,21 @@
 <template lang="pug">
+  v-list(two-line).conversation-list
+    v-slide-y-transition(group)
+      template(v-for="(c, i) in conversations")
+        v-divider(v-if="i > 0" :key="c.id + '-div'")
+        ConvoTile(:c="c" :key="c.id" @select="$emit('select', i)" @delete="$emit('delete', i)")
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
+import ConvoTile from "@/components/chat/ConvoTile.vue";
 
 @Component({
-  props: []
+  components: {ConvoTile},
+  props: ["conversations"]
 })
 export default class ConvoList extends Vue {}
 </script>
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.conversation-list
+  height: 100%
+</style>

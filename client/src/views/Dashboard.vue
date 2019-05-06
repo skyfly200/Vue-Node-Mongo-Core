@@ -89,7 +89,7 @@ export default class Dashboard extends Vue {}
     display: flex
     flex-direction: column
   .v-btn
-    width: fill-available
+    width: strech
 .settings
   .password-btn
     margin-left: auto

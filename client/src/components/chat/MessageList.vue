@@ -2,14 +2,14 @@
   .messages
     v-list
       v-fade-transition(group)
-        Message(v-for="m in convo.messages"
+        Message(v-for="m in conversation.messages"
           :key="getTime(m.timestamp)"
           :author="m.author",
           :avatar="getAvatar(m.author)",
           :body="m.body",
           :timestamp="formatTimestamp(m.timestamp)",
           :own="m.author === username",
-          :showName="multi && m.author !== username")
+          :showName="isMulti && m.author !== username")
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
@@ -23,7 +23,15 @@ const format = require('date-fns/format');
 
 @Component({
   components: {Message},
-  props: ["convo", "multi", "username"],
+  props: ["conversation"],
+  computed: {
+    username: function() {
+      return this.$store.getters.user.username;
+    },
+    isMulti: function() {
+      return this.conversation.members.length > 2;
+    }
+  },
   methods: {
     formatTimestamp: function(t) {
       let f = isToday(t) ? format(t, "h:mm a") : (isThisWeek(t) ? format(t, "ddd") : (isThisYear ? format(t, "MMM Do") : format(t, "M/D/YY")));
@@ -31,7 +39,7 @@ const format = require('date-fns/format');
     },
     getTime: getTime,
     getAvatar: function(author) {
-      return this.convo.members.find( (m) => (m.username === author) ).avatar;
+      return this.conversation.members.find( (m) => (m.username === author) ).avatar;
     },
   }
 })
