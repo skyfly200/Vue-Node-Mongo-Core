@@ -1,6 +1,6 @@
 <template lang="pug">
 v-container(fluid grid-list-md).chat
-  v-layout.layout(wrap)
+  v-layout.layout
     ConversationIndex(:conversations="conversations"
       @select="selectConvo($event)"
       @new="newConversation"
@@ -110,7 +110,6 @@ const format = require('date-fns/format');
     },
     selectConvo: function(i) {
       this.selected = i;
-      //this.editRecipients = this.activeConvo.members.length <= 1;
       this.conversations[i].unread = false;
     },
     deleteConvo: function(i) {
@@ -128,19 +127,10 @@ export default class Profile extends Vue {}
 
 <style lang="sass" scoped>
 .layout
-  display: flex
   height: 100%
 .container
   height: 100%
-.app
-  height: 100vh
 .flex
   display: flex
-  justify-content: center
   flex-direction: column
-.v-input__slot
-  margin: 0
-  padding: 0
-.v-list__tile__content
-  height: auto
 </style>
