@@ -4,8 +4,20 @@ import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
 import Axios from "axios";
-
+import SocketIO from 'socket.io-client';
+import VueSocketIO from 'vue-socket.io';
 import App from "./App.vue";
+
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: SocketIO('http://localhost:1234'),
+    vuex: {
+      store,
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_"
+    }
+  })
+);
 
 Vue.prototype.$http = Axios;
 
