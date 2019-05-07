@@ -2,7 +2,7 @@
 #nav
   v-navigation-drawer(app v-model="drawer")
     v-list.pa1
-      v-list-tile(avatar)
+      v-list-tile(avatar v-if='isLoggedIn')
         v-list-tile-avatar
           v-img(src="https://randomuser.me/api/portraits/men/85.jpg")
         v-list-tile-content
@@ -12,7 +12,7 @@
       v-divider
       v-list-tile
         v-list-tile-content
-          v-list-tile-title title
+          v-list-tile-title sub-title
   v-toolbar(app scroll-off-screen)
     v-toolbar-side-icon(@click="drawer = !drawer")
     v-toolbar-title.headline.text-uppercase

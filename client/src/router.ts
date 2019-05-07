@@ -133,7 +133,7 @@ router.beforeEach((to, from, next) => {
         } else {
           next({
               path: '/login',
-              params: { nextUrl: to.fullPath }
+              params: { redirect: to.fullPath }
           });
         }
     } else if(to.matched.some(record => record.meta.guest)) {

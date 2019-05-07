@@ -5,11 +5,10 @@
       ReplyBar(v-if="isLoggedIn" @send="sendMessage($event)" :disabled="!isRecipients")
       v-toolbar(v-else dense)
         v-spacer
-        v-toolbar-action
-          v-btn(to="/login/") Login
-          span or
-          v-btn(to="/register/") Register
-          span to join the chat
+        v-btn(to="/login/home") Login
+        span or
+        v-btn(to="/register/home") Register
+        span to join the chat
         v-spacer
 </template>
 <script>
