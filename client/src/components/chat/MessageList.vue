@@ -1,15 +1,14 @@
 <template lang="pug">
   .messages
-    v-list
-      v-fade-transition(group)
-        Message(v-for="m in conversation.messages"
-          :key="getTime(m.timestamp)"
-          :author="m.author",
-          :avatar="getAvatar(m.author)",
-          :body="m.body",
-          :timestamp="formatTimestamp(m.timestamp)",
-          :own="m.author === username",
-          :showName="isMulti && m.author !== username")
+    v-fade-transition(group)
+      Message.message(v-for="m in conversation.messages"
+        :key="getTime(m.timestamp)"
+        :author="m.author",
+        :avatar="getAvatar(m.author)",
+        :body="m.body",
+        :timestamp="formatTimestamp(m.timestamp)",
+        :own="m.author === username",
+        :showName="isMulti && m.author !== username")
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
@@ -48,10 +47,7 @@ export default class MessageList extends Vue {}
 <style lang="sass" scoped>
 .messages
   height: 100%
-  .v-list
-    padding: 0
-    height: 100%
-    display: flex
-    flex-direction: column
-    justify-content: flex-end
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
 </style>

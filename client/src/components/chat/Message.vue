@@ -1,13 +1,12 @@
 <template lang="pug">
-  v-list-tile.message
-    v-list-tile-avatar(v-if="!own")
+  .message
+    v-avatar.avatar-left(v-if="!own")
       v-img(:src="avatar")
-    v-list-tile-content
-      v-list-tile-sub-title.content
-        .author(v-if="showName") {{ author }}
-        .body {{ body }}
-        .timestamp(:class="{ right: !own }") {{ timestamp }}
-    v-list-tile-avatar(v-if="own")
+    .content
+      .body {{ body }}
+      span.author(v-if="showName") {{ author }}
+      .timestamp(:class="{ right: !own }") {{ timestamp }}
+    v-avatar.avatar-right(v-if="own")
       v-img(:src="avatar")
 </template>
 <script>
@@ -21,8 +20,15 @@ export default class Message extends Vue {}
 <style lang="sass" scoped>
 .message
   padding: 7px 5px
+  display: flex
   p
   margin: 0
+  .content
+    width: 100%
+  .avatar-right
+    margin-left: 10px
+  .avatar-left
+    margin-right: 10px
   .body
     color: black
     padding: 7px
