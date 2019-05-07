@@ -40,7 +40,7 @@
         template(v-slot:activator="{ on }")
           v-btn(icon v-on="on")
             v-icon more_vert
-        v-list
+        v-list(dense)
           v-list-tile(@click="menu = 'search'")
             v-list-tile-action
               v-icon search
