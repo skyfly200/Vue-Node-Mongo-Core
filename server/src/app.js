@@ -61,6 +61,6 @@ io.on('connection', function(socket){
 
 // Start express server
 const port = process.env.PORT || config.expressPort;
-app.listen(port, () => {
+http.listen(port, () => {
     console.log('Server is up and running on port number ' + port);
 });
