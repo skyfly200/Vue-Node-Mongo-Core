@@ -1,12 +1,37 @@
 <template lang="pug">
   v-toolbar.view-toolbar(flat dense)
-    template(v-if="editRecipients || !isRecipients")
-      UserSelector(:previous="conversation.members" :contacts="contacts" @done="updateRecipients($event)")
+    template(v-if="menu === 'search'")
+      v-text-field.search(name="search" label="Search Conversation" single-line full-width hide-details
+        v-model="query"
+        prepend-icon="search"
+        append-icon="clear"
+        @click:append="query = ''"
+        append-outer-icon="check"
+        @click:append-outer="menu = ''")
+    template(v-else-if="menu === 'mute'")
+      v-select.mute(name="mute" label="Mute Notifications Period" single-line full-width hide-details
+        v-model="mute"
+        :items="['1 hour','6 hours','12 hours','24 hours','1 week','Till I turn them back on']"
+        prepend-icon="notifications_off"
+        append-outer-icon="check"
+        @click:append-outer="menu = ''")
     template(v-else-if="editTitle")
       v-text-field.title-edit(name="title" label="Conversation Title" single-line full-width hide-details
         v-model="title"
-        append-icon="check"
-        @click:append="updateTitle")
+        prepend-icon="title"
+        append-outer-icon="check"
+        @click:append-outer="updateTitle")
+    template(v-else-if="editRecipients || !isRecipients")
+      UserSelector(:previous="conversation.members" :contacts="contacts" @done="updateRecipients($event)")
+    template(v-else-if="menu === 'color'")
+      v-select.color(name="color" label="Set Message Color" single-line full-width hide-details return-object
+        v-model="color"
+        :items="colors"
+        item-text="title"
+        item-value="hex"
+        prepend-icon="color_lens"
+        append-outer-icon="check"
+        @click:append-outer="menu = ''")
     template(v-else)
       v-spacer
       v-toolbar-title.title-view {{ autoTitle(conversation) }}
@@ -16,11 +41,11 @@
           v-btn(icon v-on="on")
             v-icon more_vert
         v-list
-          v-list-tile(@click="")
+          v-list-tile(@click="menu = 'search'")
             v-list-tile-action
               v-icon search
             v-list-tile-title Search Conversation
-          v-list-tile(@click="")
+          v-list-tile(@click="menu = 'mute'")
             v-list-tile-action
               v-icon notifications_off
             v-list-tile-title Mute Notifications
@@ -28,7 +53,7 @@
             v-list-tile-action
               v-icon edit
             v-list-tile-title Rename Conversation
-          v-list-tile(v-if="isMulti" @click="editRecipients = true")
+          v-list-tile(v-if="isMulti && isOwner" @click="editRecipients = true")
             v-list-tile-action
               v-icon person_add
             v-list-tile-title Edit Recipients
@@ -36,7 +61,7 @@
             v-list-tile-action
               v-icon remove_circle
             v-list-tile-title Leave Conversation
-          v-list-tile(@click="")
+          v-list-tile(@click="menu = 'color'")
             v-list-tile-action
               v-icon color_lens
             v-list-tile-title Set Message Color
@@ -54,7 +79,15 @@ import UserSelector from "@/components/chat/UserSelector.vue";
   props: ["conversation", "contacts"],
   data: function() {
     return {
+      menu: "",
       title: "",
+      query: "",
+      color: 0,
+      colors: [
+        {title: "Red", hex: "#FF0000"},
+        {title: "Green", hex: "#00FF00"},
+        {title: "Blue", hex: "#0000FF"}
+      ],
       editTitle: false,
       editRecipients: false
     };
@@ -68,6 +101,9 @@ import UserSelector from "@/components/chat/UserSelector.vue";
     },
     isMulti: function() {
       return this.conversation.members.length > 2;
+    },
+    isOwner: function() {
+      return this.conversation.created === this.$store.getters.user.username;
     },
     isRecipients: function() {
       return this.conversation.members.length > 1;
