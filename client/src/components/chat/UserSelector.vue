@@ -4,6 +4,7 @@
     :items="contacts"
     item-text="username"
     item-value="username"
+    prepend-icon="contacts"
     append-outer-icon="check"
     @click:append-outer="$emit('done', members)")
     template(v-slot:selection='data')

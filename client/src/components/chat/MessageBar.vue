@@ -11,10 +11,39 @@
       v-spacer
       v-toolbar-title.title-view {{ autoTitle(conversation) }}
       v-spacer
-      v-btn(v-if="isMulti" small icon @click="editTitle = true")
-        v-icon(small) edit
-      v-btn(v-if="isMulti" small icon @click="editRecipients = true")
-        v-icon(small) person_add
+      v-menu(bottom left)
+        template(v-slot:activator="{ on }")
+          v-btn(icon v-on="on")
+            v-icon more_vert
+        v-list
+          v-list-tile(@click="")
+            v-list-tile-action
+              v-icon search
+            v-list-tile-title Search Conversation
+          v-list-tile(@click="")
+            v-list-tile-action
+              v-icon notifications_off
+            v-list-tile-title Mute Notifications
+          v-list-tile(v-if="isMulti" @click="editTitle = true")
+            v-list-tile-action
+              v-icon edit
+            v-list-tile-title Rename Conversation
+          v-list-tile(v-if="isMulti" @click="editRecipients = true")
+            v-list-tile-action
+              v-icon person_add
+            v-list-tile-title Edit Recipients
+          v-list-tile(v-if="isMulti" @click="")
+            v-list-tile-action
+              v-icon remove_circle
+            v-list-tile-title Leave Conversation
+          v-list-tile(@click="")
+            v-list-tile-action
+              v-icon color_lens
+            v-list-tile-title Set Message Color
+          v-list-tile(@click="")
+            v-list-tile-action
+              v-icon info
+            v-list-tile-title Info
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
