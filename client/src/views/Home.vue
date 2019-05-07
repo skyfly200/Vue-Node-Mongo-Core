@@ -2,12 +2,16 @@
 v-container(fluid='')
   .home
     h1 Welcome
+    PublicChat()
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import PublicChat from "@/components/PublicChat.vue";
 
-@Component({})
+@Component({
+  components: {PublicChat}
+})
 export default class Home extends Vue {}
 </script>
 
