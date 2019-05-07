@@ -53,9 +53,12 @@ const db = database.connect(mongoDB);
 
 // Setup Socket.io
 io.on('connection', function(socket){
-  console.log('a user connected');
+  io.emit('connect');
+  socket.on('message', function(msg){
+    io.emit('message', msg);
+  });
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    io.emit('disconnect');
   });
 });
 

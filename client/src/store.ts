@@ -7,6 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: '',
+    socketConnected: false,
+    socketMessage: '',
     token: localStorage.getItem('token') || '',
     user : {}
   },
@@ -26,8 +28,17 @@ export default new Vuex.Store({
       state.status = ''
       state.token = ''
     },
+    setSocketState(state, s){
+      state.socketConnected = s;
+    },
+    socket_message(state, m){
+      state.socketMessage = m;
+    }
   },
   actions: {
+    SOCKET_MESSAGE(state, message) {
+      commit('socket_message', message);
+    },
     load_session: ({commit}, data) => {
       let {token, user} = data;
       commit('auth_success', {token, user});

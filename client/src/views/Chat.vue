@@ -30,19 +30,21 @@ const format = require('date-fns/format');
     return {
       selected: 0,
       contacts: [
+        {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
         {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
         {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
         {username: "test4", avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg"},
-        {username: "test5", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+        {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
       ],
       conversations: [
         {
           id: new Date(2018,11,28).getTime(),
           unread: false,
           title: "",
-          creator: this.$store.getters.user.username,
+          creator: "test",
           members: [
-            {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+            {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
             {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
           ],
           messages: [
@@ -56,13 +58,13 @@ const format = require('date-fns/format');
           id: new Date(2019,4,3).getTime(),
           unread: true,
           title: "",
-          creator: "test3",
+          creator: "test",
           members: [
-            {username: this.$store.getters.user.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
-            {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"}
+            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/6.jpg"},
+            {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
           ],
           messages: [
-            { author: "test3", body: "Hey, whats up?", timestamp: new Date(2019,4,3) }
+            { author: "test", body: "Hey, whats up?", timestamp: new Date(2019,4,3) }
           ]
         }
       ]
@@ -86,11 +88,21 @@ const format = require('date-fns/format');
     },
   },
   created() {},
+  sockets: {
+      connect: function () {
+          console.log('socket connected')
+      },
+      message: function (message) {
+        if (message.author !== this.username)
+          this.activeConvo.messages.push(message);
+      }
+  },
   methods: {
     sendMessage: function(body) {
       let message = { author: this.username, body: body, timestamp: new Date() };
       if (this.isRecipients) {
         this.activeConvo.messages.push(message);
+        this.$socket.emit('message', message)
       }
     },
     newConversation: function() {
