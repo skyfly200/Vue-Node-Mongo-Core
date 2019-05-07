@@ -49,8 +49,9 @@ import { Component, Vue } from "vue-property-decorator";
           .then(response => {
             if (response.data) {
               if (response.data.auth && response.data.token) {
-                if (this.$route.params.nextUrl != null) {
-                  this.$router.push(this.$route.params.nextUrl);
+                if (this.$route.params.redirect !== null) {
+                  let route = this.$route.params.redirect ? this.$route.params.redirect : "";
+                  this.$router.push("/" + route);
                 } else {
                   this.$router.push("/dashboard");
                 }

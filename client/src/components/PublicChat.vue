@@ -6,9 +6,9 @@
       v-toolbar(v-else dense)
         v-spacer
         v-toolbar-action
-          v-btn(to="/login") Login
+          v-btn(to="/login/") Login
           span or
-          v-btn(to="/register") Register
+          v-btn(to="/register/") Register
           span to join the chat
         v-spacer
 </template>

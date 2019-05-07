@@ -89,7 +89,7 @@ let router = new Router({
       }
     },
     {
-      path: "/login",
+      path: "/login/:redirect?",
       name: "login",
       component: () =>
         import(/* webpackChunkName: "login" */ "./views/Login.vue"),
@@ -98,7 +98,7 @@ let router = new Router({
       }
     },
     {
-      path: "/register",
+      path: "/register/:redirect?",
       name: "Register",
       component: () =>
         import(/* webpackChunkName: "Register" */ "./views/Register.vue"),

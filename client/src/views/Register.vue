@@ -82,7 +82,11 @@ import { Component, Vue } from "vue-property-decorator";
             .dispatch("register", data)
             .then(response => {
               if (response.data.message) {
-                this.$router.push("/login");
+                if (this.$route.params.redirect != null) {
+                  this.$router.push("/login/" + this.$route.params.redirect);
+                } else {
+                  this.$router.push("/login");
+                }
               } else if (response.data.err) {
                 this.error = response.data.err;
               } else {
