@@ -23,15 +23,6 @@
         prepend-icon="title"
         append-outer-icon="check"
         @click:append-outer="updateTitle")
-    template(v-else-if="menu === 'color'")
-      v-select.color(name="color" label="Set Message Color" single-line full-width hide-details return-object
-        v-model="color"
-        :items="colors"
-        item-text="title"
-        item-value="hex"
-        prepend-icon="color_lens"
-        append-outer-icon="check"
-        @click:append-outer="menu = ''")
     template(v-else)
       v-spacer
       v-toolbar-title.title-view {{ autoTitle(conversation) }}
@@ -61,10 +52,10 @@
             v-list-tile-action
               v-icon remove_circle
             v-list-tile-title Leave Conversation
-          v-list-tile(@click="menu = 'color'")
+          v-list-tile(@click="menu = 'style'")
             v-list-tile-action
               v-icon color_lens
-            v-list-tile-title Set Message Color
+            v-list-tile-title Set Conversation Styles
           v-list-tile(@click="menu = 'info'")
             v-list-tile-action
               v-icon info
