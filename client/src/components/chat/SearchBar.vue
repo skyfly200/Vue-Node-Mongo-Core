@@ -1,6 +1,6 @@
 <template lang="pug">
   v-toolbar.convo-toolbar(flat dense)
-    v-text-field.search-field(flat full-width hide-details single-line name="search" v-model="query" @input="$emit('query', query)" label="Search"
+    v-text-field.search-field(flat full-width hide-details single-line clearable name="search" v-model="query" @input="$emit('query', query)" label="Search"
       prepend-inner-icon="search"
       append-icon="filter_list"
       append-outer-icon="add_circle"
