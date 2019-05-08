@@ -109,10 +109,8 @@ const format = require('date-fns/format');
   },
   computed: {
     activeConvo: function() {
+      // $store.getters.conversations
       return this.conversations[this.selected];
-    },
-    username: function() {
-      return this.$store.getters.username;
     },
     isMulti: function() {
       return this.activeConvo.members.length > 2;
@@ -123,6 +121,13 @@ const format = require('date-fns/format');
     isNew: function() {
       return this.conversations[0].members.length <= 1;
     },
+    ...mapGetters([
+      'user',
+      'username',
+      'contacts',
+      'conversations',
+      'connected'
+    ])
   },
   created() {
     for (var c of this.conversations) {
