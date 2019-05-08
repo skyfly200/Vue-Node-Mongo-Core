@@ -10,15 +10,38 @@
       v-flex.pane(v-if="pane !== ''" pa4)
         template(v-if="pane === 'notifications'")
           h3.pane-title Mute Notifications
-          .pane-content
-            v-select.mute(name="mute" label="How long to turn of notifications for" single-line full-width hide-details
+          .pane-content.notifications
+            v-select.mute(name="mute" label="How long to turn of notifications for" full-width
               v-model="mute"
               :items="['Keep on','1 hour','6 hours','12 hours','24 hours','1 week','Till I turn them back on']"
               prepend-icon="notifications_off")
         template(v-else-if="pane === 'style'")
           h3.pane-title Conversation Styles
+          .pane-content.styles
+            v-select.color(name="color" label="Color for messages" full-width
+              v-model="styles.color"
+              :items="['default','red','blue','green','purple','orange','yellow','pink']"
+              prepend-icon="color_lens")
+            v-select.density(name="density" label="Density of message list" full-width
+              v-model="styles.density"
+              :items="['spacious', 'medium', 'cozy']"
+              prepend-icon="format_line_spacing")
         template(v-else-if="pane === 'info'")
           h3.pane-title Conversation Info
+          .pane-content.information
+            .info-item
+              h4 Conversation ID:
+              span {{ conversation.id }}
+            .info-item
+              h4 Created:
+              span {{ conversation.created }}
+            .info-item
+              h4 Creator:
+              span {{ conversation.creator }}
+            .info-item
+              h4 Members:
+              ul
+                li(v-for="m in conversation.members") {{ m.username }}
         v-btn(@click="pane = ''" color="primary") Done
       template(v-else)
         MessageList(:conversation="conversation")
@@ -38,7 +61,8 @@ import ReplyBar from "@/components/chat/ReplyBar.vue";
       pane: "",
       mute: "",
       styles: {
-        color: ""
+        color: "default",
+        density: "medium"
       }
     };
   },
@@ -56,7 +80,6 @@ export default class Conversation extends Vue {}
 <style lang="sass" scoped>
   .active-conversation
     height: 100%
-    margin-right: -1px
     .body
       height: 100%
       display: flex
@@ -68,7 +91,14 @@ export default class Conversation extends Vue {}
       display: flex
       flex-direction: column
       justify-content: space-between
-    .pane-content
-      width: 100%
-      height: 100%
+      .pane-title
+        padding-top: 1em
+      .pane-content
+        padding: 1em
+        width: 100%
+        height: 100%
+      .information
+        text-align: left
+        .info-item
+          padding-bottom: 2em
 </style>

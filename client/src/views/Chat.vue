@@ -41,6 +41,7 @@ const format = require('date-fns/format');
           id: new Date(2018,11,28).getTime(),
           unread: false,
           title: "The Group",
+          created: new Date(2018,11,28),
           creator: "test",
           members: [
             {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
@@ -58,6 +59,7 @@ const format = require('date-fns/format');
           id: new Date(2019,4,3).getTime(),
           unread: true,
           title: "",
+          created: new Date(2019,4,3),
           creator: "test",
           members: [
             {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
@@ -71,6 +73,7 @@ const format = require('date-fns/format');
           id: new Date(2019,3,3).getTime(),
           unread: false,
           title: "",
+          created: new Date(2019,3,3),
           creator: "test3",
           members: [
             {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
@@ -138,6 +141,7 @@ const format = require('date-fns/format');
           id: new Date().getTime(),
           unread: false,
           title: "",
+          created: new Date(),
           creator: this.username,
           members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
           messages: []
@@ -172,4 +176,6 @@ export default class Profile extends Vue {}
 .flex
   display: flex
   flex-direction: column
+.container.grid-list-md .layout .flex
+  padding: 0
 </style>

@@ -3,11 +3,9 @@
     template(v-if="menu === 'recipients' || !isRecipients")
       UserSelector(:previous="conversation.members" :contacts="contacts" @done="updateRecipients($event)")
     template(v-else-if="menu === 'search'")
-      v-text-field.search(name="search" label="Search Conversation" single-line full-width hide-details
+      v-text-field.search(name="search" label="Search Conversation" single-line full-width hide-details clearable
         v-model="query"
         prepend-icon="search"
-        append-icon="clear"
-        @click:append="query = ''"
         append-outer-icon="check"
         @click:append-outer="menu = ''")
     template(v-else-if="menu === 'title'")
