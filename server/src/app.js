@@ -68,14 +68,14 @@ io.on('connection', function(socket){
     //for (var r of conversation.recipients)
     //  socket.to(${r.socketID}).emit('new_conversation', convoID, conversation);
   });
-  socket.on('add_recipients', function(id, recipients){
+  socket.on('set_recipients', function(id, recipients){
     // update conversation in the database
     //let convoID = "convo-" + ;
     // return new conversation id to creator
     //socket.emit('created', convoID);
     // emit new_conversation event to recipients
     //for (var r of recipients)
-    //  socket.to(${r.socketID}).emit('add_recipients', convoID, recipients);
+    //  socket.to(${r.socketID}).emit('set_recipients', convoID, recipients);
   });
   socket.on('message', function(id, msg){
     // add message to DB

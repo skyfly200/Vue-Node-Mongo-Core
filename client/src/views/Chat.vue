@@ -170,7 +170,7 @@ const format = require('date-fns/format');
 
         this.$socket.emit('new_conversation', id, recipients);
       }
-      else this.$socket.emit('add_recipients', this.activeConvo.id, recipients);
+      else this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
       this.activeConvo.members = recipients;
 
     },
