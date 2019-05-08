@@ -33,7 +33,7 @@ import ConvoList from "@/components/chat/ConvoList.vue";
         let direct = this.filters.direct || c.members.length > 2;
         let group = this.filters.group || c.members.length < 3;
         // filter by query here
-        let query = this.query === "" ||
+        let query = this.query === "" || this.query === null ||
           c.members.find( m => ( m.username.toLowerCase().includes(this.query.toLowerCase()) ))
           || c.title.toLowerCase().includes(this.query.toLowerCase());
         return (unread && created && direct && group && query);
