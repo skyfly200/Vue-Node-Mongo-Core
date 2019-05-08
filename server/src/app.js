@@ -52,13 +52,19 @@ const mongoDB = process.env.MONGODB_URI || dev_db_url;
 const db = database.connect(mongoDB);
 
 // Setup Socket.io
+var totalActive = 0;
 io.on('connection', function(socket){
-  io.emit('connect');
-  socket.on('message', function(msg){
-    socket.broadcast.emit('message', msg);
+  totalActive++;
+  io.emit('CONNECTIONS', totalActive);
+  socket.on('subscribe', function(id){
+    socket.join("convo-"+id);
+  });
+  socket.on('message', function(id, msg){
+    socket.to("convo-"+id).emit('message', id, msg);
   });
   socket.on('disconnect', function(){
-    io.emit('disconnect');
+    totalActive--;
+    io.emit('CONNECTIONS', totalActive);
   });
 });
 

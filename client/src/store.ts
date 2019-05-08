@@ -7,8 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: '',
-    socketConnected: false,
-    socketMessage: '',
+    connections: 0,
     token: localStorage.getItem('token') || '',
     user : {}
   },
@@ -28,16 +27,13 @@ export default new Vuex.Store({
       state.status = ''
       state.token = ''
     },
-    setSocketState(state, s){
-      state.socketConnected = s;
-    },
-    socket_message(state, m){
-      state.socketMessage = m;
+    set_connections(state, c){
+      state.connections = c;
     }
   },
   actions: {
-    SOCKET_MESSAGE(state, message) {
-      commit('socket_message', message);
+    SOCKET_CONNECTIONS({commit}, data) {
+      commit('set_connections', data);
     },
     load_session: ({commit}, data) => {
       let {token, user} = data;

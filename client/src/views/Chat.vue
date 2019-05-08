@@ -40,7 +40,7 @@ const format = require('date-fns/format');
         {
           id: new Date(2018,11,28).getTime(),
           unread: false,
-          title: "",
+          title: "The Group",
           creator: "test",
           members: [
             {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
@@ -60,11 +60,24 @@ const format = require('date-fns/format');
           title: "",
           creator: "test",
           members: [
-            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/6.jpg"},
+            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
             {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
           ],
           messages: [
             { author: "test", body: "Hey, whats up?", timestamp: new Date(2019,4,3) }
+          ]
+        },
+        {
+          id: new Date(2019,3,3).getTime(),
+          unread: false,
+          title: "",
+          creator: "test3",
+          members: [
+            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+            {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
+          ],
+          messages: [
+            { author: "test3", body: "Hola amigo", timestamp: new Date(2019,4,3) }
           ]
         }
       ]
@@ -87,13 +100,25 @@ const format = require('date-fns/format');
       return this.conversations[0].members.length === 1;
     },
   },
-  created() {},
+  created() {
+    for (var c of this.conversations) {
+      this.$socket.emit('subscribe', c.id);
+    }
+  },
   sockets: {
       connect: function () {
           console.log('socket connected')
       },
-      message: function (message) {
-        this.activeConvo.messages.push(message);
+      message: function (data) {
+        let id = data[0];
+        let messageConvo = this.conversations.findIndex(c => c.id === id);
+        this.conversations[messageConvo].messages.push(data[1]);
+        if (this.selected !== messageConvo) this.conversations[messageConvo].unread = true;
+        if (messageConvo > 0) {
+          let newest = this.conversations.splice(messageConvo, 1);
+          this.conversations.unshift(newest[0]);
+        }
+        this.selected = this.selected < messageConvo ? this.selected + 1 : this.selected;
       }
   },
   methods: {
@@ -101,7 +126,10 @@ const format = require('date-fns/format');
       let message = { author: this.username, body: body, timestamp: new Date() };
       if (this.isRecipients) {
         this.activeConvo.messages.push(message);
-        this.$socket.emit('message', message)
+        this.$socket.emit('message', this.activeConvo.id, message);
+        let newest = this.conversations.splice(this.selected, 1);
+        this.conversations.unshift(newest[0]);
+        this.selected = 0;
       }
     },
     newConversation: function() {
