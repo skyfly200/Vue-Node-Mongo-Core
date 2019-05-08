@@ -55,7 +55,7 @@ const db = database.connect(mongoDB);
 var totalActive = 0;
 io.on('connection', function(socket){
   totalActive++;
-  io.emit('CONNECTIONS', totalActive);
+  io.emit('connections', totalActive);
   socket.on('subscribe', function(id){
     socket.join("convo-"+id);
   });
@@ -64,18 +64,14 @@ io.on('connection', function(socket){
     //let convoID = "convo-" + "";
     // return new conversation id to creator
     //socket.emit('created', convoID);
-    // emit new_conversation event to recipients
+    // emit new_conversation event to recipients main socket
     //for (var r of conversation.recipients)
     //  socket.to(${r.socketID}).emit('new_conversation', convoID, conversation);
   });
-  socket.on('set_recipients', function(id, recipients){
-    // update conversation in the database
-    //let convoID = "convo-" + ;
-    // return new conversation id to creator
-    //socket.emit('created', convoID);
-    // emit new_conversation event to recipients
-    //for (var r of recipients)
-    //  socket.to(${r.socketID}).emit('set_recipients', convoID, recipients);
+  socket.on('set_properties', function(id, prop, value){
+    // update conversation properties in the database
+    // emit conversation_updated event to the room
+    socket.to("convo-"+id).emit('conversation_updated', id, prop, value);
   });
   socket.on('message', function(id, msg){
     // add message to DB
@@ -84,7 +80,7 @@ io.on('connection', function(socket){
   });
   socket.on('disconnect', function(){
     totalActive--;
-    io.emit('CONNECTIONS', totalActive);
+    io.emit('connections', totalActive);
   });
 });
 
