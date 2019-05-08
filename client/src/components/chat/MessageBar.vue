@@ -10,13 +10,6 @@
         @click:append="query = ''"
         append-outer-icon="check"
         @click:append-outer="menu = ''")
-    template(v-else-if="menu === 'mute'")
-      v-select.mute(name="mute" label="Mute Notifications Period" single-line full-width hide-details
-        v-model="mute"
-        :items="['Keep on','1 hour','6 hours','12 hours','24 hours','1 week','Till I turn them back on']"
-        prepend-icon="notifications_off"
-        append-outer-icon="check"
-        @click:append-outer="menu = ''")
     template(v-else-if="menu === 'title'")
       v-text-field.title-edit(name="title" label="Conversation Title" single-line full-width hide-details
         v-model="title"
@@ -36,10 +29,6 @@
             v-list-tile-action
               v-icon search
             v-list-tile-title Search Conversation
-          v-list-tile(@click="menu = 'mute'")
-            v-list-tile-action
-              v-icon notifications_off
-            v-list-tile-title Mute Notifications
           v-list-tile(v-if="isMulti" @click="menu = 'title'")
             v-list-tile-action
               v-icon title
@@ -48,15 +37,23 @@
             v-list-tile-action
               v-icon person_add
             v-list-tile-title Edit Recipients
-          v-list-tile(v-if="isMulti" @click="")
+          v-list-tile(v-if="isMulti" @click="$emit('leave')")
             v-list-tile-action
               v-icon remove_circle
             v-list-tile-title Leave Conversation
-          v-list-tile(@click="menu = 'style'")
+          v-list-tile(@click="$emit('delete')")
+            v-list-tile-action
+              v-icon delete
+            v-list-tile-title Delete Conversation
+          v-list-tile(@click="$emit('pane', 'notifications')")
+            v-list-tile-action
+              v-icon notifications_off
+            v-list-tile-title Mute Notifications
+          v-list-tile(@click="$emit('pane', 'style')")
             v-list-tile-action
               v-icon color_lens
             v-list-tile-title Set Conversation Styles
-          v-list-tile(@click="menu = 'info'")
+          v-list-tile(@click="$emit('pane', 'info')")
             v-list-tile-action
               v-icon info
             v-list-tile-title Info
@@ -72,14 +69,7 @@ import UserSelector from "@/components/chat/UserSelector.vue";
     return {
       menu: "",
       title: "",
-      query: "",
-      mute: "",
-      color: 0,
-      colors: [
-        {title: "Red", hex: "#FF0000"},
-        {title: "Green", hex: "#00FF00"},
-        {title: "Blue", hex: "#0000FF"}
-      ]
+      query: ""
     };
   },
   created: function() {

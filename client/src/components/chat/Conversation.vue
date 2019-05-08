@@ -1,11 +1,28 @@
 <template lang="pug">
   v-flex.active-conversation(sm8)
     MessageBar(:conversation="conversation" :contacts="contacts"
+      @leave=""
+      @delete=""
+      @pane="pane = $event"
       @updateTitle="$emit('updateTitle', $event)"
       @updateRecipients="$emit('updateRecipients', $event)")
     .body
-      MessageList(:conversation="conversation")
-      ReplyBar(@send="$emit('sendMessage', $event)" :disabled="!isRecipients")
+      v-flex.pane(v-if="pane !== ''" pa4)
+        template(v-if="pane === 'notifications'")
+          h3.pane-title Mute Notifications
+          .pane-content
+            v-select.mute(name="mute" label="How long to turn of notifications for" single-line full-width hide-details
+              v-model="mute"
+              :items="['Keep on','1 hour','6 hours','12 hours','24 hours','1 week','Till I turn them back on']"
+              prepend-icon="notifications_off")
+        template(v-else-if="pane === 'style'")
+          h3.pane-title Conversation Styles
+        template(v-else-if="pane === 'info'")
+          h3.pane-title Conversation Info
+        v-btn(@click="pane = ''" color="primary") Done
+      template(v-else)
+        MessageList(:conversation="conversation")
+        ReplyBar(@send="$emit('sendMessage', $event)" :disabled="!isRecipients")
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
@@ -17,7 +34,13 @@ import ReplyBar from "@/components/chat/ReplyBar.vue";
   components: { MessageBar, MessageList, ReplyBar },
   props: ["contacts", "conversation"],
   data: function() {
-    return {};
+    return {
+      pane: "",
+      mute: "",
+      styles: {
+        color: ""
+      }
+    };
   },
   computed: {
     username: function() {
@@ -39,4 +62,13 @@ export default class Conversation extends Vue {}
       display: flex
       justify-content: flex-end
       flex-direction: column
+    .pane
+      text-align: center
+      height: 100%
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+    .pane-content
+      width: 100%
+      height: 100%
 </style>
