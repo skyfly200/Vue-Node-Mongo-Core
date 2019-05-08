@@ -59,7 +59,27 @@ io.on('connection', function(socket){
   socket.on('subscribe', function(id){
     socket.join("convo-"+id);
   });
+  socket.on('new_conversation', function(id, conversation){
+    // create a new conversation in the database
+    //let convoID = "convo-" + "";
+    // return new conversation id to creator
+    //socket.emit('created', convoID);
+    // emit new_conversation event to recipients
+    //for (var r of conversation.recipients)
+    //  socket.to(${r.socketID}).emit('new_conversation', convoID, conversation);
+  });
+  socket.on('add_recipients', function(id, recipients){
+    // update conversation in the database
+    //let convoID = "convo-" + ;
+    // return new conversation id to creator
+    //socket.emit('created', convoID);
+    // emit new_conversation event to recipients
+    //for (var r of recipients)
+    //  socket.to(${r.socketID}).emit('add_recipients', convoID, recipients);
+  });
   socket.on('message', function(id, msg){
+    // add message to DB
+    // emit message to conversation socket room
     socket.to("convo-"+id).emit('message', id, msg);
   });
   socket.on('disconnect', function(){

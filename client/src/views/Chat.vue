@@ -112,6 +112,10 @@ const format = require('date-fns/format');
       connect: function () {
           console.log('socket connected')
       },
+      new_conversation: function (id, conversation) {
+          this.$socket.emit('subscribe', id);
+          this.conversations.push(conversation);
+      },
       message: function (data) {
         let id = data[0];
         let messageConvo = this.conversations.findIndex(c => c.id === id);
@@ -138,7 +142,7 @@ const format = require('date-fns/format');
     newConversation: function() {
       if (!this.isNew) {
         let conversation = {
-          id: new Date().getTime(),
+          id: 'new',
           unread: false,
           title: "",
           created: new Date(),
@@ -161,7 +165,14 @@ const format = require('date-fns/format');
       this.editTitle = false;
     },
     updateRecipients: function(recipients) {
+      if (!isRecipients) {
+        // get uuid for new convo
+
+        this.$socket.emit('new_conversation', id, recipients);
+      }
+      else this.$socket.emit('add_recipients', this.activeConvo.id, recipients);
       this.activeConvo.members = recipients;
+
     },
   }
 })
