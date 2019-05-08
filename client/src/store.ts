@@ -15,21 +15,21 @@ export default new Vuex.Store({
     contacts: []
   },
   mutations: {
-    load_contacts(state, contacts){
-      state.contacts = contacts;
+    load_contacts(state, data){
+      state.contacts = data.contacts;
     },
-    load_conversations(state, conversations){
-      state.conversations = conversations;
+    load_conversations(state, data){
+      state.conversations = data.conversations;
     },
-    new_conversation(state, conversation){
-      state.conversations.unshift(conversation);
+    new_conversation(state, data){
+      state.conversations.unshift(data.conversation);
     },
     set_convo_prop(state, data){
       let index = state.conversations.findIndex(c => data.id === c.id);
       state.conversations[index][data.property] = data[data.property];
     },
-    delete_conversation(state, id){
-      let index = state.conversations.findIndex(c => id === c.id);
+    delete_conversation(state, data){
+      let index = state.conversations.findIndex(c => data.id === c.id);
       state.conversations.splice(index, 1);
     },
     new_message(state, data){
