@@ -167,7 +167,7 @@ const format = require('date-fns/format');
     updateRecipients: function(recipients) {
       if (!isRecipients) {
         // get uuid for new convo
-
+        let id = new Date(); // replace with id retrieved from server
         this.$socket.emit('new_conversation', id, recipients);
       }
       else this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
