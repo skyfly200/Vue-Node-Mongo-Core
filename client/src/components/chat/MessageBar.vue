@@ -1,7 +1,7 @@
 <template lang="pug">
   v-toolbar.view-toolbar(flat dense)
     template(v-if="menu === 'recipients' || !isRecipients")
-      UserSelector(:previous="conversation.members" :contacts="contacts" @done="updateRecipients($event)")
+      UserSelector(:previous="getOtherMembers(conversation.members)" :contacts="contacts" @done="updateRecipients($event)")
     template(v-else-if="menu === 'search'")
       v-text-field.search(name="search" label="Search Conversation" single-line full-width hide-details clearable
         v-model="query"
