@@ -11,8 +11,82 @@ export default new Vuex.Store({
     connections: 0,
     token: localStorage.getItem('token') || '',
     user : {},
-    conversations: [],
-    contacts: []
+    conversations: [
+      {
+        id: new Date(2018,11,28).getTime(),
+        unread: false,
+        title: "The Group",
+        styles: {
+          color: "default",
+          density: "medium"
+        },
+        notifications: {
+          state: true
+        },
+        created: new Date(2018,11,28),
+        creator: "test",
+        members: [
+          {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+          {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+          {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
+        ],
+        messages: [
+          { author: "test2", body: "This is a message from another user", timestamp: new Date(2018,11,28) },
+          { author: "test", body: "This is a message you sent", timestamp: new Date(2019,2,22) },
+          { author: "test2", body: "Another message from another user", timestamp: new Date(2019,3,20) },
+          { author: "test", body: "Another from you", timestamp: new Date() }
+        ]
+      },
+      {
+        id: new Date(2019,4,3).getTime(),
+        unread: true,
+        title: "",
+        styles: {
+          color: "default",
+          density: "medium"
+        },
+        notifications: {
+          state: true
+        },
+        created: new Date(2019,4,3),
+        creator: "test",
+        members: [
+          {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+          {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
+        ],
+        messages: [
+          { author: "test", body: "Hey, whats up?", timestamp: new Date(2019,4,3) }
+        ]
+      },
+      {
+        id: new Date(2019,3,3).getTime(),
+        unread: false,
+        title: "",
+        styles: {
+          color: "default",
+          density: "medium"
+        },
+        notifications: {
+          state: true
+        },
+        created: new Date(2019,3,3),
+        creator: "test3",
+        members: [
+          {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+          {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
+        ],
+        messages: [
+          { author: "test3", body: "Hola amigo", timestamp: new Date(2019,4,3) }
+        ]
+      }
+    ],
+    contacts: [
+      {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
+      {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
+      {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
+      {username: "test4", avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg"},
+      {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"}
+    ]
   },
   mutations: {
     load_contacts(state, data){
@@ -39,19 +113,19 @@ export default new Vuex.Store({
       state.conversations.unshift(newest[0]);
     },
     auth_request(state){
-      state.status = 'loading'
+      state.status = 'loading';
     },
     auth_success(state, data){
-      state.status = 'success'
-      state.token = data.token
-      state.user = data.user
+      state.status = 'success';
+      state.token = data.token;
+      state.user = data.user;
     },
     auth_error(state){
-      state.status = 'error'
+      state.status = 'error';
     },
     logout(state){
-      state.status = ''
-      state.token = ''
+      state.status = '';
+      state.token = '';
     },
     set_connections(state, c){
       state.connections = c;
@@ -67,8 +141,23 @@ export default new Vuex.Store({
     SOCKET_disconnect({commit}) {
       commit('set_connected', false);
     },
-    SOCKET_CONNECTIONS({commit}, data) {
+    SOCKET_connections({commit}, data) {
       commit('set_connections', data);
+    },
+    SOCKET_message({commit}, data) {
+      commit('new_message', data);
+    },
+    SOCKET_conversation_updated({commit}, data) {
+      commit('set_convo_prop', data);
+    },
+    SOCKET_new_conversation({commit}, data) {
+      commit('new_conversation', data);
+    },
+    load_contacts: ({commit}, data) => {
+      commit('load_contacts', data);
+    },
+    load_conversations: ({commit}, data) => {
+      commit('load_conversations', data);
     },
     load_session: ({commit}, data) => {
       let {token, user} = data;
