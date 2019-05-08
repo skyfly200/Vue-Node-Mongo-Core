@@ -1,7 +1,7 @@
 <template lang="pug">
   v-toolbar.view-toolbar(flat dense)
     template(v-if="menu === 'recipients' || !isRecipients")
-      UserSelector(:previous="getOtherMembers(conversation.members)" :contacts="contacts" @done="updateRecipients($event)")
+      UserSelector(:previous="getOthers(conversation.members)" :contacts="getOthers(contacts)" @done="updateRecipients($event)")
     template(v-else-if="menu === 'search'")
       v-text-field.search(name="search" label="Search Conversation" single-line full-width hide-details clearable
         v-model="query"
@@ -97,11 +97,11 @@ import UserSelector from "@/components/chat/UserSelector.vue";
       this.menu = "";
       this.$emit('updateRecipients', recipients);
     },
-    getOtherMembers: function(members) {
+    getOthers: function(members) {
       return members.filter( (m) => (m.username !== this.username));
     },
     autoTitle: function(c) {
-      let auto = this.getOtherMembers(c.members).map(m => (this.titleCase(m.username))).join(', ');
+      let auto = this.getOthers(c.members).map(m => (this.titleCase(m.username))).join(', ');
       return c.title ? c.title : (c.members.length > 1 ? (c.messages.length > 0 ? auto : "New Message to " + auto) : "New Message");
     },
     titleCase: function(string) {
