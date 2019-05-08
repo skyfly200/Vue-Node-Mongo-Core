@@ -212,7 +212,13 @@ export default new Vuex.Store({
     user: state => state.user,
     connected: state => state.connected,
     connections: state => state.connections,
-    contacts: state => state.contacts,
-    conversations: state => state.userconversations
+    contacts: state => state.contacts,,
+    contact: (state) => (username) => {
+      return state.contacts.find(c => c.username === username)
+    },
+    conversations: state => state.conversations,
+    conversation: (state) => (id) => {
+      return state.conversations.find(c => todo.id === id)
+    }
   }
 });
