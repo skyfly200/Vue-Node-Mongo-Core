@@ -93,8 +93,7 @@ const format = require('date-fns/format');
           console.log('socket connected')
       },
       message: function (message) {
-        if (message.author !== this.username)
-          this.activeConvo.messages.push(message);
+        this.activeConvo.messages.push(message);
       }
   },
   methods: {

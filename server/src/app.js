@@ -55,7 +55,7 @@ const db = database.connect(mongoDB);
 io.on('connection', function(socket){
   io.emit('connect');
   socket.on('message', function(msg){
-    io.emit('message', msg);
+    socket.broadcast.emit('message', msg);
   });
   socket.on('disconnect', function(){
     io.emit('disconnect');
