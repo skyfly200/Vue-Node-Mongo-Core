@@ -34,7 +34,7 @@ const format = require('date-fns/format');
         {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
         {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
         {username: "test4", avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg"},
-        {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+        {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"}
       ],
       conversations: [
         {
