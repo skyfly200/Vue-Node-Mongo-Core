@@ -99,7 +99,7 @@ export default new Vuex.Store({
       state.conversations.unshift(data.conversation);
     },
     set_convo_prop(state, data){
-      let index = state.conversations.findIndex(c => data.id === c.id);
+      let index: number = state.conversations.findIndex(c => data.id === c.id);
       state.conversations[index][data.property] = data[data.property];
     },
     delete_conversation(state, data){
@@ -210,15 +210,14 @@ export default new Vuex.Store({
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     user: state => state.user,
-    username: state => state.user.username,
     connected: state => state.connected,
     connections: state => state.connections,
-    contacts: state => state.contacts,,
-    contact: (state) => (username) => {
+    contacts: state => state.contacts,
+    contact: (state) => (username: String) => {
       return state.contacts.find(c => c.username === username)
     },
     conversations: state => state.conversations,
-    conversation: (state) => (id) => {
+    conversation: (state) => (id: Number) => {
       return state.conversations.find(c => c.id === id)
     }
   }

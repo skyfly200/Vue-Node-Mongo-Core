@@ -44,9 +44,11 @@ const format = require('date-fns/format');
     isNew: function() {
       return this.conversations[0].members.length <= 1;
     },
+    username: function() {
+      return this.user.username;
+    },
     ...mapGetters([
       'user',
-      'username',
       'contacts',
       'conversations',
       'connected'
