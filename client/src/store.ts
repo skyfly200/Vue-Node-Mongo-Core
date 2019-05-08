@@ -9,9 +9,34 @@ export default new Vuex.Store({
     status: '',
     connections: 0,
     token: localStorage.getItem('token') || '',
-    user : {}
+    user : {},
+    conversations: [],
+    contacts: []
   },
   mutations: {
+    load_contacts(state, contacts){
+      state.contacts = contacts;
+    },
+    load_conversations(state, conversations){
+      state.conversations = conversations;
+    },
+    new_conversation(state, conversation){
+      state.conversations.unshift(conversation);
+    },
+    set_convo_prop(state, data){
+      let index = state.conversations.findIndex(c => data.id === c.id);
+      state.conversations[index][data.property] = data[data.property];
+    },
+    delete_conversation(state, id){
+      let index = state.conversations.findIndex(c => id === c.id);
+      state.conversations.splice(index, 1);
+    },
+    new_message(state, data){
+      let index = state.conversations.findIndex(c => data.id === c.id);
+      state.conversations[index].messages.push(data.message);
+      let newest = state.conversations.splice(index, 1);
+      state.conversations.unshift(newest[0]);
+    },
     auth_request(state){
       state.status = 'loading'
     },
@@ -85,6 +110,7 @@ export default new Vuex.Store({
   getters : {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
-    user: state => state.user
+    user: state => state.user,
+    connections: state => state.connections
   }
 });

@@ -41,6 +41,13 @@ const format = require('date-fns/format');
           id: new Date(2018,11,28).getTime(),
           unread: false,
           title: "The Group",
+          styles: {
+            color: "default",
+            density: "medium"
+          },
+          notifications: {
+            state: true
+          },
           created: new Date(2018,11,28),
           creator: "test",
           members: [
@@ -59,6 +66,13 @@ const format = require('date-fns/format');
           id: new Date(2019,4,3).getTime(),
           unread: true,
           title: "",
+          styles: {
+            color: "default",
+            density: "medium"
+          },
+          notifications: {
+            state: true
+          },
           created: new Date(2019,4,3),
           creator: "test",
           members: [
@@ -73,6 +87,13 @@ const format = require('date-fns/format');
           id: new Date(2019,3,3).getTime(),
           unread: false,
           title: "",
+          styles: {
+            color: "default",
+            density: "medium"
+          },
+          notifications: {
+            state: true
+          },
           created: new Date(2019,3,3),
           creator: "test3",
           members: [
@@ -100,7 +121,7 @@ const format = require('date-fns/format');
       return this.activeConvo.members.length > 1;
     },
     isNew: function() {
-      return this.conversations[0].members.length === 1;
+      return this.conversations[0].members.length <= 1;
     },
   },
   created() {
@@ -114,7 +135,8 @@ const format = require('date-fns/format');
       },
       new_conversation: function (id, conversation) {
           this.$socket.emit('subscribe', id);
-          this.conversations.push(conversation);
+          this.conversations.unshift(conversation);
+          this.selected++;
       },
       message: function (data) {
         let id = data[0];
@@ -130,8 +152,8 @@ const format = require('date-fns/format');
   },
   methods: {
     sendMessage: function(body) {
-      let message = { author: this.username, body: body, timestamp: new Date() };
       if (this.isRecipients) {
+        let message = { author: this.username, body: body, timestamp: new Date() };
         this.activeConvo.messages.push(message);
         this.$socket.emit('message', this.activeConvo.id, message);
         let newest = this.conversations.splice(this.selected, 1);
@@ -145,6 +167,13 @@ const format = require('date-fns/format');
           id: 'new',
           unread: false,
           title: "",
+          styles: {
+            color: "default",
+            density: "medium"
+          },
+          notifications: {
+            state: true
+          },
           created: new Date(),
           creator: this.username,
           members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
@@ -153,7 +182,6 @@ const format = require('date-fns/format');
         this.conversations.unshift(conversation);
       }
       this.selected = 0;
-      this.editRecipients = true;
     },
     selectConvo: function(i) {
       this.selected = i;
@@ -161,13 +189,11 @@ const format = require('date-fns/format');
     },
     deleteConvo: function(i) {
       this.conversations.splice(i,1);
-      this.editRecipients = false;
-      this.editTitle = false;
     },
     updateRecipients: function(recipients) {
       if (!isRecipients) {
         // get uuid for new convo
-        let id = new Date(); // replace with id retrieved from server
+        let id = new Date().getTime(); // later replace with id retrieved from server
         this.$socket.emit('new_conversation', id, recipients);
       }
       else this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
