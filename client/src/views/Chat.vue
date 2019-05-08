@@ -28,88 +28,11 @@ const format = require('date-fns/format');
   components: {ConversationIndex, Conversation},
   data: function() {
     return {
-      selected: 0,
-      contacts: [
-        {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
-        {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
-        {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
-        {username: "test4", avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg"},
-        {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"}
-      ],
-      conversations: [
-        {
-          id: new Date(2018,11,28).getTime(),
-          unread: false,
-          title: "The Group",
-          styles: {
-            color: "default",
-            density: "medium"
-          },
-          notifications: {
-            state: true
-          },
-          created: new Date(2018,11,28),
-          creator: "test",
-          members: [
-            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
-            {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
-            {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"}
-          ],
-          messages: [
-            { author: "test2", body: "This is a message from another user", timestamp: new Date(2018,11,28) },
-            { author: "test", body: "This is a message you sent", timestamp: new Date(2019,2,22) },
-            { author: "test2", body: "Another message from another user", timestamp: new Date(2019,3,20) },
-            { author: "test", body: "Another from you", timestamp: new Date() }
-          ]
-        },
-        {
-          id: new Date(2019,4,3).getTime(),
-          unread: true,
-          title: "",
-          styles: {
-            color: "default",
-            density: "medium"
-          },
-          notifications: {
-            state: true
-          },
-          created: new Date(2019,4,3),
-          creator: "test",
-          members: [
-            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
-            {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
-          ],
-          messages: [
-            { author: "test", body: "Hey, whats up?", timestamp: new Date(2019,4,3) }
-          ]
-        },
-        {
-          id: new Date(2019,3,3).getTime(),
-          unread: false,
-          title: "",
-          styles: {
-            color: "default",
-            density: "medium"
-          },
-          notifications: {
-            state: true
-          },
-          created: new Date(2019,3,3),
-          creator: "test3",
-          members: [
-            {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
-            {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
-          ],
-          messages: [
-            { author: "test3", body: "Hola amigo", timestamp: new Date(2019,4,3) }
-          ]
-        }
-      ]
+      selected: 0
     }
   },
   computed: {
     activeConvo: function() {
-      // $store.getters.conversations
       return this.conversations[this.selected];
     },
     isMulti: function() {
