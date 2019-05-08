@@ -211,6 +211,8 @@ export default new Vuex.Store({
     authStatus: state => state.status,
     user: state => state.user,
     connected: state => state.connected,
-    connections: state => state.connections
+    connections: state => state.connections,
+    contacts: state => state.contacts,
+    conversations: state => state.userconversations
   }
 });
