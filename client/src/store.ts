@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status: '',
+    connected: false,
     connections: 0,
     token: localStorage.getItem('token') || '',
     user : {},
@@ -54,9 +55,18 @@ export default new Vuex.Store({
     },
     set_connections(state, c){
       state.connections = c;
+    },
+    set_connected(state, c){
+      state.connected = c;
     }
   },
   actions: {
+    SOCKET_connect({commit}) {
+      commit('set_connected', true);
+    },
+    SOCKET_disconnect({commit}) {
+      commit('set_connected', false);
+    },
     SOCKET_CONNECTIONS({commit}, data) {
       commit('set_connections', data);
     },
@@ -111,6 +121,7 @@ export default new Vuex.Store({
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     user: state => state.user,
+    connected: state => state.connected,
     connections: state => state.connections
   }
 });
