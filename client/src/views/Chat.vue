@@ -112,7 +112,7 @@ const format = require('date-fns/format');
       return this.conversations[this.selected];
     },
     username: function() {
-      return this.$store.getters.user.username;
+      return this.$store.getters.username;
     },
     isMulti: function() {
       return this.activeConvo.members.length > 2;

@@ -6,9 +6,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    status: '',
     connected: false,
     connections: 0,
+    status: '',
     token: localStorage.getItem('token') || '',
     user : {},
     conversations: [
@@ -210,6 +210,7 @@ export default new Vuex.Store({
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     user: state => state.user,
+    username: state => state.user.username,
     connected: state => state.connected,
     connections: state => state.connections,
     contacts: state => state.contacts,,
@@ -218,7 +219,7 @@ export default new Vuex.Store({
     },
     conversations: state => state.conversations,
     conversation: (state) => (id) => {
-      return state.conversations.find(c => todo.id === id)
+      return state.conversations.find(c => c.id === id)
     }
   }
 });
