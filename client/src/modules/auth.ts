@@ -4,7 +4,7 @@ import axios from "axios";
 import {User} from '@/models/user';
 
 @Module
-export default class User extends VuexModule {
+export default class Auth extends VuexModule {
   status: string = '';
   token: string = localStorage.getItem('token') || '';
   user: object = {};

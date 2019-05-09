@@ -3,14 +3,14 @@ import Vuex, { Module } from "vuex";
 import axios from "axios";
 
 import Chat from './modules/chat';
-import User from './modules/user';
+import Auth from './modules/auth';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     chat: Chat,
-    user: User
+    auth: Auth
   },
   state: {
     connected: false,
