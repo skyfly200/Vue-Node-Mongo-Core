@@ -1,9 +1,9 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import axios from "axios";
 
-import {Conversation} from './models/conversation';
-import {Contact} from './models/contact';
-import {Message} from './models/message';
+import {Conversation} from '@/models/conversation';
+import {Contact} from '@/models/contact';
+import {Message} from '@/models/message';
 
 @Module
 export default class Chat extends VuexModule {

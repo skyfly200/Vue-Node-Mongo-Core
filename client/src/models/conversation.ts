@@ -10,10 +10,10 @@ export class Conversation {
     enabled: Boolean = true,
     muteExpire: Date = new Date()
   };
-  created: new Date(2018,11,28);
+  created: Date = new Date(2018,11,28);
   creator: String = "";
-  members: Array<Contact> = [];
-  messages: Array<Message> = [];
+  members: Array<Contact> = [new Contact()];
+  messages: Array<Message> = [new Message()];
   constructor(data = {}) {
     Object.assign(this, data);
   }

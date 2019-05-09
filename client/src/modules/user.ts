@@ -1,6 +1,8 @@
 import { Module, VuexModule, Mutation, MutationAction, Action } from 'vuex-module-decorators';
 import axios from "axios";
 
+import {User} from '@/models/user';
+
 @Module
 export default class User extends VuexModule {
   status: string = '';
@@ -10,9 +12,6 @@ export default class User extends VuexModule {
   @Mutation auth_request(){
     this.status = 'loading';
   }
-  @Mutation auth_error(){
-    this.status = 'error';
-  }
 
   @MutationAction({mutate: ['status', 'token', 'user']}) async load_session(data: object) {
     let {token, user} = data;
@@ -21,7 +20,7 @@ export default class User extends VuexModule {
   @MutationAction({mutate: ['status', 'token', 'user']}) async login(data: object) {
     this.context.commit('auth_request');
     try {
-      const response: object = await axios({url: 'http://localhost:1234/users/login', data: data, method: 'POST' });
+      const response: any = await axios({url: 'http://localhost:1234/users/login', data: data, method: 'POST' });
       const token = response.token;
       const user = response.user;
       // MUST be changed to store JWT in cookie for security!!!
@@ -32,7 +31,7 @@ export default class User extends VuexModule {
     }
     catch(error) {
       console.log("error", error);
-      this.context.commit('auth_error');
+      return {status: "error", token: "", user: {}};
     }
   }
   @MutationAction({mutate: ['status', 'token', 'user']}) async logout() {
