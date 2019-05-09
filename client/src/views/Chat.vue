@@ -26,7 +26,6 @@ const format = require('date-fns/format');
 import { mapGetters } from "vuex";
 
 @Component({
-  name: "Chat",
   components: {ConversationIndex, Conversation},
   data: function() {
     return {
@@ -134,7 +133,7 @@ import { mapGetters } from "vuex";
     },
   }
 })
-export default class Profile extends Vue {}
+export default class Chat extends Vue {}
 </script>
 
 <style lang="sass" scoped>
