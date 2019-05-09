@@ -10,8 +10,8 @@ export class Conversation {
     density: "medium"
   };
   notifications: Object = {
-    enabled: Boolean = true,
-    muteExpire: Date = new Date()
+    enabled: true,
+    muteExpire: new Date()
   };
   created: Date = new Date(2018,11,28);
   creator: String = "";
