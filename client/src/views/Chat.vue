@@ -45,10 +45,10 @@ const format = require('date-fns/format');
       return this.conversations[0].members.length <= 1;
     },
     username: function() {
-      return this.user.username;
+      return this.getUser.username;
     },
     ...mapGetters([
-      'user',
+      'getUser',
       'contacts',
       'conversations',
       'connected'
