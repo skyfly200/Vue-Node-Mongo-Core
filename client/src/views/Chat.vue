@@ -101,7 +101,7 @@ import {Message} from '@/models/message';
       this.$store.dispatch("delete_conversation", i);
     },
     updateRecipients: function(recipients) {
-      this.$store.dispatch("update_conversation", this.active, "members", recipients);
+      this.$store.dispatch("update_recipients", recipients);
       if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.active, recipients);
     },
   }
