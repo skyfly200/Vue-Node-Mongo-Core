@@ -9,6 +9,15 @@ function hasKey<O>(obj: O, key: (string | number | symbol)): key is keyof O {
   return key in obj
 }
 
+class PropUpdate {
+  id: number = new Date().getTime();
+  property: string = "";
+  value: (string | boolean | object) = "";
+  constructor(data: Contact | {} = {}) {
+    Object.assign(this, data);
+  }
+}
+
 @Module
 export default class Chat extends VuexModule {
   active: number = new Date(2018,11,28).getTime();
@@ -74,10 +83,11 @@ export default class Chat extends VuexModule {
       creator: "test3",
       members: [
         {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"},
+        {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
         {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"}
       ],
       messages: [
-        { author: "test3", body: "Hola amigo", timestamp: new Date(2019,4,3) }
+        { author: "test3", body: "Hola amigos", timestamp: new Date(2019,4,3) }
       ]
     }
   ].map(c => new Conversation(c));
@@ -105,11 +115,15 @@ export default class Chat extends VuexModule {
   @Mutation new_conversation(conversation: Conversation){
     this.conversations.unshift(conversation);
   }
-  @Mutation set_convo_prop(id: Number, property: string, value: string | boolean | object){
-    let index: number = this.conversations.findIndex(c => id === c.id);
-    if (hasKey(this.conversations[index], property)) {
-      this.conversations[index][property] = value;
+  @Mutation set_convo_prop(data: PropUpdate){
+    let index: number = this.conversations.findIndex(c => data.id === c.id);
+    if (hasKey(this.conversations[index], data.property)) {
+      this.conversations[index][data.property] = data.value;
     }
+  }
+  @Mutation set_recipients(recipients: Array<Contact>){
+    let index: number = this.conversations.findIndex(c => this.active === c.id);
+    this.conversations[index].members = recipients;
   }
   @Mutation set_active_conversation(id: number){
     this.active = id;
@@ -132,7 +146,8 @@ export default class Chat extends VuexModule {
     return {conversations: [new Conversation()]};
   }
 
-  @Action({ commit: 'set_active_conversation' }) select_conversation(id: Number) {
+  @Action({ commit: 'set_active_conversation' }) async select_conversation(id: Number) {
+    // ERROR - calling this statement causes an error !?!?!?
     // this.context.commit("set_convo_prop", {
     //   id: id,
     //   property: "unread",
@@ -141,17 +156,21 @@ export default class Chat extends VuexModule {
     return id;
   }
   @Action({ commit: 'new_conversation' }) start_conversation(conversation: Conversation) {
+    this.context.commit("set_convo_prop", conversation.id);
     return conversation;
   }
   @Action({ commit: 'new_message' }) send_message(message: Message) {
     return message;
   }
+  @Action({ commit: 'set_recipients' }) update_recipients(recipients: Array<Contact>) {
+    return recipients;
+  }
   @Action({ commit: 'set_convo_prop' }) update_conversation(id: Number, property: string, value: (string | boolean | object)) {
-    return {
+    return new PropUpdate({
       id: id,
       property: property,
       value: value
-    };
+    });
   }
 
   // Socket.io Event Listener Actions
@@ -169,11 +188,11 @@ export default class Chat extends VuexModule {
     });
   }
   @Action SOCKET_conversation_updated(id: Number, property: string, value: (string | boolean | object)) {
-    this.context.commit('set_convo_prop', {
+    this.context.commit('set_convo_prop', new PropUpdate({
       id: id,
       property: property,
       value: value
-    });
+    }));
   }
 
   get activeID() {
