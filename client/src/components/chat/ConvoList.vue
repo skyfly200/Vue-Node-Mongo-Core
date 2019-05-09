@@ -3,7 +3,7 @@
     v-slide-y-transition(group)
       template(v-for="(c, i) in conversations")
         v-divider(v-if="i > 0" :key="c.id + '-div'")
-        ConvoTile(:c="c" :key="c.id" @select="$emit('select', i)" @delete="$emit('delete', i)")
+        ConvoTile(:c="c" :key="c.id" @select="$emit('select', c.id)" @delete="$emit('delete', i)")
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";

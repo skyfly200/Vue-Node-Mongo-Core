@@ -118,8 +118,8 @@ export default class Chat extends VuexModule {
     let index = this.conversations.findIndex(c => id === c.id);
     this.conversations.splice(index, 1);
   }
-  @Mutation new_message(id: Number, message: Message){
-    let index = this.conversations.findIndex(c => id === c.id);
+  @Mutation new_message(message: Message){
+    let index = this.conversations.findIndex(c => message.convoID === c.id);
     this.conversations[index].messages.push(message);
     if (index > 0) {
       let newest = this.conversations.splice(index, 1);
@@ -133,21 +133,18 @@ export default class Chat extends VuexModule {
   }
 
   @Action({ commit: 'set_active_conversation' }) select_conversation(id: Number) {
-    this.context.commit("set_convo_prop", {
-      id: id,
-      property: "unread",
-      value: false
-    });
-    return {id: id};
+    // this.context.commit("set_convo_prop", {
+    //   id: id,
+    //   property: "unread",
+    //   value: false
+    // });
+    return id;
   }
   @Action({ commit: 'new_conversation' }) start_conversation(conversation: Conversation) {
-    return {conversation: conversation};
+    return conversation;
   }
-  @Action({ commit: 'new_message' }) send_message(message: Object) {
-    return {
-      id: this.active,
-      message: new Message(message)
-    };
+  @Action({ commit: 'new_message' }) send_message(message: Message) {
+    return message;
   }
   @Action({ commit: 'set_convo_prop' }) update_conversation(id: Number, property: string, value: (string | boolean | object)) {
     return {
@@ -168,7 +165,6 @@ export default class Chat extends VuexModule {
       value: (this.conversations[this.active].id !== id)
     });
     this.context.commit('new_message', {
-      id: id,
       message: new Message(message)
     });
   }
@@ -184,7 +180,7 @@ export default class Chat extends VuexModule {
     return this.active;
   }
   get getActiveConversation() {
-    return this.conversations.find((c: Conversation) => c.id === this.active);
+    return this.conversations.find((c: Conversation) => c.id === this.active );
   }
   get getConversations() {
     return this.conversations;

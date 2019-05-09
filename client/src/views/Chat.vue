@@ -65,9 +65,9 @@ import {Message} from '@/models/message';
   methods: {
     sendMessage: function(body) {
       if (this.isRecipients) {
-        let message = { author: this.username, body: body, timestamp: new Date() };
-        this.$socket.emit('message', this.activeConvo.id, message);
-        this.$store.dispatch("send_message", this.activeConvo.id, this.activeConvo);
+        let message = { convoID: this.active, author: this.username, body: body, timestamp: new Date() };
+        this.$socket.emit('message', this.active, message);
+        this.$store.dispatch("send_message", new Message(message));
       }
     },
     newConversation: function() {
@@ -100,8 +100,8 @@ import {Message} from '@/models/message';
       this.$store.dispatch("delete_conversation", i);
     },
     updateRecipients: function(recipients) {
-      this.$store.dispatch("update_conversation", this.activeConvo.id, "members", recipients);
-      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
+      this.$store.dispatch("update_conversation", this.active, "members", recipients);
+      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.active, recipients);
     },
   }
 })

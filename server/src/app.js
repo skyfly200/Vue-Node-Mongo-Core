@@ -76,7 +76,7 @@ io.on('connection', function(socket){
   socket.on('message', function(id, msg){
     // add message to DB
     // emit message to conversation socket room
-    socket.to("convo-"+id).emit('message', id, msg);
+    socket.to("convo-"+id).emit('message', msg);
   });
   socket.on('disconnect', function(){
     totalActive--;
