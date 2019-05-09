@@ -1,8 +1,8 @@
 <template lang="pug">
   v-flex.active-conversation(sm8)
     MessageBar(:conversation="conversation" :contacts="contacts"
-      @leave=""
-      @delete=""
+      @leave="$emit('leave', $event)"
+      @delete="$emit('delete', $event)"
       @pane="pane = $event"
       @updateTitle="$emit('updateTitle', $event)"
       @updateRecipients="$emit('updateRecipients', $event)")

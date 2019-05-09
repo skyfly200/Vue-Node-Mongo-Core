@@ -9,7 +9,9 @@ v-container(fluid grid-list-md).chat
     ConversationView(:contacts="contacts" :conversation="activeConvo"
       @sendMessage="sendMessage($event)"
       @updateTitle="activeConvo.title = $event"
-      @updateRecipients="updateRecipients($event)")
+      @updateRecipients="updateRecipients($event)"
+      @leave=""
+      @delete="deleteConvo($event)")
 </template>
 
 <script>
