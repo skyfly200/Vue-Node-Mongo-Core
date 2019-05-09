@@ -13,8 +13,7 @@ export default class Auth extends VuexModule {
     this.status = 'loading';
   }
 
-  @MutationAction({mutate: ['status', 'token', 'user']}) async load_session(data: object) {
-    let {token, user} = data;
+  @MutationAction({mutate: ['status', 'token', 'user']}) async load_session(token: String, user: User) {
     return {status: 'success', token: token, user: user};
   }
   @MutationAction({mutate: ['status', 'token', 'user']}) async login(data: object) {
