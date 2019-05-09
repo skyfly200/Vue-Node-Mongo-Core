@@ -101,8 +101,11 @@ import {Message} from '@/models/message';
       this.$store.dispatch("delete_conversation", i);
     },
     updateRecipients: function(recipients) {
-      this.$store.dispatch("update_recipients", recipients);
-      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.active, recipients);
+      let self = new Contact({username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"});
+      let allRecpients = recipients;
+      allRecpients.push(self);
+      this.$store.dispatch("update_recipients", allRecpients);
+      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.active, allRecpients);
     },
   }
 })

@@ -38,7 +38,7 @@ const format = require('date-fns/format');
     },
     getTime: getTime,
     getAvatar: function(author) {
-      return this.conversation.members.find( (m) => (m.username === author) ).avatar;
+      return this.conversation.members.find( (m) => m.username === author ).avatar;
     },
   }
 })
