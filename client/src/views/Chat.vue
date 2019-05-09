@@ -49,12 +49,12 @@ import { mapGetters } from "vuex";
     username: function() {
       return this.getUser.username;
     },
-    ...mapGetters([
-      'getUser',
-      'contacts',
-      'conversations',
-      'connected'
-    ])
+    ...mapGetters({
+      getUser: 'getUser',
+      contacts: 'getContacts',
+      conversations: 'getConversations',
+      connected: 'connected'
+    })
   },
   created() {
     for (var c of this.conversations) {
