@@ -156,7 +156,6 @@ export default class Chat extends VuexModule {
     return id;
   }
   @Action({ commit: 'new_conversation' }) start_conversation(conversation: Conversation) {
-    this.context.commit("set_convo_prop", conversation.id);
     return conversation;
   }
   @Action({ commit: 'new_message' }) send_message(message: Message) {

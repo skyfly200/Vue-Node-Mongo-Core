@@ -91,6 +91,7 @@ import {Message} from '@/models/message';
         this.$socket.emit('new_conversation', newConvo);
         this.$socket.emit('subscribe', newConvo.id);
         this.$store.dispatch("start_conversation", newConvo);
+        this.$store.dispatch("select_conversation", newConvo.id);
       }
     },
     selectConvo: function(i) {
