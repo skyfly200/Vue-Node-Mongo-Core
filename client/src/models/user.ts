@@ -1,8 +1,8 @@
 export class User {
-  _id: String = '';
-  username: String = '';
+  _id: string = '';
+  username: string = '';
   active: Boolean = false;
-  roles: Array<String> = [""];
+  roles: Array<string> = [""];
   constructor(data = {}) {
     Object.assign(this, data);
   }

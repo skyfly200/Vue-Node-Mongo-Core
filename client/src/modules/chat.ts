@@ -92,7 +92,7 @@ export default class Chat extends VuexModule {
 
   get getContacts() { return this.contacts }
   get getContact() {
-    return (username: String) => {
+    return (username: string) => {
       return this.contacts.find(c => c.username === username);
     };
   }
@@ -103,7 +103,7 @@ export default class Chat extends VuexModule {
   @Mutation new_conversation(conversation: Conversation){
     this.conversations.unshift(conversation);
   }
-  @Mutation set_convo_prop(id: Number, property: String, value: any){
+  @Mutation set_convo_prop(id: Number, property: string, value: any){
     let index: number = this.conversations.findIndex(c => id === c.id);
     this.conversations[index][property] = value;
   }
@@ -121,16 +121,16 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'set_conversations' }) load_conversations() { return [new Conversation()] }
   @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(conversation: Object) { return new Conversation(conversation) }
   @Action SOCKET_message(id: Number, message: Object) {
-    this.context.commit('new_message', id, new Message(message));
+    this.context.commit('new_message', {id: id, message: new Message(message)});
   }
-  @Action SOCKET_conversation_updated(id: Number, property: String, value: any) {
-    this.context.commit('set_convo_prop', id, property, value);
+  @Action SOCKET_conversation_updated(id: Number, property: string, value: any) {
+    this.context.commit('set_convo_prop', {id: id, property: property, value: value});
   }
 
   get getConversations() { return this.conversations }
-  // get getConversation() {
-  //   return (id: Number) => {
-  //     return this.conversations.find((c: Conversation) => c.id === id)
-  //   };
-  // }
+  get getConversation() {
+    return (id: Number) => {
+      return this.conversations.find((c: Conversation) => c.id === id)
+    };
+  }
 }

@@ -1,6 +1,6 @@
 export class Message {
-  author: String = '';
-  body: String = '';
+  author: string = '';
+  body: string = '';
   timestamp: Date = new Date();
   constructor(data = {}) {
     Object.assign(this, data);

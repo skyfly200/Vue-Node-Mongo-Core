@@ -1,6 +1,6 @@
 export class Contact {
-  username: String = '';
-  avatar: String = '';
+  username: string = '';
+  avatar: string = '';
   constructor(data = {}) {
     Object.assign(this, data);
   }
