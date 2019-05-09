@@ -103,7 +103,7 @@ export default class Chat extends VuexModule {
   @Mutation new_conversation(conversation: Conversation){
     this.conversations.unshift(conversation);
   }
-  @Mutation set_convo_prop(id: Number, property: string, value: any){
+  @Mutation set_convo_prop(id: Number, property: string, value: string | boolean | object){
     let index: number = this.conversations.findIndex(c => id === c.id);
     this.conversations[index][property] = value;
   }

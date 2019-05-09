@@ -1,7 +1,7 @@
 export class Contact {
   username: string = '';
   avatar: string = '';
-  constructor(data = {}) {
+  constructor(data: Contact | {} = {}) {
     Object.assign(this, data);
   }
 }

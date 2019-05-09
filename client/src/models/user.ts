@@ -3,7 +3,7 @@ export class User {
   username: string = '';
   active: Boolean = false;
   roles: Array<string> = [""];
-  constructor(data = {}) {
+  constructor(data: User | {} = {}) {
     Object.assign(this, data);
   }
 }

@@ -17,7 +17,7 @@ export class Conversation {
   creator: string = "";
   members: Array<Contact> = [new Contact()];
   messages: Array<Message> = [new Message()];
-  constructor(data = {}) {
+  constructor(data: Conversation | {} = {}) {
     Object.assign(this, data);
   }
 }
