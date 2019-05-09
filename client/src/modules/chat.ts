@@ -5,6 +5,10 @@ import {Conversation} from '@/models/conversation';
 import {Contact} from '@/models/contact';
 import {Message} from '@/models/message';
 
+function hasKey<O>(obj: O, key: string): key is keyof O {
+  return key in obj
+}
+
 @Module
 export default class Chat extends VuexModule {
   conversations: Array<Conversation> = [
@@ -105,7 +109,9 @@ export default class Chat extends VuexModule {
   }
   @Mutation set_convo_prop(id: Number, property: string, value: string | boolean | object){
     let index: number = this.conversations.findIndex(c => id === c.id);
-    this.conversations[index][property] = value;
+    if (hasKey(this.conversations[index], property)) {
+      this.conversations[index][property] = value;
+    }
   }
   @Mutation delete_conversation(id: Number){
     let index = this.conversations.findIndex(c => id === c.id);
