@@ -29,7 +29,7 @@ import ConvoList from "@/components/chat/ConvoList.vue";
     filteredConversations: function() {
       return this.conversations.filter( c => {
         let unread = !this.filters.unread || c.unread || c.messages.length === 0;
-        let created = !this.filters.created || c.creator === this.$store.getters.user.username;
+        let created = !this.filters.created || c.creator === this.$store.getters.getUser.username;
         let direct = this.filters.direct || c.members.length > 2;
         let group = this.filters.group || c.members.length < 3;
         // filter by query here

@@ -59,7 +59,7 @@ import { Component, Vue } from "vue-property-decorator";
     },
     img: function() {
       // Need to implement this getter and backend data flow
-      //return this.$store.getters.user.img;
+      //return this.$store.getters.getUser.img;
     }
   },
   methods: {

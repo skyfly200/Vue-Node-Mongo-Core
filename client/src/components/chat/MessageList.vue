@@ -25,7 +25,7 @@ const format = require('date-fns/format');
   props: ["conversation"],
   computed: {
     username: function() {
-      return this.$store.getters.isLoggedIn ? this.$store.getters.user.username : "";
+      return this.$store.getters.isLoggedIn ? this.$store.getters.getUser.username : "";
     },
     isMulti: function() {
       return this.conversation.members.length > 2;

@@ -145,7 +145,7 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
     },
     isGroupAdmin: function() {
       // check if current user is a group admin
-      let groups = this.$store.getters.user.groups;
+      let groups = this.$store.getters.getUser.groups;
       return groups && groups[this.title].role === "admin";
     }
   },

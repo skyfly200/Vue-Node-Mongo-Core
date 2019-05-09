@@ -98,14 +98,14 @@ import ImgEditHover from "@/components/ImgEditHover.vue";
     $route(to, from) {
       this.username = this.$route.params.username
         ? this.$route.params.username
-        : this.$store.getters.user.username;
+        : this.$store.getters.getUser.username;
       this.getProfile(this.username);
     }
   },
   created() {
     this.username = this.$route.params.username
       ? this.$route.params.username
-      : this.$store.getters.user.username;
+      : this.$store.getters.getUser.username;
     this.getProfile(this.username);
   },
   computed: {

@@ -75,13 +75,13 @@ import UserSelector from "@/components/chat/UserSelector.vue";
   },
   computed: {
     username: function() {
-      return this.$store.getters.user.username;
+      return this.$store.getters.getUser.username;
     },
     isMulti: function() {
       return this.conversation.members.length > 2;
     },
     isOwner: function() {
-      return this.conversation.creator === this.$store.getters.user.username;
+      return this.conversation.creator === this.$store.getters.getUser.username;
     },
     isRecipients: function() {
       return this.conversation.members.length > 1;

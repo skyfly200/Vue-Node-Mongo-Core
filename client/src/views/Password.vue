@@ -58,7 +58,7 @@ import { Component, Vue } from "vue-property-decorator";
       return this.$store.getters.isLoggedIn;
     },
     username: function() {
-      return this.$store.getters.user.username;
+      return this.$store.getters.getUser.username;
     }
   },
   methods: {

@@ -30,7 +30,7 @@ import Nav from "@/components/Nav.vue";
   },
   watch: {
     $route(to, from) {
-      this.dialog = this.$store.getters.isLoggedIn && !this.$store.getters.user.active;
+      this.dialog = this.$store.getters.isLoggedIn && !this.$store.getters.getUser.active;
     }
   }
 })

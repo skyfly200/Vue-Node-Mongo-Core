@@ -26,13 +26,13 @@ import { Component, Vue } from "vue-property-decorator";
   }),
   created() {
     this.dialog =
-    this.$store.getters.isLoggedIn && !this.$store.getters.user.active;
+    this.$store.getters.isLoggedIn && !this.$store.getters.getUser.active;
   },
   methods: {
     resend: function() {
       // send a new verification email
       this.$http({
-        url: "http://localhost:1234/users/resend/" + this.$store.getters.user.username,
+        url: "http://localhost:1234/users/resend/" + this.$store.getters.getUser.username,
         data: { username: this.username },
         method: "GET"
       })

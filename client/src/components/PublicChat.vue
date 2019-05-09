@@ -43,7 +43,7 @@ import ReplyBar from "@/components/chat/ReplyBar.vue";
   },
   computed: {
     username: function() {
-      return this.$store.getters.user.username;
+      return this.$store.getters.getUser.username;
     },
     isLoggedIn: function() {
       return this.$store.getters.isLoggedIn;

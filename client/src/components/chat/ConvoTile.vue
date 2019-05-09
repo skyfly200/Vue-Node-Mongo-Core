@@ -26,7 +26,7 @@ const format = require('date-fns/format');
   props: ["c"],
   computed: {
     username: function() {
-      return this.$store.getters.user.username;
+      return this.$store.getters.getUser.username;
     }
   },
   methods: {
