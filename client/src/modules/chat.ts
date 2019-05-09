@@ -76,7 +76,7 @@ export default class Chat extends VuexModule {
       ]
     }
   ]
-  contacts: Array<Contacts> = [
+  contacts: Array<Contact> = [
     {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
     {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
     {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
@@ -84,7 +84,7 @@ export default class Chat extends VuexModule {
     {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"}
   ]
 
-  @Mutation set_contacts(contacts: Array<Contacts>){
+  @Mutation set_contacts(contacts: Array<Contact>){
     this.contacts = contacts;
   }
 
