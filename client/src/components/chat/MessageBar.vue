@@ -35,11 +35,11 @@
             v-list-tile-action
               v-icon person_add
             v-list-tile-title Edit Recipients
-          v-list-tile(v-if="isMulti" @click="$emit('leave')")
+          v-list-tile(v-if="isMulti" @click="$emit('leave', conversation.id)")
             v-list-tile-action
               v-icon remove_circle
             v-list-tile-title Leave Conversation
-          v-list-tile(@click="$emit('delete')")
+          v-list-tile(@click="$emit('delete', conversation.id)")
             v-list-tile-action
               v-icon delete
             v-list-tile-title Delete Conversation

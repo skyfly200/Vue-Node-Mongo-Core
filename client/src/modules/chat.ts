@@ -130,7 +130,8 @@ export default class Chat extends VuexModule {
   }
   @Mutation remove_conversation(id: Number){
     let index = this.conversations.findIndex(c => id === c.id);
-    this.conversations.splice(index, 1);
+    if (index >= 0)
+      this.conversations.splice(index, 1);
   }
   @Mutation new_message(message: Message){
     let index = this.conversations.findIndex(c => message.convoID === c.id);
