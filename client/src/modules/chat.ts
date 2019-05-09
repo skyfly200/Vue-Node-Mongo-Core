@@ -5,7 +5,7 @@ import {Conversation} from '@/models/conversation';
 import {Contact} from '@/models/contact';
 import {Message} from '@/models/message';
 
-function hasKey<O>(obj: O, key: string): key is keyof O {
+function hasKey<O>(obj: O, key: (string | number | symbol)): key is keyof O {
   return key in obj
 }
 
@@ -127,16 +127,25 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'set_conversations' }) load_conversations() { return [new Conversation()] }
   @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(conversation: Object) { return new Conversation(conversation) }
   @Action SOCKET_message(id: Number, message: Object) {
-    this.context.commit('new_message', {id: id, message: new Message(message)});
+    this.context.commit('new_message', {
+      id: id,
+      message: new Message(message)
+    });
   }
   @Action SOCKET_conversation_updated(id: Number, property: string, value: any) {
-    this.context.commit('set_convo_prop', {id: id, property: property, value: value});
+    this.context.commit('set_convo_prop', {
+      id: id,
+      property: property,
+      value: value
+    });
   }
 
-  get getConversations() { return this.conversations }
+  get getConversations() {
+    return this.conversations;
+  }
   get getConversation() {
     return (id: Number) => {
-      return this.conversations.find((c: Conversation) => c.id === id)
+      return this.conversations.find((c: Conversation) => c.id === id);
     };
   }
 }
