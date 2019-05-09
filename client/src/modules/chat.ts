@@ -125,7 +125,10 @@ export default class Chat extends VuexModule {
   }
 
   @Action({ commit: 'set_conversations' }) load_conversations() { return [new Conversation()] }
-  @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(conversation: Object) { return new Conversation(conversation) }
+  @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(id: string, conversation: Object) {
+    //this.$socket.emit('subscribe', id);
+    return new Conversation(conversation)
+  }
   @Action SOCKET_message(id: Number, message: Object) {
     this.context.commit('new_message', {
       id: id,

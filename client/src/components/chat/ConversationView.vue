@@ -75,7 +75,7 @@ import ReplyBar from "@/components/chat/ReplyBar.vue";
     },
   }
 })
-export default class Conversation extends Vue {}
+export default class ConversationView extends Vue {}
 </script>
 <style lang="sass" scoped>
   .active-conversation

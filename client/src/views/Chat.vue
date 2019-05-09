@@ -6,7 +6,7 @@ v-container(fluid grid-list-md).chat
       @new="newConversation"
       @delete="deleteConvo($event)")
     v-divider(vertical)
-    Conversation(:contacts="contacts" :conversation="activeConvo"
+    ConversationView(:contacts="contacts" :conversation="activeConvo"
       @sendMessage="sendMessage($event)"
       @updateTitle="activeConvo.title = $event"
       @updateRecipients="updateRecipients($event)")
@@ -15,18 +15,21 @@ v-container(fluid grid-list-md).chat
 <script>
 import { Component, Vue } from "vue-property-decorator";
 import ConversationIndex from "@/components/chat/ConversationIndex.vue";
-import Conversation from "@/components/chat/Conversation.vue";
+import ConversationView from "@/components/chat/ConversationView.vue";
 // import date-fns utils
 const isToday = require('date-fns/is_today');
 const isThisWeek = require('date-fns/is_this_week');
 const isThisYear = require('date-fns/is_this_year');
 const getTime = require('date-fns/get_time');
 const format = require('date-fns/format');
-
+// vuex stuff
 import { mapGetters } from "vuex";
+import {Conversation} from '@/models/conversation';
+import {Contact} from '@/models/contact';
+import {Message} from '@/models/message';
 
 @Component({
-  components: {ConversationIndex, Conversation},
+  components: {ConversationIndex, ConversationView},
   data: function() {
     return {
       selected: 0
@@ -94,7 +97,7 @@ import { mapGetters } from "vuex";
     },
     newConversation: function() {
       if (!this.isNew) {
-        let conversation = {
+        let newConvo = new Conversation({
           id: 'new',
           unread: false,
           title: "",
@@ -109,8 +112,8 @@ import { mapGetters } from "vuex";
           creator: this.username,
           members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
           messages: []
-        };
-        this.conversations.unshift(conversation);
+        });
+        this.conversations.unshift(newConvo);
       }
       this.selected = 0;
     },
@@ -122,9 +125,10 @@ import { mapGetters } from "vuex";
       this.conversations.splice(i,1);
     },
     updateRecipients: function(recipients) {
-      if (!isRecipients) {
+      if (!this.isRecipients) {
         // get uuid for new convo
         let id = new Date().getTime(); // later replace with id retrieved from server
+        this.$store.dispatch("new_conversation", this.activeConvo);
         this.$socket.emit('new_conversation', id, recipients);
       }
       else this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
