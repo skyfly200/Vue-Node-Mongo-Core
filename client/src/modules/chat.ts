@@ -111,6 +111,9 @@ export default class Chat extends VuexModule {
       this.conversations[index][property] = value;
     }
   }
+  @Mutation set_active_conversation(id: number){
+    this.active = id;
+  }
   @Mutation delete_conversation(id: Number){
     let index = this.conversations.findIndex(c => id === c.id);
     this.conversations.splice(index, 1);
@@ -128,15 +131,15 @@ export default class Chat extends VuexModule {
     // get users conversations with axios here using await
     return {conversations: [new Conversation()]};
   }
-  @MutationAction({mutate: ['active']}) async select_conversation(id: Number) {
+
+  @Action({ commit: 'set_active_conversation' }) select_conversation(id: Number) {
     this.context.commit("set_convo_prop", {
       id: id,
       property: "unread",
       value: false
     });
-    return {active: id};
+    return {id: id};
   }
-
   @Action({ commit: 'new_conversation' }) start_conversation(conversation: Conversation) {
     return {conversation: conversation};
   }
