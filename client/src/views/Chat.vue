@@ -23,6 +23,8 @@ const isThisYear = require('date-fns/is_this_year');
 const getTime = require('date-fns/get_time');
 const format = require('date-fns/format');
 
+import { mapGetters } from "vuex";
+
 @Component({
   name: "Chat",
   components: {ConversationIndex, Conversation},
