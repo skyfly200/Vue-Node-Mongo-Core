@@ -1,3 +1,6 @@
+import {Contact} from '@/models/contact';
+import {Message} from '@/models/message';
+
 export class Conversation {
   id: Number = new Date().getTime();
   unread: Boolean = false;
