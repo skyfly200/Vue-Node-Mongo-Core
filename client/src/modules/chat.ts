@@ -75,14 +75,14 @@ export default class Chat extends VuexModule {
         { author: "test3", body: "Hola amigo", timestamp: new Date(2019,4,3) }
       ]
     }
-  ]
+  ].map(c => new Conversation(c));
   contacts: Array<Contact> = [
     {username: "test", avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"},
     {username: "test2", avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg"},
     {username: "test3", avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg"},
     {username: "test4", avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg"},
     {username: "skyfly", avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg"}
-  ]
+  ].map(c => new Contact(c));
 
   @Mutation set_contacts(contacts: Array<Contact>){
     this.contacts = contacts;

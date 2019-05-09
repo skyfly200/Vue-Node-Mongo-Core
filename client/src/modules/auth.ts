@@ -7,7 +7,7 @@ import {User} from '@/models/user';
 export default class Auth extends VuexModule {
   status: string = '';
   token: string = localStorage.getItem('token') || '';
-  user: object = {};
+  user: User = new User();
 
   @Mutation auth_request(){
     this.status = 'loading';
