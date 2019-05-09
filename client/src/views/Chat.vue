@@ -30,11 +30,6 @@ import {Message} from '@/models/message';
 
 @Component({
   components: {ConversationIndex, ConversationView},
-  data: function() {
-    return {
-      selected: 0
-    }
-  },
   computed: {
     activeConvo: function() {
       return this.conversations[this.selected];
@@ -53,8 +48,12 @@ import {Message} from '@/models/message';
     },
     ...mapGetters({
       getUser: 'getUser',
+      contact: 'getContact',
       contacts: 'getContacts',
+      conversation: 'getConversation',
       conversations: 'getConversations',
+      active: 'activeID',
+      activeConvo: 'getActiveConversation',
       connected: 'connected'
     })
   },
@@ -63,42 +62,18 @@ import {Message} from '@/models/message';
       this.$socket.emit('subscribe', c.id);
     }
   },
-  sockets: {
-      connect: function () {
-          console.log('socket connected')
-      },
-      new_conversation: function (id, conversation) {
-          this.$socket.emit('subscribe', id);
-          this.conversations.unshift(conversation);
-          this.selected++;
-      },
-      message: function (data) {
-        let id = data[0];
-        let messageConvo = this.conversations.findIndex(c => c.id === id);
-        this.conversations[messageConvo].messages.push(data[1]);
-        if (this.selected !== messageConvo) this.conversations[messageConvo].unread = true;
-        if (messageConvo > 0) {
-          let newest = this.conversations.splice(messageConvo, 1);
-          this.conversations.unshift(newest[0]);
-        }
-        this.selected = this.selected < messageConvo ? this.selected + 1 : this.selected;
-      }
-  },
   methods: {
     sendMessage: function(body) {
       if (this.isRecipients) {
         let message = { author: this.username, body: body, timestamp: new Date() };
-        this.activeConvo.messages.push(message);
         this.$socket.emit('message', this.activeConvo.id, message);
-        let newest = this.conversations.splice(this.selected, 1);
-        this.conversations.unshift(newest[0]);
-        this.selected = 0;
+        this.$store.dispatch("send_message", this.activeConvo.id, this.activeConvo);
       }
     },
     newConversation: function() {
       if (!this.isNew) {
         let newConvo = new Conversation({
-          id: 'new',
+          id: new Date().getTime(),
           unread: false,
           title: "",
           styles: {
@@ -113,27 +88,20 @@ import {Message} from '@/models/message';
           members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
           messages: []
         });
-        this.conversations.unshift(newConvo);
+        this.$socket.emit('new_conversation', newConvo);
+        this.$socket.emit('subscribe', newConvo.id);
+        this.$store.dispatch("start_conversation", newConvo);
       }
-      this.selected = 0;
     },
     selectConvo: function(i) {
-      this.selected = i;
-      this.conversations[i].unread = false;
+      this.$store.dispatch("select_conversation", i);
     },
     deleteConvo: function(i) {
-      this.conversations.splice(i,1);
+      this.$store.dispatch("delete_conversation", i);
     },
     updateRecipients: function(recipients) {
-      if (!this.isRecipients) {
-        // get uuid for new convo
-        let id = new Date().getTime(); // later replace with id retrieved from server
-        this.$store.dispatch("new_conversation", this.activeConvo);
-        this.$socket.emit('new_conversation', id, recipients);
-      }
-      else this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
-      this.activeConvo.members = recipients;
-
+      this.$store.dispatch("update_conversation", this.activeConvo.id, "members", recipients);
+      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.activeConvo.id, recipients);
     },
   }
 })

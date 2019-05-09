@@ -59,7 +59,7 @@ io.on('connection', function(socket){
   socket.on('subscribe', function(id){
     socket.join("convo-"+id);
   });
-  socket.on('new_conversation', function(id, conversation){
+  socket.on('new_conversation', function(conversation){
     // create a new conversation in the database
     //let convoID = "convo-" + "";
     // return new conversation id to creator

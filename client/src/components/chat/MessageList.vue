@@ -38,6 +38,7 @@ const format = require('date-fns/format');
     },
     getTime: getTime,
     getAvatar: function(author) {
+      console.log(this.conversation.members.find( (m) => (m.username === author) ))
       return this.conversation.members.find( (m) => (m.username === author) ).avatar;
     },
   }

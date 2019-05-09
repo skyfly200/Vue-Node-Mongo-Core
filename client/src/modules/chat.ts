@@ -1,4 +1,4 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation, Action, MutationAction } from 'vuex-module-decorators';
 import axios from "axios";
 
 import {Conversation} from '@/models/conversation';
@@ -11,6 +11,7 @@ function hasKey<O>(obj: O, key: (string | number | symbol)): key is keyof O {
 
 @Module
 export default class Chat extends VuexModule {
+  active: number = new Date(2018,11,28).getTime();
   conversations: Array<Conversation> = [
     {
       id: new Date(2018,11,28).getTime(),
@@ -101,9 +102,6 @@ export default class Chat extends VuexModule {
     };
   }
 
-  @Mutation set_conversations(conversations: Array<Conversation>){
-    this.conversations = conversations;
-  }
   @Mutation new_conversation(conversation: Conversation){
     this.conversations.unshift(conversation);
   }
@@ -120,22 +118,58 @@ export default class Chat extends VuexModule {
   @Mutation new_message(id: Number, message: Message){
     let index = this.conversations.findIndex(c => id === c.id);
     this.conversations[index].messages.push(message);
-    let newest = this.conversations.splice(index, 1);
-    this.conversations.unshift(newest[0]);
+    if (index > 0) {
+      let newest = this.conversations.splice(index, 1);
+      this.conversations.unshift(newest[0]);
+    }
   }
 
-  @Action({ commit: 'set_conversations' }) load_conversations() { return [new Conversation()] }
-  @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(id: string, conversation: Object) {
-    //this.$socket.emit('subscribe', id);
-    return new Conversation(conversation)
+  @MutationAction({mutate: ['conversations']}) async load_conversations() {
+    // get users conversations with axios here using await
+    return {conversations: [new Conversation()]};
   }
-  @Action SOCKET_message(id: Number, message: Object) {
+  @MutationAction({mutate: ['active']}) async select_conversation(id: Number) {
+    this.context.commit("set_convo_prop", {
+      id: id,
+      property: "unread",
+      value: false
+    });
+    return {active: id};
+  }
+
+  @Action({ commit: 'new_conversation' }) start_conversation(conversation: Conversation) {
+    return {conversation: conversation};
+  }
+  @Action({ commit: 'new_message' }) send_message(message: Object) {
+    return {
+      id: this.active,
+      message: new Message(message)
+    };
+  }
+  @Action({ commit: 'set_convo_prop' }) update_conversation(id: Number, property: string, value: (string | boolean | object)) {
+    return {
+      id: id,
+      property: property,
+      value: value
+    };
+  }
+
+  // Socket.io Event Listener Actions
+  @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(conversation: Object) {
+    return {conversation: new Conversation(conversation)};
+  }
+  @Action SOCKET_new_message(id: Number, message: Object) {
+    this.context.commit("set_convo_prop", {
+      id: id,
+      property: "unread",
+      value: (this.conversations[this.active].id !== id)
+    });
     this.context.commit('new_message', {
       id: id,
       message: new Message(message)
     });
   }
-  @Action SOCKET_conversation_updated(id: Number, property: string, value: any) {
+  @Action SOCKET_conversation_updated(id: Number, property: string, value: (string | boolean | object)) {
     this.context.commit('set_convo_prop', {
       id: id,
       property: property,
@@ -143,6 +177,12 @@ export default class Chat extends VuexModule {
     });
   }
 
+  get activeID() {
+    return this.active;
+  }
+  get getActiveConversation() {
+    return this.conversations.find((c: Conversation) => c.id === this.active);
+  }
   get getConversations() {
     return this.conversations;
   }
