@@ -2,14 +2,14 @@ import {Contact} from '@/models/contact';
 import {Message} from '@/models/message';
 
 export class Conversation {
-  id: Number = new Date().getTime();
-  unread: Boolean = false;
+  id: number = new Date().getTime();
+  unread: boolean = false;
   title: string = '';
-  styles: Object = {
+  styles: object = {
     color: "default",
     density: "medium"
   };
-  notifications: Object = {
+  notifications: object = {
     enabled: true,
     muteExpire: new Date()
   };

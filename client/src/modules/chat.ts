@@ -128,10 +128,15 @@ export default class Chat extends VuexModule {
   @Mutation set_active_conversation(id: number){
     this.active = id;
   }
-  @Mutation remove_conversation(id: Number){
+  @Mutation remove_conversation(id: number){
     let index = this.conversations.findIndex(c => id === c.id);
-    if (index >= 0)
+    if (index >= 0) {
+      if (this.active === this.conversations[index].id) {
+        this.active = (index > 0) ? this.conversations[0].id :
+        (this.conversations[1]  ? this.conversations[1].id : -1);
+      }
       this.conversations.splice(index, 1);
+    }
   }
   @Mutation new_message(message: Message){
     let index = this.conversations.findIndex(c => message.convoID === c.id);
@@ -147,7 +152,7 @@ export default class Chat extends VuexModule {
     return {conversations: [new Conversation()]};
   }
 
-  @Action({ commit: 'set_active_conversation' }) async select_conversation(id: Number) {
+  @Action({ commit: 'set_active_conversation' }) async select_conversation(id: number) {
     // ERROR - calling this statement causes an error !?!?!?
     // this.context.commit("set_convo_prop", {
     //   id: id,
@@ -168,7 +173,7 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'set_recipients' }) update_recipients(recipients: Array<Contact>) {
     return recipients;
   }
-  @Action({ commit: 'set_convo_prop' }) update_conversation(id: Number, property: string, value: (string | boolean | object)) {
+  @Action({ commit: 'set_convo_prop' }) update_conversation(id: number, property: string, value: (string | boolean | object)) {
     return new PropUpdate({
       id: id,
       property: property,
