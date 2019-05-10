@@ -33,9 +33,6 @@ import {Message} from '@/models/message';
 @Component({
   components: {ConversationIndex, ConversationView},
   computed: {
-    activeConvo: function() {
-      return this.conversations[this.selected];
-    },
     isMulti: function() {
       return this.activeConvo.members.length > 2;
     },
