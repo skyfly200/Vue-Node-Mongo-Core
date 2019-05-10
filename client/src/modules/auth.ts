@@ -9,28 +9,28 @@ export default class Auth extends VuexModule {
   token: string = localStorage.getItem('token') || '';
   user: User = new User();
 
-  @Mutation auth_request(){
-    this.status = 'loading';
-  }
-
-  @MutationAction({mutate: ['status', 'token', 'user']}) async load_session(data: {token: string, user: User}) {
-    let {token, user} = data
+  @MutationAction({mutate: ['status', 'token', 'user']}) async load_session(context) {
+    let token = localStorage.getItem("token");
+    let user = JSON.parse(localStorage.getItem("user"));
     return {status: 'success', token: token, user: user};
   }
   @MutationAction({mutate: ['status', 'token', 'user']}) async login(data: object) {
-    this.context.commit('auth_request');
     try {
       const response: any = await axios({url: 'http://localhost:1234/users/login', data: data, method: 'POST' });
-      const token = response.token;
-      const user = response.user;
-      // MUST be changed to store JWT in cookie for security!!!
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      axios.defaults.headers.common['Authorization'] = token;
-      return {status: "success", token: token, user: user};
+      if (response.data.auth) {
+        const token = response.data.token;
+        const user = response.data.user;
+        // MUST be changed to store JWT in cookie for security!!!
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        axios.defaults.headers.common['Authorization'] = token;
+        return {status: "success", token: token, user: user};
+      } else {
+        return {status: "failed", token: "", user: {}};
+      }
     }
     catch(error) {
-      console.log("error", error);
+      console.error("error", error);
       return {status: "error", token: "", user: {}};
     }
   }

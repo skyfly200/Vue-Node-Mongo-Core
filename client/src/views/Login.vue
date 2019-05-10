@@ -46,23 +46,23 @@ import { Component, Vue } from "vue-property-decorator";
             username: this.username,
             password: this.password
           })
-          .then(response => {
-            if (response.data) {
-              if (response.data.auth && response.data.token) {
-                if (this.$route.params.redirect != null) {
-                  let route = this.$route.params.redirect === 'home' ? "" : this.$route.params.redirect;
-                  this.$router.push("/" + route);
-                } else {
-                  this.$router.push("/dashboard");
-                }
-              } else {
-                this.error = response.data.err;
-              }
-            } else {
-              this.error = "Auth failed";
-            }
-          })
-          .catch(err => console.error(err));
+          // .then(response => {
+          //   if (response.data) {
+          //     if (response.data.auth && response.data.token) {
+          //       if (this.$route.params.redirect != null) {
+          //         let route = this.$route.params.redirect === 'home' ? "" : this.$route.params.redirect;
+          //         this.$router.push("/" + route);
+          //       } else {
+          //         this.$router.push("/dashboard");
+          //       }
+          //     } else {
+          //       this.error = response.data.err;
+          //     }
+          //   } else {
+          //     this.error = "Auth failed";
+          //   }
+          // })
+          // .catch(err => console.error(err));
       } else {
         this.error = "All fields are required";
       }
