@@ -1,6 +1,6 @@
 <template lang="pug">
   v-flex.active-conversation(sm8)
-    MessageBar(:conversation="conversation" :contacts="contacts"
+    MessageBar(v-if="conversation" :conversation="conversation" :contacts="contacts"
       @leave="$emit('leave', $event)"
       @delete="$emit('delete', $event)"
       @pane="pane = $event"
@@ -43,9 +43,15 @@
               ul
                 li(v-for="m in conversation.members") {{ m.username }}
         v-btn(@click="pane = ''" color="primary") Done
-      template(v-else)
+      template(v-else-if="conversation")
         MessageList(:conversation="conversation")
         ReplyBar(@send="$emit('sendMessage', $event)" :disabled="!isRecipients")
+      template(v-else)
+        .pane
+          h2.pane-title No conversations!
+          .pane-content.no-conversations
+            p you can start one in the menu to the left
+            p just click the plus icon
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
