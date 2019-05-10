@@ -40,7 +40,7 @@ import {Message} from '@/models/message';
       return this.activeConvo.members.length > 1;
     },
     isNew: function() {
-      return this.conversations[0].members.length <= 1;
+      return this.conversations[0] && this.conversations[0].members.length <= 1;
     },
     username: function() {
       return this.getUser.username;
