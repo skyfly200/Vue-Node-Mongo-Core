@@ -13,7 +13,7 @@ Vue.use(new VueSocketIO({
     connection: SocketIO('http://localhost:1234'),
     vuex: {
       store,
-      actionPrefix: "SOCKET_",
+      actionPrefix: "socket_",
       mutationPrefix: "SOCKET_"
     }
   })

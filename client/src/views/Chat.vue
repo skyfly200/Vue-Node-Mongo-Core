@@ -29,6 +29,7 @@ import { mapGetters } from "vuex";
 import {Conversation} from '@/models/conversation';
 import {Contact} from '@/models/contact';
 import {Message} from '@/models/message';
+import {PropUpdate} from '@/models/propUpdate';
 
 @Component({
   components: {ConversationIndex, ConversationView},
@@ -87,7 +88,7 @@ import {Message} from '@/models/message';
           members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
           messages: []
         });
-        this.$socket.emit('new_conversation', newConvo);
+        this.$socket.emit('start_conversation', newConvo);
         this.$socket.emit('subscribe', newConvo.id);
         this.$store.dispatch("start_conversation", newConvo);
         this.$store.dispatch("select_conversation", newConvo.id);
@@ -95,6 +96,7 @@ import {Message} from '@/models/message';
     },
     selectConvo: function(i) {
       this.$store.dispatch("select_conversation", i);
+      this.$store.dispatch("update_conversation", new PropUpdate({id: i, property: "unread", value: false}));
     },
     deleteConvo: function(i) {
       this.$store.dispatch("delete_conversation", i);
@@ -103,7 +105,7 @@ import {Message} from '@/models/message';
       let self = new Contact({username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"});
       let allRecpients = recipients;
       allRecpients.push(self);
-      this.$store.dispatch("update_recipients", allRecpients);
+      this.$store.dispatch("set_recipients", allRecpients);
       if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.active, allRecpients);
     },
   }

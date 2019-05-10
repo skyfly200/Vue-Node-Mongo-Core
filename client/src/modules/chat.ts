@@ -4,18 +4,10 @@ import axios from "axios";
 import {Conversation} from '@/models/conversation';
 import {Contact} from '@/models/contact';
 import {Message} from '@/models/message';
+import {PropUpdate} from '@/models/propUpdate';
 
 function hasKey<O>(obj: O, key: (string | number | symbol)): key is keyof O {
-  return key in obj
-}
-
-class PropUpdate {
-  id: number = new Date().getTime();
-  property: string = "";
-  value: (string | boolean | object) = "";
-  constructor(data: Contact | {} = {}) {
-    Object.assign(this, data);
-  }
+  return key in obj;
 }
 
 @Module
@@ -121,9 +113,13 @@ export default class Chat extends VuexModule {
       this.conversations[index][data.property] = data.value;
     }
   }
-  @Mutation set_recipients(recipients: Array<Contact>){
+  @Mutation set_active_recipients(recipients: Array<Contact>){
     let index: number = this.conversations.findIndex(c => this.active === c.id);
     this.conversations[index].members = recipients;
+  }
+  @Mutation update_recipients(data: {id: number, recipients: Array<Contact>}){
+    let index: number = this.conversations.findIndex(c => data.id === c.id);
+    this.conversations[index].members = data.recipients;
   }
   @Mutation set_active_conversation(id: number){
     this.active = id;
@@ -153,12 +149,6 @@ export default class Chat extends VuexModule {
   }
 
   @Action({ commit: 'set_active_conversation' }) async select_conversation(id: number) {
-    // ERROR - calling this statement causes an error !?!?!?
-    // this.context.commit("set_convo_prop", {
-    //   id: id,
-    //   property: "unread",
-    //   value: false
-    // });
     return id;
   }
   @Action({ commit: 'new_conversation' }) start_conversation(conversation: Conversation) {
@@ -170,37 +160,36 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'new_message' }) send_message(message: Message) {
     return message;
   }
-  @Action({ commit: 'set_recipients' }) update_recipients(recipients: Array<Contact>) {
+  @Action({ commit: 'set_active_recipients' }) set_recipients(recipients: Array<Contact>) {
     return recipients;
   }
-  @Action({ commit: 'set_convo_prop' }) update_conversation(id: number, property: string, value: (string | boolean | object)) {
+  @Action({ commit: 'set_convo_prop' }) update_conversation(data: PropUpdate) {
+    return data;
+  }
+
+  // Socket.io Event Listener Actions
+  @Action({ commit: 'new_conversation' }) socket_new_conversation(conversation: Object) {
+    return new Conversation(conversation);
+  }
+  @Action({ commit: 'new_message' }) socket_new_message(messageRaw: object) {
+    let message: Message = new Message(messageRaw);
+    let id = message.convoID;
+    // this.context.commit("set_convo_prop", {
+    //   id: id,
+    //   property: "unread",
+    //   value: (this.conversations[this.active].id !== id)
+    // });
+    return new Message(message);
+  }
+  @Action({ commit: 'set_convo_prop' }) socket_conversation_updated(id: Number, property: string, value: (string | boolean | object)) {
     return new PropUpdate({
       id: id,
       property: property,
       value: value
     });
   }
-
-  // Socket.io Event Listener Actions
-  @Action({ commit: 'new_conversation' }) SOCKET_new_conversation(conversation: Object) {
-    return {conversation: new Conversation(conversation)};
-  }
-  @Action SOCKET_new_message(id: Number, message: Object) {
-    this.context.commit("set_convo_prop", {
-      id: id,
-      property: "unread",
-      value: (this.conversations[this.active].id !== id)
-    });
-    this.context.commit('new_message', {
-      message: new Message(message)
-    });
-  }
-  @Action SOCKET_conversation_updated(id: Number, property: string, value: (string | boolean | object)) {
-    this.context.commit('set_convo_prop', new PropUpdate({
-      id: id,
-      property: property,
-      value: value
-    }));
+  @Action({ commit: 'update_recipients' }) socket_update_recipients(data: {id: number, recipients: Array<Contact>}) {
+    return {id: data.id, recipients: data.recipients};
   }
 
   get activeID() {
