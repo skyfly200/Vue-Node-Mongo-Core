@@ -25,6 +25,7 @@ v-container(fluid grid-list-md).login
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
+import { mapGetters } from "vuex";
 
 @Component({
   data: () => ({
@@ -37,6 +38,21 @@ import { Component, Vue } from "vue-property-decorator";
       required: value => !!value || "Required."
     }
   }),
+  computed: {
+    ...mapGetters([ 'authStatus' ])
+  },
+  watch: {
+    authStatus: function (newState, oldState) {
+      if (newState === "success") {
+        if (this.$route.params.redirect != null) {
+          let route = this.$route.params.redirect === 'home' ? "" : this.$route.params.redirect;
+          this.$router.push("/" + route);
+        } else {
+          this.$router.push("/dashboard");
+        }
+      }
+    }
+  },
   methods: {
     login: function(e) {
       if (this.username && this.password) {
@@ -46,23 +62,6 @@ import { Component, Vue } from "vue-property-decorator";
             username: this.username,
             password: this.password
           })
-          // .then(response => {
-          //   if (response.data) {
-          //     if (response.data.auth && response.data.token) {
-          //       if (this.$route.params.redirect != null) {
-          //         let route = this.$route.params.redirect === 'home' ? "" : this.$route.params.redirect;
-          //         this.$router.push("/" + route);
-          //       } else {
-          //         this.$router.push("/dashboard");
-          //       }
-          //     } else {
-          //       this.error = response.data.err;
-          //     }
-          //   } else {
-          //     this.error = "Auth failed";
-          //   }
-          // })
-          // .catch(err => console.error(err));
       } else {
         this.error = "All fields are required";
       }

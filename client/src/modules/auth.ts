@@ -9,9 +9,10 @@ export default class Auth extends VuexModule {
   token: string = localStorage.getItem('token') || '';
   user: User = new User();
 
-  @MutationAction({mutate: ['status', 'token', 'user']}) async load_session(context) {
+  @MutationAction({mutate: ['status', 'token', 'user']}) async load_session() {
     let token = localStorage.getItem("token");
-    let user = JSON.parse(localStorage.getItem("user"));
+    let user = localStorage.getItem("user");
+    if (user != null) user = JSON.parse(user);
     return {status: 'success', token: token, user: user};
   }
   @MutationAction({mutate: ['status', 'token', 'user']}) async login(data: object) {
