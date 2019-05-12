@@ -22,7 +22,7 @@ const format = require('date-fns/format');
 
 @Component({
   components: {Message},
-  props: ["conversation"],
+  props: ["conversation", "contacts"],
   computed: {
     username: function() {
       return this.$store.getters.isLoggedIn ? this.$store.getters.getUser.username : "";
@@ -38,7 +38,8 @@ const format = require('date-fns/format');
     },
     getTime: getTime,
     getAvatar: function(author) {
-      return this.conversation.members.find( (m) => m.username === author ).avatar;
+      var member = this.contacts.find( (m) => m.username === author );
+      return member ? member.avatar : "";
     },
   }
 })
