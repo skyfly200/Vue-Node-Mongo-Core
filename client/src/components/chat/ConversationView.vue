@@ -45,7 +45,7 @@
         v-btn(@click="pane = ''" color="primary") Done
       template(v-else-if="conversation")
         MessageList(:conversation="conversation" :contacts="contacts")
-        ReplyBar(@send="$emit('sendMessage', $event)" :disabled="!isRecipients")
+        ReplyBar(@send="$emit('sendMessage', $event)" :disabled="!isRecipients || !conversation.active")
       template(v-else)
         .pane
           h2.pane-title No conversations!

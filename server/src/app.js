@@ -102,6 +102,7 @@ io.on('connection', function(socket){
       // set the conversation as removed for recipient in the database
       // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
       var coreSocket = activeUsers[r.username];
+      console.log("remove",r.username);
       // emit new_conversation event to the recipients core socket if its live
       if (coreSocket) socket.to(coreSocket).emit('removed_from_conversation', id);
   });
