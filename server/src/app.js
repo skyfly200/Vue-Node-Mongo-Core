@@ -12,8 +12,6 @@ const database = require('./database.js');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const User = require('./models/user.model');
-
 require('./auth');
 
 app.set('views', __dirname + '/views');
@@ -55,6 +53,7 @@ const db = database.connect(mongoDB);
 var totalActive = 0;
 io.on('connection', function(socket){
   totalActive++;
+  console.log("socket ID", socket.id)
   io.emit('connections', totalActive);
   socket.on('subscribe', function(id){
     socket.join("convo-"+id);
@@ -65,8 +64,10 @@ io.on('connection', function(socket){
     // return new conversation id to creator
     socket.join(convoID);
     // emit new_conversation event to other recipients main socket
-    //for (var r of conversation.recipients)
-    //  socket.to(${r.socketID}).emit('new_conversation', convoID, conversation);
+    for (var r of conversation.recipients)
+      console.log(r.username);
+      let privateSocket = "";
+      socket.to(privateSocket).emit('new_conversation', convoID, conversation);
   });
   socket.on('set_properties', function(id, prop, value){
     // update conversation properties in the database
