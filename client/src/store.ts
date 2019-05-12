@@ -37,9 +37,8 @@ export default new Vuex.Store({
     socket_socket_id({commit, rootGetters}, data) {
       // store socket ID of users core socket
       commit('set_socket_id', data);
-      let username = rootGetters.getUser.username;
       // register core sockets socketID to username
-      (vm as any).$socket.emit('register', data, username);
+      (vm as any).$socket.emit('register', data, rootGetters.getUser.username);
     },
     socket_disconnect({commit}) {
       commit('set_connected', false);

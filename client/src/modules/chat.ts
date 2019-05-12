@@ -127,8 +127,8 @@ export default class Chat extends VuexModule {
   @Mutation set_active_conversation(id: number){
     this.active = id;
   }
-  @Mutation removed_from_conversation(id: number){
-    let index: number = this.conversations.findIndex(c => data.id === c.id);
+  @Mutation deactivate_conversation(id: number){
+    let index: number = this.conversations.findIndex(c => id === c.id);
     this.conversations[index].active = false;
   }
   @Mutation remove_conversation(id: number){
@@ -164,6 +164,9 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'remove_conversation' }) delete_conversation(id: number) {
     return id;
   }
+  @Action({ commit: 'deactivate_conversation' }) leave_conversation(id: number) {
+    return id;
+  }
   @Action({ commit: 'new_message' }) send_message(message: Message) {
     return message;
   }
@@ -178,9 +181,7 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'new_conversation' }) socket_new_conversation(conversation: Object) {
     return new Conversation(conversation);
   }
-  @Action({ commit: 'new_message' }) socket_new_message(messageRaw: object) {
-    let message: Message = new Message(messageRaw);
-    let id = message.convoID;
+  @Action({ commit: 'new_message' }) socket_new_message(message: object) {
     return new Message(message);
   }
   @Action({ commit: 'set_convo_prop' }) socket_conversation_updated(id: Number, property: string, value: (string | boolean | object)) {
@@ -193,7 +194,8 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'update_recipients' }) socket_update_recipients(data: {id: number, recipients: Array<Contact>}) {
     return {id: data.id, recipients: data.recipients};
   }
-  @Action({ commit: 'removed_from_conversation' }) socket_removed_from_conversation(id: number) {
+  @Action({ commit: 'deactivate_conversation' }) socket_removed_from_conversation(id: number) {
+    (context as any)._vm.$socket.emit('unsubscribe', id)
     return id;
   }
 
