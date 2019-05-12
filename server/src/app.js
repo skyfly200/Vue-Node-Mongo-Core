@@ -66,6 +66,9 @@ io.on('connection', function(socket){
   socket.on('subscribe', function(id){
     socket.join("convo-"+id);
   });
+  socket.on('unsubscribe', function(id){
+    socket.leave("convo-"+id);
+  });
   socket.on('start_conversation', function(conversation){
     let convoID = "convo-" + conversation.id;
     // subscribe creator to new room for the conversation

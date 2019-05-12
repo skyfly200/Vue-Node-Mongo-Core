@@ -4,6 +4,7 @@ import {Message} from '@/models/message';
 export class Conversation {
   id: number = new Date().getTime();
   unread: boolean = false;
+  active: boolean = true;
   title: string = '';
   styles: object = {
     color: "default",

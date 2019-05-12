@@ -17,6 +17,7 @@ export default class Chat extends VuexModule {
     {
       id: new Date(2018,11,28).getTime(),
       unread: false,
+      active: true,
       title: "The Group",
       styles: {
         color: "default",
@@ -42,6 +43,7 @@ export default class Chat extends VuexModule {
     {
       id: new Date(2019,4,3).getTime(),
       unread: true,
+      active: true,
       title: "",
       styles: {
         color: "default",
@@ -63,6 +65,7 @@ export default class Chat extends VuexModule {
     {
       id: new Date(2019,3,3).getTime(),
       unread: false,
+      active: true,
       title: "",
       styles: {
         color: "default",
@@ -124,6 +127,10 @@ export default class Chat extends VuexModule {
   @Mutation set_active_conversation(id: number){
     this.active = id;
   }
+  @Mutation removed_from_conversation(id: number){
+    let index: number = this.conversations.findIndex(c => data.id === c.id);
+    this.conversations[index].active = false;
+  }
   @Mutation remove_conversation(id: number){
     let index = this.conversations.findIndex(c => id === c.id);
     if (index >= 0) {
@@ -174,11 +181,6 @@ export default class Chat extends VuexModule {
   @Action({ commit: 'new_message' }) socket_new_message(messageRaw: object) {
     let message: Message = new Message(messageRaw);
     let id = message.convoID;
-    // this.context.commit("set_convo_prop", {
-    //   id: id,
-    //   property: "unread",
-    //   value: (this.conversations[this.active].id !== id)
-    // });
     return new Message(message);
   }
   @Action({ commit: 'set_convo_prop' }) socket_conversation_updated(id: Number, property: string, value: (string | boolean | object)) {
@@ -190,6 +192,9 @@ export default class Chat extends VuexModule {
   }
   @Action({ commit: 'update_recipients' }) socket_update_recipients(data: {id: number, recipients: Array<Contact>}) {
     return {id: data.id, recipients: data.recipients};
+  }
+  @Action({ commit: 'removed_from_conversation' }) socket_removed_from_conversation(id: number) {
+    return id;
   }
 
   get activeID() {

@@ -62,7 +62,7 @@ import {PropUpdate} from '@/models/propUpdate';
   },
   created() {
     for (var c of this.conversations) {
-      this.$socket.emit('subscribe', c.id);
+      if (c.active) this.$socket.emit('subscribe', c.id);
     }
   },
   methods: {
