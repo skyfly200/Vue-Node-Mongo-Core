@@ -28,7 +28,7 @@ if (token) {
 
 Vue.config.productionTip = false;
 
-new Vue({
+export default new Vue({
   router,
   store,
   render: h => h(App)

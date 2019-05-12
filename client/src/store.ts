@@ -5,6 +5,8 @@ import axios from "axios";
 import Chat from './modules/chat';
 import Auth from './modules/auth';
 
+import vm from './main';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -32,10 +34,13 @@ export default new Vuex.Store({
     socket_connect({commit}) {
       commit('set_connected', true);
     },
-    socket_socket_id({commit, rootState}, data) {
+    socket_socket_id({commit, rootGetters}, data) {
+      // store socket ID of users core socket
       commit('set_socket_id', data);
-      console.log(rootState.auth.getUser);
-      //this.$socket.emit('register', data, username);
+      let username = rootGetters.getUser.username;
+      console.log(username);
+      // register core sockets socketID to username
+      (vm as any).$socket.emit('register', data, username);
     },
     socket_disconnect({commit}) {
       commit('set_connected', false);
