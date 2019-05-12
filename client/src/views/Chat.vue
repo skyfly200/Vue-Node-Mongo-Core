@@ -110,8 +110,8 @@ import {PropUpdate} from '@/models/propUpdate';
       let self = new Contact({username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"});
       let allRecpients = recipients;
       allRecpients.push(self);
+      if (!this.isFirst) this.$socket.emit('set_recipients', allRecpients, this.activeConvo);
       this.$store.dispatch("set_recipients", allRecpients);
-      if (!this.isFirst) this.$socket.emit('set_recipients', "", allRecpients, this.activeConvo.members, this.activeConvo);
     },
   }
 })

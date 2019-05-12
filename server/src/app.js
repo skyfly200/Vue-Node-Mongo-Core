@@ -83,12 +83,13 @@ io.on('connection', function(socket){
     // emit conversation_updated event to the room
     socket.to("convo-"+id).emit('conversation_updated', id, prop, value);
   });
-  socket.on('set_recipients', function(id, recipients, oldRecipients, conversation){
+  socket.on('set_recipients', function(recipients, conversation){
     // update conversation recipients in the database
     // emit update_recipients event to the room
+    var id = conversation.id;
     socket.to("convo-"+id).emit('update_recipients', {id: id, recipients: recipients});
     // add any new recipients
-    for (var r of recipients.filter(i => true))
+    for (var r of recipients.filter(x => !conversation.members.includes(x)))
         // add the new conversation to recipients in the database
         // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
         var coreSocket = activeUsers[r.username];
@@ -97,7 +98,7 @@ io.on('connection', function(socket){
         //if (coreSocket)
           //socket.to(coreSocket).emit('removed_from_conversation', id);
     // remove any recipients in old but not new list
-    for (var r of oldRecipients.filter(i => true))
+    for (var r of conversation.members.filter(x => !recipients.includes(x)))
       // set the conversation as removed for recipient in the database
       // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
       var coreSocket = activeUsers[r.username];
