@@ -111,7 +111,7 @@ import {PropUpdate} from '@/models/propUpdate';
       let allRecpients = recipients;
       allRecpients.push(self);
       this.$store.dispatch("set_recipients", allRecpients);
-      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', "", allRecpients, this.activeConvo.members, this.activeConvo);
+      if (!this.isFirst) this.$socket.emit('set_recipients', "", allRecpients, this.activeConvo.members, this.activeConvo);
     },
   }
 })
