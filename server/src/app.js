@@ -75,8 +75,7 @@ io.on('connection', function(socket){
       // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
       var coreSocket = activeUsers[r.username];
       // emit new_conversation event to the recipients core socket if its live
-      if (coreSocket)
-        socket.to(coreSocket).emit('new_conversation', convoID, conversation);
+      if (coreSocket) socket.to(coreSocket).emit('new_conversation', convoID, conversation);
   });
   socket.on('set_properties', function(id, prop, value){
     // update conversation properties in the database
@@ -95,8 +94,7 @@ io.on('connection', function(socket){
         var coreSocket = activeUsers[r.username];
         console.log("add", r.username);
         // emit new_conversation event to the recipients core socket if its live
-        //if (coreSocket)
-          //socket.to(coreSocket).emit('removed_from_conversation', id);
+        if (coreSocket) socket.to(coreSocket).emit('new_conversation', id, conversation);
     // remove any recipients in old but not new list
     for (var r of conversation.members.filter(x => !recipients.includes(x)))
       // set the conversation as removed for recipient in the database
@@ -104,8 +102,7 @@ io.on('connection', function(socket){
       var coreSocket = activeUsers[r.username];
       console.log("remove", r.username);
       // emit new_conversation event to the recipients core socket if its live
-      //if (coreSocket)
-        //socket.to(coreSocket).emit('new_conversation', id, conversation);
+      if (coreSocket) socket.to(coreSocket).emit('removed_from_conversation', id);
   });
   socket.on('message', function(id, msg){
     // add message to DB
