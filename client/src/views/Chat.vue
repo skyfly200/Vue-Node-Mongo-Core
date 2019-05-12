@@ -40,6 +40,9 @@ import {PropUpdate} from '@/models/propUpdate';
     isRecipients: function() {
       return this.activeConvo.members.length > 1;
     },
+    isFirst: function() {
+      return this.activeConvo.messages.length === 0;
+    },
     isNew: function() {
       return this.conversations[0] && this.conversations[0].members.length <= 1;
     },
@@ -64,6 +67,9 @@ import {PropUpdate} from '@/models/propUpdate';
   },
   methods: {
     sendMessage: function(body) {
+      if (this.isFirst) {
+        this.$socket.emit('start_conversation', this.activeConvo);
+      }
       if (this.isRecipients) {
         let message = { convoID: this.active, author: this.username, body: body, timestamp: new Date() };
         this.$socket.emit('message', this.active, message);
@@ -88,7 +94,6 @@ import {PropUpdate} from '@/models/propUpdate';
           members: [ {username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"} ],
           messages: []
         });
-        this.$socket.emit('start_conversation', newConvo);
         this.$store.dispatch("start_conversation", newConvo);
         this.$store.dispatch("select_conversation", newConvo.id);
       }

@@ -74,6 +74,7 @@ io.on('connection', function(socket){
       // add the new conversation to recipients in the database
       // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
       var coreSocket = activeUsers[r.username];
+      console.log(r.username);
       // emit new_conversation event to the recipients core socket if its live
       if (coreSocket)
         socket.to(coreSocket).emit('new_conversation', convoID, conversation);
