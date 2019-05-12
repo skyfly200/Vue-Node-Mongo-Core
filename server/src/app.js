@@ -74,7 +74,6 @@ io.on('connection', function(socket){
       // add the new conversation to recipients in the database
       // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
       var coreSocket = activeUsers[r.username];
-      console.log(r.username);
       // emit new_conversation event to the recipients core socket if its live
       if (coreSocket)
         socket.to(coreSocket).emit('new_conversation', convoID, conversation);
@@ -84,10 +83,30 @@ io.on('connection', function(socket){
     // emit conversation_updated event to the room
     socket.to("convo-"+id).emit('conversation_updated', id, prop, value);
   });
-  socket.on('set_recipients', function(id, recipients){
-    // update conversation properties in the database
-    // emit conversation_updated event to the room
+  socket.on('set_recipients', function(id, recipients, oldRecipients, conversation){
+    // update conversation recipients in the database
+    // emit update_recipients event to the room
     socket.to("convo-"+id).emit('update_recipients', {id: id, recipients: recipients});
+    // add new recipients
+    for (var r of recipients)
+      // check if recipient is new
+      if (true)
+        // add the new conversation to recipients in the database
+        // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
+        var coreSocket = activeUsers[r.username];
+        console.log("add",r.username);
+        // emit new_conversation event to the recipients core socket if its live
+        //if (coreSocket)
+          //socket.to(coreSocket).emit('removed_from_conversation', id);
+    // remove any recipients in old but not new list
+    for (var r of oldRecipients)
+      // set the conversation as removed for recipient in the database
+      // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
+      var coreSocket = activeUsers[r.username];
+      console.log("remove",r.username);
+      // emit new_conversation event to the recipients core socket if its live
+      //if (coreSocket)
+        //socket.to(coreSocket).emit('new_conversation', id, conversation);
   });
   socket.on('message', function(id, msg){
     // add message to DB
