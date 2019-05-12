@@ -91,18 +91,17 @@ io.on('connection', function(socket){
     var id = conversation.id;
     socket.to("convo-"+id).emit('update_recipients', {id: id, recipients: recipients});
     // add any new recipients
-    for (var r of recipients.filter(x => !conversation.members.includes(x)))
+    for (var r of recipients.filter(x => conversation.members.findIndex(y => y.username === x.username) === -1 ))
         // add the new conversation to recipients in the database
         // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
         var coreSocket = activeUsers[r.username];
         // emit new_conversation event to the recipients core socket if its live
         if (coreSocket) socket.to(coreSocket).emit('new_conversation', id, conversation);
     // remove any recipients in old but not new list
-    for (var r of conversation.members.filter(x => !recipients.includes(x)))
+    for (var r of conversation.members.filter(x => recipients.findIndex(y => y.username === x.username) === -1 ))
       // set the conversation as removed for recipient in the database
       // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
       var coreSocket = activeUsers[r.username];
-      console.log("remove",r.username);
       // emit new_conversation event to the recipients core socket if its live
       if (coreSocket) socket.to(coreSocket).emit('removed_from_conversation', id);
   });
