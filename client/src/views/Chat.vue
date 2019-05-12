@@ -89,7 +89,6 @@ import {PropUpdate} from '@/models/propUpdate';
           messages: []
         });
         this.$socket.emit('start_conversation', newConvo);
-        this.$socket.emit('subscribe', newConvo.id);
         this.$store.dispatch("start_conversation", newConvo);
         this.$store.dispatch("select_conversation", newConvo.id);
       }

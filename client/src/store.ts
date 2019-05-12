@@ -14,7 +14,8 @@ export default new Vuex.Store({
   },
   state: {
     connected: false,
-    connections: 0
+    connections: 0,
+    socketID: ""
   },
   mutations: {
     set_connections(state, c){
@@ -22,21 +23,30 @@ export default new Vuex.Store({
     },
     set_connected(state, c){
       state.connected = c;
+    },
+    set_socket_id(state, id){
+      state.socketID = id;
     }
   },
   actions: {
-    SOCKET_connect({commit}) {
+    socket_connect({commit}) {
       commit('set_connected', true);
     },
-    SOCKET_disconnect({commit}) {
+    socket_socket_id({commit, rootState}, data) {
+      commit('set_socket_id', data);
+      console.log(rootState.auth.getUser);
+      //this.$socket.emit('register', data, username);
+    },
+    socket_disconnect({commit}) {
       commit('set_connected', false);
     },
-    SOCKET_connections({commit}, data) {
+    socket_connections({commit}, data) {
       commit('set_connections', data);
     }
   },
   getters : {
     connected: state => state.connected,
-    connections: state => state.connections
+    connections: state => state.connections,
+    socketID: state => state.socketID
   }
 });

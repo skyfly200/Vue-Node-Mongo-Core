@@ -51,23 +51,33 @@ const db = database.connect(mongoDB);
 
 // Setup Socket.io
 var totalActive = 0;
+var activeUsers = {};
 io.on('connection', function(socket){
+  // send user their core socket id
+  socket.emit('socket_id', socket.id)
+  // register username and core socket idea
+  socket.on('register', function(socketID, username){
+    // store users socket (maybe use Redis here eventualy)
+    activeUsers[username] = socketID;
+  });
+  // update active user count
   totalActive++;
-  console.log("socket ID", socket.id)
   io.emit('connections', totalActive);
   socket.on('subscribe', function(id){
     socket.join("convo-"+id);
   });
   socket.on('start_conversation', function(conversation){
-    // create a new conversation in the database
-    let convoID = "convo-" + "";
-    // return new conversation id to creator
+    let convoID = "convo-" + conversation.id;
+    // subscribe creator to new room for the conversation
     socket.join(convoID);
-    // emit new_conversation event to other recipients main socket
-    for (var r of conversation.recipients)
-      console.log(r.username);
-      let privateSocket = "";
-      socket.to(privateSocket).emit('new_conversation', convoID, conversation);
+    for (var r of conversation.members)
+      // add the new conversation to recipients in the database
+      // retrieve recipients core socket ids from the DB (later maybe store them in Redis?)
+      var coreSocket = activeUsers[r.username];
+      console.log(coreSocket);
+      // emit new_conversation event to the recipients core socket if its live
+      if (coreSocket)
+        socket.to(coreSocket).emit('new_conversation', convoID, conversation);
   });
   socket.on('set_properties', function(id, prop, value){
     // update conversation properties in the database
@@ -85,6 +95,10 @@ io.on('connection', function(socket){
     socket.to("convo-"+id).emit('new_message', msg);
   });
   socket.on('disconnect', function(){
+    // remove socket from activeUsers
+    for (i in activeUsers) {
+        if (activeUsers[i] === socket.id) activeUsers[i] = false;
+    }
     totalActive--;
     io.emit('connections', totalActive);
   });
