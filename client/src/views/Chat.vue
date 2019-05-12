@@ -106,11 +106,12 @@ import {PropUpdate} from '@/models/propUpdate';
       this.$store.dispatch("delete_conversation", i);
     },
     updateRecipients: function(recipients) {
+      console.log("set", recipients);
       let self = new Contact({username: this.username, avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"});
       let allRecpients = recipients;
       allRecpients.push(self);
-      this.$store.dispatch("set_recipients", "", allRecpients, this.activeConvo.members, this.activeConvo);
-      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', this.active, allRecpients);
+      this.$store.dispatch("set_recipients", allRecpients);
+      if (this.activeConvo.messages.length >= 1) this.$socket.emit('set_recipients', "", allRecpients, this.activeConvo.members, this.activeConvo);
     },
   }
 })

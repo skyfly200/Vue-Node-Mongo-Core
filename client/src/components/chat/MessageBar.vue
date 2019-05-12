@@ -98,7 +98,7 @@ import UserSelector from "@/components/chat/UserSelector.vue";
       this.$emit('updateRecipients', recipients);
     },
     getOthers: function(members) {
-      return members.filter( (m) => (m.username !== this.username));
+      return members ? members.filter( (m) => (m.username !== this.username)) : [];
     },
     autoTitle: function(c) {
       let auto = this.getOthers(c.members).map(m => (this.titleCase(m.username))).join(', ');

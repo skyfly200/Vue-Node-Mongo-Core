@@ -39,7 +39,7 @@ const format = require('date-fns/format');
       return c.title ? c.title : (c.members.length > 1 ? (c.messages.length > 0 ? auto : "New Message to " + auto) : "New Message");
     },
     getOtherMembers: function(members) {
-      return members.filter( (m) => (m.username !== this.username));
+      return members ? members.filter( (m) => (m.username !== this.username)) : [];
     },
     selectConvoAvatar: function(c) {
       let members = this.getOtherMembers(c.members);
