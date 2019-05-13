@@ -10,49 +10,45 @@
         v-model="reply" label="Reply" :disabled="disabled")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
+    v-card.link-preview(v-show="preview" flat :href="preview.url")
+      v-card-title
+        h1 {{ preview.title }}
+      v-card-text.preview-body
+        v-img(:src="preview.image" height="")
+        p {{ preview.description }}
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
 import { Picker } from 'emoji-mart-vue';
+import _ from 'lodash';
 
 @Component({
   components: {Picker},
   props: ["disabled"],
   data: () => ({
     reply: "",
+    preview: {},
+    previewState: "none",
     showEmojiPicker: false
   }),
   methods: {
-    debounce: function(func, wait, immediate) {
-      var timeout;
-      return function() {
-        var context = this;
-        var args = arguments;
-        var later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
-    },
     parseReply: function() {
-      console.log("ran")
       var url = this.urlify(this.reply);
-      var getPreview = this.debounce(this.getLinkPreview(url[0]), 3000);
-      if (url && url[0]) getPreview();
+      if (url && url[0])
+        this.previewState = "loading";
+        this.getLinkPreview(this, url[0]);
     },
-    getLinkPreview: function(url) {
-      this.$http.post('https://api.linkpreview.net', {
+    getLinkPreview: _.debounce((context, url) => {
+      context.$http.post('https://api.linkpreview.net', {
           q: url,
           key: '5cd91310830534140fe6a9358de3c9d660225c4c2fcb4'
         }).then(resp => {
-          console.log(resp.data)
+          context.preview = resp.data;
+          context.previewState = "show";
         }).catch(error => {});
-    },
+    }, 5000),
     urlify: function(text) {
+      // this is not quite the best URL regex
       var urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
       return text.match(urlRegex);
     },
@@ -75,6 +71,8 @@ import { Picker } from 'emoji-mart-vue';
       if (this.reply) {
         this.$emit('send', this.reply);
         this.reply = "";
+        this.preview = {};
+        this.previewState = "none";
       }
     }
   }
@@ -82,9 +80,14 @@ import { Picker } from 'emoji-mart-vue';
 export default class ReplyBar extends Vue {}
 </script>
 <style lang="sass" scoped>
+  .reply
+    margin-bottom: -30px
   .reply-bar
     display: flex
-    margin-bottom: -30px
     button i
       transform: rotate(-90deg)
+  .link-preview
+    margin-top: 5px
+  .preview-body
+    display: flex
 </style>
