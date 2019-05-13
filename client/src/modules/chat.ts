@@ -6,6 +6,8 @@ import {Contact} from '@/models/contact';
 import {Message} from '@/models/message';
 import {PropUpdate} from '@/models/propUpdate';
 
+import vm from '../main';
+
 function hasKey<O>(obj: O, key: (string | number | symbol)): key is keyof O {
   return key in obj;
 }
@@ -195,7 +197,7 @@ export default class Chat extends VuexModule {
     return {id: data.id, recipients: data.recipients};
   }
   @Action({ commit: 'deactivate_conversation' }) socket_removed_from_conversation(id: number) {
-    (context as any)._vm.$socket.emit('unsubscribe', id)
+    (vm as any).$socket.emit('unsubscribe', id)
     return id;
   }
 
