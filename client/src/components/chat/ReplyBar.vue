@@ -1,13 +1,14 @@
 <template lang="pug">
   .reply
-    Picker(v-show="showEmojiPicker" title="Pick your emoji..." emoji="point_up" set="messenger" @select="addEmoji")
     v-form.reply-bar(@submit.prevent="send")
-      v-textarea(autofocus auto-grow single-line full-width hide-details solo
+      v-textarea.reply-input(autofocus auto-grow single-line full-width hide-details solo
         name="reply" ref="textarea" rows=1
         append-icon="insert_emoticon"
         @click:append.prevent="toggleShowEmojiPicker"
         @input="parseReply"
         v-model="reply" label="Reply" :disabled="disabled")
+      v-menu(v-model="showEmojiPicker" activator="textarea" :close-on-content-click="false" :disabled="disabled")
+        Picker(v-show="showEmojiPicker" style="width: auto !importiant" title="Pick your emoji..." emoji="point_up" set="messenger" @select="addEmoji")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
     v-card.link-loader(v-show="previewState === 'loading'")
@@ -70,7 +71,6 @@ import _ from 'lodash';
       const cursorPosition = textarea.selectionEnd
       const start = this.reply.substring(0, textarea.selectionStart)
       const end = this.reply.substring(textarea.selectionStart)
-      console.log(textarea, textarea.selectionEnd);
       this.reply += emoji.native;
       textarea.focus()
       this.$nextTick(() => {
