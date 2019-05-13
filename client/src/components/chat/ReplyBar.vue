@@ -13,13 +13,13 @@
     v-card.link-loader(v-show="previewState === 'loading'")
       v-progress-circular(indeterminate)
     v-card.link-preview(v-show="previewState === 'show'" flat :href="preview.url" target="_blank")
-      v-card-title
+      v-card-title.preview-header
         h2 {{ preview.title }}
         v-spacer
         v-btn(icon @click.prevent="clearPreview")
           v-icon close
       v-card-text.preview-body
-        v-img(:src="preview.image" height="200px" width="300px" contain)
+        v-img(:src="preview.image" contain)
         p {{ preview.description }}
 </template>
 <script>
@@ -104,6 +104,14 @@ export default class ReplyBar extends Vue {}
   .link-preview
     height: auto
     margin-top: 5px
+  .preview-header
+    padding: 0
+    padding-left: 16px
   .preview-body
     display: flex
+    .v-image
+      flex: 1 1 20%
+    p
+      flex: 1 1 60%
+      padding: 10px
 </style>
