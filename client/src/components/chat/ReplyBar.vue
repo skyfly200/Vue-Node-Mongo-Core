@@ -10,7 +10,7 @@
         v-model="reply" label="Reply" :disabled="disabled")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
-    v-card.link-preview(v-show="preview" flat :href="preview.url")
+    v-card.link-preview(v-show="preview.title" flat :href="preview.url" target="_blank")
       v-card-title
         h1 {{ preview.title }}
       v-card-text.preview-body
@@ -34,9 +34,10 @@ import _ from 'lodash';
   methods: {
     parseReply: function() {
       var url = this.urlify(this.reply);
-      if (url && url[0])
+      if (url && url[0]) {
         this.previewState = "loading";
         this.getLinkPreview(this, url[0]);
+      }
     },
     getLinkPreview: _.debounce((context, url) => {
       context.$http.post('https://api.linkpreview.net', {
@@ -46,7 +47,7 @@ import _ from 'lodash';
           context.preview = resp.data;
           context.previewState = "show";
         }).catch(error => {});
-    }, 5000),
+    }, 3000),
     urlify: function(text) {
       // this is not quite the best URL regex
       var urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
@@ -87,6 +88,7 @@ export default class ReplyBar extends Vue {}
     button i
       transform: rotate(-90deg)
   .link-preview
+    height: auto
     margin-top: 5px
   .preview-body
     display: flex
