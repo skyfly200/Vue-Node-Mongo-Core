@@ -4,9 +4,9 @@
     v-form.reply-bar(@submit.prevent="send")
       v-textarea(autofocus auto-grow single-line full-width hide-details solo
         name="reply" ref="textarea" rows=1
-        append-outer-icon="insert_emoticon"
+        append-icon="insert_emoticon"
+        @click:append.prevent="toggleShowEmojiPicker"
         @input="parseReply"
-        @click:append-outer.prevent="toggleShowEmojiPicker"
         v-model="reply" label="Reply" :disabled="disabled")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
