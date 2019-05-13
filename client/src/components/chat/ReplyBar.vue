@@ -10,9 +10,11 @@
         v-model="reply" label="Reply" :disabled="disabled")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
-    v-card.link-preview(v-show="preview.title" flat :href="preview.url" target="_blank")
+    v-card.link-preview(v-show="previewState === 'show'" flat :href="preview.url" target="_blank")
       v-card-title
-        h1 {{ preview.title }}
+        h2 {{ preview.title }}
+        v-btn(icon)
+          v-icon close
       v-card-text.preview-body
         v-img(:src="preview.image" height="")
         p {{ preview.description }}
@@ -34,7 +36,7 @@ import _ from 'lodash';
   methods: {
     parseReply: function() {
       var url = this.urlify(this.reply);
-      if (url && url[0]) {
+      if (url && url[0] && previewState === "none") {
         this.previewState = "loading";
         this.getLinkPreview(this, url[0]);
       }
