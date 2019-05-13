@@ -13,14 +13,17 @@
     v-card.link-loader(v-show="previewState === 'loading'")
       v-progress-circular(indeterminate)
     v-card.link-preview(v-show="previewState === 'show'" flat :href="preview.url" target="_blank")
-      v-card-title.preview-header
-        h2 {{ preview.title }}
-        v-spacer
-        v-btn(icon @click.prevent="clearPreview")
-          v-icon close
-      v-card-text.preview-body
-        v-img(:src="preview.image" contain)
-        p {{ preview.description }}
+      v-layout(row)
+        v-flex(xs3)
+          v-img(v-show="preview.image" :src="preview.image" contain)
+        v-flex(xs9)
+          v-card-actions
+            v-spacer
+            v-icon(small @click.prevent="clearPreview") close
+          v-card-title
+            .link-title {{ preview.title }}
+            .description {{ preview.description }}
+            .url {{ preview.url }}
 </template>
 <script>
 import { Component, Vue } from "vue-property-decorator";
@@ -99,19 +102,20 @@ export default class ReplyBar extends Vue {}
   .link-loader
     width: 100%
     text-align: center
-    margin-top: 5px
+    margin-top: 10px
     overflow: hidden
   .link-preview
     height: auto
-    margin-top: 5px
-  .preview-header
-    padding: 0
-    padding-left: 16px
-  .preview-body
-    display: flex
-    .v-image
-      flex: 1 1 20%
-    p
-      flex: 1 1 60%
-      padding: 10px
+    margin-top: 10px
+    .v-card__title
+      padding: 0
+      padding-left: 10px
+    .link-title
+      font: 1.5em bold
+      padding-bottom: 0.2em
+    .description
+    .url
+      color: grey
+      font-size: 0.9em
+      margin-top: 0.5em
 </style>
