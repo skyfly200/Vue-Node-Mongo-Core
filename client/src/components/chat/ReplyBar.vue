@@ -10,13 +10,16 @@
         v-model="reply" label="Reply" :disabled="disabled")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
+    v-card.link-loader(v-show="previewState === 'loading'")
+      v-progress-circular(indeterminate)
     v-card.link-preview(v-show="previewState === 'show'" flat :href="preview.url" target="_blank")
       v-card-title
         h2 {{ preview.title }}
-        v-btn(icon)
+        v-spacer
+        v-btn(icon @click.prevent="clearPreview")
           v-icon close
       v-card-text.preview-body
-        v-img(:src="preview.image" height="")
+        v-img(:src="preview.image" height="200px" width="300px" contain)
         p {{ preview.description }}
 </template>
 <script>
@@ -34,9 +37,13 @@ import _ from 'lodash';
     showEmojiPicker: false
   }),
   methods: {
+    clearPreview: function() {
+      this.preview = {};
+      this.previewState = "none";
+    },
     parseReply: function() {
       var url = this.urlify(this.reply);
-      if (url && url[0] && previewState === "none") {
+      if (url && url[0] && this.previewState === "none") {
         this.previewState = "loading";
         this.getLinkPreview(this, url[0]);
       }
@@ -89,6 +96,11 @@ export default class ReplyBar extends Vue {}
     display: flex
     button i
       transform: rotate(-90deg)
+  .link-loader
+    width: 100%
+    text-align: center
+    margin-top: 5px
+    overflow: hidden
   .link-preview
     height: auto
     margin-top: 5px
