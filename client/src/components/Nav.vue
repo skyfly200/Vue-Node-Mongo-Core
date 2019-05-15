@@ -2,17 +2,42 @@
 #nav
   v-navigation-drawer(app v-model="drawer")
     v-list.pa1
-      v-list-tile(avatar v-if='isLoggedIn')
-        v-list-tile-avatar
-          v-img(src="https://randomuser.me/api/portraits/men/85.jpg")
-        v-list-tile-content
-          v-list-tile-title {{ username }}
-            .logout
-              v-btn(flat small @click='logout') Logout
+      template(avatar v-if='isLoggedIn')
+        v-list-tile
+          v-list-tile-avatar
+            v-img(src="https://randomuser.me/api/portraits/men/85.jpg")
+          v-list-tile-content
+            .welcome
+              span Welcome&nbsp;
+              router-link(to='/profile') {{ username }}
+        v-divider
+        v-list-tile(@click='logout')
+          v-list-tile-content
+            v-list-tile-title Logout
+      template(v-else)
+        v-list-tile(to='/login')
+          v-list-tile-content
+            v-list-tile-title Login
+        v-list-tile(to='/register')
+          v-list-tile-content
+            v-list-tile-title Register
       v-divider
-      v-list-tile
+      v-list-tile(to='/')
         v-list-tile-content
-          v-list-tile-title sub-title
+          v-list-tile-title Home
+      v-list-tile(to='/about')
+        v-list-tile-content
+          v-list-tile-title About
+      template(v-if='isLoggedIn')
+        v-list-tile(to='/groups')
+          v-list-tile-content
+            v-list-tile-title Groups
+        v-list-tile(to='/chat')
+          v-list-tile-content
+            v-list-tile-title Chat
+        v-list-tile(to='/dahsboard')
+          v-list-tile-content
+            v-list-tile-title Dashboard
   v-toolbar(app scroll-off-screen)
     v-toolbar-side-icon(@click="drawer = !drawer")
     v-toolbar-title.headline.text-uppercase
