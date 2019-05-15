@@ -8,7 +8,7 @@
         @input="parseReply"
         v-model="reply" label="Reply" :disabled="disabled")
       v-menu(v-model="showEmojiPicker" activator="textarea" :close-on-content-click="false" :disabled="disabled")
-        Picker(v-show="showEmojiPicker" style="width: auto !importiant" title="Pick your emoji..." emoji="point_up" set="messenger" @select="addEmoji")
+        Picker(v-show="showEmojiPicker" style="width: auto !importiant" title="Select Emoji" emoji="point_up" set="messenger" @select="addEmoji")
       v-btn(fab small color="green" :disabled="disabled" @click="send")
         v-icon send
     v-card.link-loader(v-show="previewState === 'loading'")
