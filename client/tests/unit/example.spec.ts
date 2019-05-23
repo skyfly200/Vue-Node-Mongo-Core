@@ -41,9 +41,12 @@ describe("FabBtn.vue", () => {
     expect(wrapper.html()).toContain(icon + '</i>');
   })
 
+  console.log("before")
   it('button click should emit select', () => {
+    console.log("inside")
     const button = wrapper.find('button');
     button.trigger('click');
     expect(wrapper.emitted().select).toBeTruthy();
   })
+  console.log("after")
 });
