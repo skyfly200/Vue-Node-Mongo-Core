@@ -9,7 +9,7 @@ v-tooltip(:right="tooltip.right" :left="tooltip.left" :top="tooltip.top" :bottom
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
-  props: ["icon", "tooltip", "color", "action", "size"]
+  props: ["icon", "tooltip", "color", "size"]
 })
 export default class FabBtn extends Vue {}
 </script>
