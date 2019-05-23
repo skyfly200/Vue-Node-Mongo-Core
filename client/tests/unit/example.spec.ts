@@ -1,4 +1,3 @@
-var expect = require('expect');
 import { mount, createLocalVue, Wrapper } from '@vue/test-utils';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
