@@ -1,5 +1,5 @@
 var expect = require('expect');
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount, createLocalVue, Wrapper } from '@vue/test-utils';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 import FabBtn from "@/components/FabBtn.vue";
@@ -8,33 +8,31 @@ describe("FabBtn.vue", () => {
   const routes = [
     { path: '/items/:item_id/edit', name: 'item-edit' }
   ];
-
   const router = new VueRouter({ routes });
 
   const icon = "check";
   const tooltip = {text: "new message", bottom: true};
   const color = "red";
   const size = "small";
+  
+  var wrapper: Wrapper<any>;
 
-  const localVue = createLocalVue();
-  localVue.use(VueRouter);
-  localVue.use(Vuetify);
+  beforeEach(() => {
+    const localVue = createLocalVue();
+    localVue.use(VueRouter);
+    localVue.use(Vuetify);
 
-  const wrapper = mount(FabBtn, {
-    localVue: localVue,
-    router,
-    propsData: { icon, tooltip, color, size }
+    wrapper = mount(FabBtn, {
+      localVue: localVue,
+      router,
+      propsData: { icon, tooltip, color, size }
+    });
   });
-
-  beforeEach(() => {});
-
-  console.log(wrapper.html());
 
   it("renders tooltip text", () => {
     expect(wrapper.text()).toContain(tooltip.text);
   });
 
-  //it's also easy to check for the existence of elements
   it('has a button', () => {
     expect(wrapper.contains('button')).toBe(true);
   })
