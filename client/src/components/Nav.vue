@@ -35,7 +35,7 @@
         v-list-tile(to='/chat')
           v-list-tile-content
             v-list-tile-title Chat
-        v-list-tile(to='/dahsboard')
+        v-list-tile(to='/dashboard')
           v-list-tile-content
             v-list-tile-title Dashboard
   v-toolbar(app scroll-off-screen)
