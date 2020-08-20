@@ -20,7 +20,7 @@
   "homepage": "https://github.com/skyfly200/Vue-Node-Mongo-Core#readme",
   "dependencies": {
     "base64url": "^3.0.1",
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
